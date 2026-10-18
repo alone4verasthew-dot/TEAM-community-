@@ -14,7 +14,6 @@ export default function CursorSwords() {
 
     let raf = 0;
     let previous: { x: number; y: number } | null = null;
-    let lastDoodle = 0;
     const strokes: Stroke[] = [];
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
