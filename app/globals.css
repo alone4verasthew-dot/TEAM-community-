@@ -118,3 +118,24 @@
   .torii{right:-2%;top:38%;opacity:.34;}
   .pagoda{right:0;top:25%;opacity:.42;}
 }
+
+/* Reference-inspired samurai foreground: full-body silhouette, detailed katana and animated slash. */
+.samurai-world .ronin.samurai-art{z-index:5;right:clamp(4px,5vw,80px);bottom:0;width:clamp(270px,39vw,590px);height:min(82vh,760px);filter:drop-shadow(0 0 18px #ff0c2b4d);transform-origin:50% 85%;animation:hero-samurai-breathe 4.8s ease-in-out infinite}
+.samurai-world .ronin.samurai-art:before,.samurai-world .ronin.samurai-art:after,.samurai-world .ronin.samurai-art>i,.samurai-world .ronin.samurai-art>b,.samurai-world .ronin.samurai-art>em,.samurai-world .ronin.samurai-art>strong{display:none}
+.samurai-illustration{width:100%;height:100%;overflow:visible;display:block}
+.samurai-hair{transform-origin:260px 130px;animation:hair-sway 3.2s ease-in-out infinite alternate}
+.samurai-cloak{transform-origin:160px 180px;animation:cloak-wave 3.6s ease-in-out infinite}
+.samurai-slash{stroke-dasharray:440;stroke-dashoffset:440;animation:slash-draw 3.4s ease-in-out infinite}
+.samurai-world .moon{right:9%;top:2%;width:clamp(300px,40vw,610px);opacity:.9}
+.samurai-world .torii{right:21%;top:29%;opacity:.3}
+.samurai-world .pagoda{right:4%;top:25%;opacity:.36}
+.samurai-world .hero-brand{z-index:7;width:min(620px,57vw)}
+.samurai-world .samurai-header{z-index:12}
+.samurai-world .katana{z-index:8}
+.samurai-world .petal-field{z-index:9}
+.samurai-world .embers{z-index:6}
+@keyframes hero-samurai-breathe{0%,100%{translate:0 0;rotate:-.5deg}50%{translate:0 -8px;rotate:.5deg}}
+@keyframes hair-sway{from{transform:translateX(-2px) rotate(-1deg)}to{transform:translateX(4px) rotate(2deg)}}
+@keyframes slash-draw{0%,18%,100%{stroke-dashoffset:440;opacity:0}30%{opacity:1}55%{stroke-dashoffset:0;opacity:.95}75%{opacity:0}}
+@media(max-width:760px){.samurai-world .samurai-hero{min-height:calc(100svh - 72px);padding:56px 24px 115px;align-items:flex-start}.samurai-world .samurai-header{height:72px;padding:0 18px}.samurai-world .samurai-header nav{display:none}.samurai-world .hero-brand{width:100%;max-width:520px}.samurai-world .hero-brand h1{position:relative;z-index:8}.samurai-world .ronin.samurai-art{right:-24px;bottom:0;width:clamp(250px,68vw,390px);height:min(58vh,520px);opacity:.9}.samurai-world .moon{width:78vw;right:-8%;top:14%}.samurai-world .torii{right:24%;top:35%;opacity:.2}.samurai-world .pagoda{right:0;top:29%;opacity:.25}.samurai-world .hero-subtitle,.samurai-world .hero-buttons,.samurai-world .hero-footnote{position:relative;z-index:9}.samurai-world .hero-brand h1 .team-word{font-size:clamp(48px,14vw,78px)}.samurai-world .hero-brand h1 .tfy-word{font-size:clamp(90px,25vw,140px)}.samurai-world .vertical-kanji{display:none}.samurai-world .katana{width:58vw}}
+@media(prefers-reduced-motion:reduce){.samurai-world .ronin.samurai-art,.samurai-hair,.samurai-cloak,.samurai-slash{animation:none!important}}
