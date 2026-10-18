@@ -102,3 +102,19 @@
 .cursor-swords-moving:after{animation:slash-trail .38s ease-out .04s;transform:rotate(22deg)}
 @keyframes slash-trail{0%{opacity:.9;translate:-10px 0;scale:1.1}100%{opacity:0;translate:18px 0;scale:.65}}
 @media(max-width:760px){.cursor-sword{width:clamp(58px,16vw,90px)}}
+
+
+/* Preview refinement: keep the full samurai visible and separate the scene layers */
+.samurai-hero{min-height: min(820px, calc(100svh - 86px));}
+.ronin.samurai-art{right:7%;bottom:12%;width:clamp(220px,25vw,340px);height:clamp(390px,48vw,560px);z-index:5;opacity:1;filter:drop-shadow(0 0 24px #ff173777);}
+.torii{right:15%;top:27%;opacity:.48;}
+.pagoda{right:4%;top:20%;opacity:.62;}
+.katana-one{z-index:6;}
+.katana-two{z-index:6;}
+.katana-three{z-index:6;}
+@media(max-width:760px){
+  .samurai-hero{min-height:780px;padding-bottom:160px;}
+  .ronin.samurai-art{right:0;bottom:12%;width:42vw;height:60vw;opacity:.98;}
+  .torii{right:-2%;top:38%;opacity:.34;}
+  .pagoda{right:0;top:25%;opacity:.42;}
+}
