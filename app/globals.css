@@ -176,3 +176,7 @@
  .samurai-world .hero-brand h1.tfy-logo-lockup .team-word{font-size:clamp(43px,13vw,76px)}
  .samurai-world .hero-brand h1.tfy-logo-lockup .tfy-word{font-size:clamp(17px,4.7vw,27px);top:.06em}
 }
+
+
+/* Cursor interaction: simple hand-drawn red pen doodle, no glow or splash. */
+.cursor-doodle-canvas{position:fixed;inset:0;z-index:30;pointer-events:none;display:block}
