@@ -54,3 +54,14 @@
 @keyframes ronin-blade-swing{0%,100%{transform:rotate(-35deg)}50%{transform:rotate(-23deg) translateX(-8px)}}
 @media(hover:none),(pointer:coarse){.cursor-swords{display:none}}
 @media(prefers-reduced-motion:reduce){.cursor-swords,.cursor-sword,.cursor-cross-flash{animation:none!important;transition:none!important}}
+
+
+/* Make the existing ronin character clearly visible and animated */
+.ronin{z-index:5;right:18%;bottom:8%;width:clamp(170px,20vw,290px);height:clamp(320px,43vw,520px);opacity:1;filter:drop-shadow(0 0 18px #ff173766);isolation:isolate}
+.ronin:before{top:3%;left:21%;width:58%;height:13%;background:linear-gradient(180deg,#030304 0 45%,#1d0a10 48% 60%,#030304 63%);border-radius:50% 50% 15% 15%;transform:rotate(-9deg);box-shadow:0 -9px 0 #090608,0 4px 0 #741024}
+.ronin:after{top:15%;left:18%;width:64%;height:43%;background:linear-gradient(100deg,#030304 0%,#13080d 28%,#35101b 52%,#090609 78%);clip-path:polygon(27% 0,72% 0,100% 30%,88% 56%,100% 100%,62% 82%,50% 70%,20% 100%,0 32%);border-bottom:2px solid #6f0d20}
+.ronin i{top:17%;left:49%;height:36%;width:3px;background:linear-gradient(#ff9aa7,#f30e34,#ffd8dc);box-shadow:0 0 12px #ff1737}
+.ronin b{top:49%;left:27%;height:45%;width:46%;background:linear-gradient(90deg,#030304,#1a0a10 45%,#050406);clip-path:polygon(15% 0,85% 0,100% 100%,58% 85%,50% 100%,0 100%)}
+.ronin em{top:34%;right:-4%;width:78%;height:4px;background:linear-gradient(90deg,#160c11,#fff 55%,#ff1737);box-shadow:0 0 9px #ff1737,0 0 20px #ff173766}
+.ronin strong{top:34%;left:-8%;width:112%;height:45%;background:linear-gradient(100deg,#030304,#200811 45%,#070507);clip-path:polygon(50% 0,100% 16%,84% 42%,100% 100%,55% 73%,25% 100%,31% 55%,0 18%);filter:drop-shadow(0 0 10px #ff173755)}
+@media(max-width:760px){.ronin{right:2%;bottom:9%;width:34vw;height:52vw;opacity:.95}}
