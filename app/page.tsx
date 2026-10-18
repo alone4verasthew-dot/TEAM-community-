@@ -85,7 +85,7 @@ export default function HomePage() {
         <div className="vertical-kanji" aria-hidden="true">{kanji.map((word) => <span key={word}>{word}</span>)}</div>
         <div className="hero-brand" id="about">
           <p className="hero-kicker"><span /> A PRIVATE CIRCLE • A SHARED PATH</p>
-          <h1><span className="team-word">𝑻𝑬𝑨𝑴</span><span className="tfy-word">ᵀᶠʸ</span></h1>
+          <h1 className="tfy-logo-lockup"><span className="team-word">𝑻𝑬𝑨𝑴</span><span className="tfy-word">ᵀᶠʸ</span></h1>
           <div className="slogan"><span />TO FIND YOURSELF<span /></div>
           <p className="hero-subtitle">Walk your path. Find your people. Become more.</p>
           <div className="hero-buttons" id="join">
