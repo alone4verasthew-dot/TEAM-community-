@@ -65,3 +65,77 @@
 .ronin em{top:34%;right:-4%;width:78%;height:4px;background:linear-gradient(90deg,#160c11,#fff 55%,#ff1737);box-shadow:0 0 9px #ff1737,0 0 20px #ff173766}
 .ronin strong{top:34%;left:-8%;width:112%;height:45%;background:linear-gradient(100deg,#030304,#200811 45%,#070507);clip-path:polygon(50% 0,100% 16%,84% 42%,100% 100%,55% 73%,25% 100%,31% 55%,0 18%);filter:drop-shadow(0 0 10px #ff173755)}
 @media(max-width:760px){.ronin{right:2%;bottom:9%;width:34vw;height:52vw;opacity:.95}}
+
+
+/* Preview refinements: floating paired katanas and a visible moving samurai */
+.samurai-logo{display:flex;flex-direction:row;align-items:baseline;gap:4px;white-space:nowrap;line-height:1;transform:none;letter-spacing:0}
+.samurai-logo span{font-size:clamp(18px,1.7vw,24px);font-weight:700;letter-spacing:0}
+.samurai-logo strong{font-size:clamp(12px,1.05vw,15px);font-weight:700;font-style:normal;margin-left:0;position:relative;top:-.35em;letter-spacing:0}
+.cursor-swords{left:var(--cursor-x,50vw);top:var(--cursor-y,50vh);z-index:30;transition:opacity .2s ease}
+.cursor-sword-a{animation:katana-float-a 2.5s ease-in-out infinite}
+.cursor-sword-b{animation:katana-float-b 2.9s ease-in-out infinite}
+.cursor-swords-moving .cursor-sword-a{animation:katana-float-a 2.5s ease-in-out infinite,cursor-slash .16s ease-out}
+.cursor-swords-moving .cursor-sword-b{animation:katana-float-b 2.9s ease-in-out infinite,cursor-slash-reverse .2s ease-out}
+@keyframes katana-float-a{0%,100%{translate:0 0;rotate:-8deg}50%{translate:8px -12px;rotate:3deg}}
+@keyframes katana-float-b{0%,100%{translate:0 0;rotate:8deg}50%{translate:-10px 11px;rotate:-5deg}}
+.ronin.samurai-art{right:13%;bottom:3%;width:clamp(190px,24vw,330px);height:clamp(350px,48vw,570px);opacity:1;z-index:4;filter:drop-shadow(0 0 16px #f5173a55);animation:ronin-breathe 3.2s ease-in-out infinite,ronin-shift 6s ease-in-out infinite}
+.samurai-art svg{width:100%;height:100%;overflow:visible}
+.samurai-cloak{transform-box:fill-box;transform-origin:50% 12%;animation:cloak-wave 3s ease-in-out infinite}
+.samurai-art:before,.samurai-art:after,.samurai-art i,.samurai-art b,.samurai-art em,.samurai-art strong{display:none}
+@media(max-width:760px){.ronin.samurai-art{right:0;bottom:7%;width:40vw;height:58vw;opacity:.88}}
+@media(hover:none),(pointer:coarse){.cursor-swords{display:none}}
+
+
+/* Katana polish: crisp steel edge, etched hamon, independent floating motion and slash trails */
+.cursor-sword{height:5px;border-radius:0;background:linear-gradient(180deg,#fff 0%,#f7fbff 18%,#aab9ca 34%,#fff 47%,#dce6f2 62%,#78899e 76%,#fff 88%,#a90c27 100%);clip-path:polygon(0 0,100% 0,94% 42%,100% 50%,94% 58%,0 100%);box-shadow:0 0 3px #fff,0 0 9px #dce6f2,0 0 17px #ff1737aa,0 0 34px #ff173744}
+.cursor-sword:after{left:15px;top:1px;width:calc(100% - 22px);height:1px;background:linear-gradient(90deg,#fff 0%,#fff9 55%,transparent);filter:none;box-shadow:0 1px 2px #fff}
+.cursor-sword:before{left:-14px;top:-5px;width:17px;height:15px;background:repeating-linear-gradient(45deg,#09080b 0 2px,#791022 2px 4px,#d6b27c 4px 5px);border:1px solid #e4c89c;box-shadow:inset 0 0 0 1px #1b1012,0 0 8px #ff1737}
+.cursor-sword i{left:5px;top:-5px;width:3px;height:15px;background:linear-gradient(90deg,#6d4b2d,#fff0c5,#9a6e43);box-shadow:0 0 4px #fff0c5}
+.cursor-sword-a{z-index:2}
+.cursor-sword-b{z-index:1;filter:drop-shadow(0 0 4px #ff1737);opacity:.96}
+.cursor-sword-a:after,.cursor-sword-b:after{content:"";position:absolute;left:24px;top:2px;width:68%;height:1px;background:linear-gradient(90deg,#fff, #d8e7ff99,transparent)}
+.cursor-swords-moving .cursor-sword-a{animation:katana-float-a 2.5s ease-in-out infinite,cursor-slash .16s ease-out,steel-flare .28s ease-out}
+.cursor-swords-moving .cursor-sword-b{animation:katana-float-b 2.9s ease-in-out infinite,cursor-slash-reverse .2s ease-out,steel-flare .32s ease-out}
+@keyframes steel-flare{0%{filter:brightness(2.8) drop-shadow(0 0 10px #fff)}100%{filter:brightness(1) drop-shadow(0 0 3px #ff1737)}}
+.cursor-swords:before,.cursor-swords:after{content:"";position:absolute;pointer-events:none;width:100px;height:2px;left:-28px;top:-4px;opacity:0;background:linear-gradient(90deg,transparent,#dceaffaa,transparent);filter:blur(1px);transform:rotate(-18deg)}
+.cursor-swords-moving:before{animation:slash-trail .32s ease-out}
+.cursor-swords-moving:after{animation:slash-trail .38s ease-out .04s;transform:rotate(22deg)}
+@keyframes slash-trail{0%{opacity:.9;translate:-10px 0;scale:1.1}100%{opacity:0;translate:18px 0;scale:.65}}
+@media(max-width:760px){.cursor-sword{width:clamp(58px,16vw,90px)}}
+
+
+/* Preview refinement: keep the full samurai visible and separate the scene layers */
+.samurai-hero{min-height: min(820px, calc(100svh - 86px));}
+.ronin.samurai-art{right:7%;bottom:12%;width:clamp(220px,25vw,340px);height:clamp(390px,48vw,560px);z-index:5;opacity:1;filter:drop-shadow(0 0 24px #ff173777);}
+.torii{right:15%;top:27%;opacity:.48;}
+.pagoda{right:4%;top:20%;opacity:.62;}
+.katana-one{z-index:6;}
+.katana-two{z-index:6;}
+.katana-three{z-index:6;}
+@media(max-width:760px){
+  .samurai-hero{min-height:780px;padding-bottom:160px;}
+  .ronin.samurai-art{right:0;bottom:12%;width:42vw;height:60vw;opacity:.98;}
+  .torii{right:-2%;top:38%;opacity:.34;}
+  .pagoda{right:0;top:25%;opacity:.42;}
+}
+
+/* Reference-inspired samurai foreground: full-body silhouette, detailed katana and animated slash. */
+.samurai-world .ronin.samurai-art{z-index:5;right:clamp(4px,5vw,80px);bottom:0;width:clamp(270px,39vw,590px);height:min(82vh,760px);filter:drop-shadow(0 0 18px #ff0c2b4d);transform-origin:50% 85%;animation:hero-samurai-breathe 4.8s ease-in-out infinite}
+.samurai-world .ronin.samurai-art:before,.samurai-world .ronin.samurai-art:after,.samurai-world .ronin.samurai-art>i,.samurai-world .ronin.samurai-art>b,.samurai-world .ronin.samurai-art>em,.samurai-world .ronin.samurai-art>strong{display:none}
+.samurai-illustration{width:100%;height:100%;overflow:visible;display:block}
+.samurai-hair{transform-origin:260px 130px;animation:hair-sway 3.2s ease-in-out infinite alternate}
+.samurai-cloak{transform-origin:160px 180px;animation:cloak-wave 3.6s ease-in-out infinite}
+.samurai-slash{stroke-dasharray:440;stroke-dashoffset:440;animation:slash-draw 3.4s ease-in-out infinite}
+.samurai-world .moon{right:9%;top:2%;width:clamp(300px,40vw,610px);opacity:.9}
+.samurai-world .torii{right:21%;top:29%;opacity:.3}
+.samurai-world .pagoda{right:4%;top:25%;opacity:.36}
+.samurai-world .hero-brand{z-index:7;width:min(620px,57vw)}
+.samurai-world .samurai-header{z-index:12}
+.samurai-world .katana{z-index:8}
+.samurai-world .petal-field{z-index:9}
+.samurai-world .embers{z-index:6}
+@keyframes hero-samurai-breathe{0%,100%{translate:0 0;rotate:-.5deg}50%{translate:0 -8px;rotate:.5deg}}
+@keyframes hair-sway{from{transform:translateX(-2px) rotate(-1deg)}to{transform:translateX(4px) rotate(2deg)}}
+@keyframes slash-draw{0%,18%,100%{stroke-dashoffset:440;opacity:0}30%{opacity:1}55%{stroke-dashoffset:0;opacity:.95}75%{opacity:0}}
+@media(max-width:760px){.samurai-world .samurai-hero{min-height:calc(100svh - 72px);padding:56px 24px 115px;align-items:flex-start}.samurai-world .samurai-header{height:72px;padding:0 18px}.samurai-world .samurai-header nav{display:none}.samurai-world .hero-brand{width:100%;max-width:520px}.samurai-world .hero-brand h1{position:relative;z-index:8}.samurai-world .ronin.samurai-art{right:-24px;bottom:0;width:clamp(250px,68vw,390px);height:min(58vh,520px);opacity:.9}.samurai-world .moon{width:78vw;right:-8%;top:14%}.samurai-world .torii{right:24%;top:35%;opacity:.2}.samurai-world .pagoda{right:0;top:29%;opacity:.25}.samurai-world .hero-subtitle,.samurai-world .hero-buttons,.samurai-world .hero-footnote{position:relative;z-index:9}.samurai-world .hero-brand h1 .team-word{font-size:clamp(48px,14vw,78px)}.samurai-world .hero-brand h1 .tfy-word{font-size:clamp(90px,25vw,140px)}.samurai-world .vertical-kanji{display:none}.samurai-world .katana{width:58vw}}
+@media(prefers-reduced-motion:reduce){.samurai-world .ronin.samurai-art,.samurai-hair,.samurai-cloak,.samurai-slash{animation:none!important}}
