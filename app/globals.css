@@ -65,3 +65,22 @@
 .ronin em{top:34%;right:-4%;width:78%;height:4px;background:linear-gradient(90deg,#160c11,#fff 55%,#ff1737);box-shadow:0 0 9px #ff1737,0 0 20px #ff173766}
 .ronin strong{top:34%;left:-8%;width:112%;height:45%;background:linear-gradient(100deg,#030304,#200811 45%,#070507);clip-path:polygon(50% 0,100% 16%,84% 42%,100% 100%,55% 73%,25% 100%,31% 55%,0 18%);filter:drop-shadow(0 0 10px #ff173755)}
 @media(max-width:760px){.ronin{right:2%;bottom:9%;width:34vw;height:52vw;opacity:.95}}
+
+
+/* Preview refinements: floating paired katanas and a visible moving samurai */
+.samurai-logo{display:flex;flex-direction:row;align-items:baseline;gap:4px;white-space:nowrap;line-height:1;transform:none;letter-spacing:0}
+.samurai-logo span{font-size:clamp(18px,1.7vw,24px);font-weight:700;letter-spacing:0}
+.samurai-logo strong{font-size:clamp(12px,1.05vw,15px);font-weight:700;font-style:normal;margin-left:0;position:relative;top:-.35em;letter-spacing:0}
+.cursor-swords{left:var(--cursor-x,50vw);top:var(--cursor-y,50vh);z-index:30;transition:opacity .2s ease}
+.cursor-sword-a{animation:katana-float-a 2.5s ease-in-out infinite}
+.cursor-sword-b{animation:katana-float-b 2.9s ease-in-out infinite}
+.cursor-swords-moving .cursor-sword-a{animation:katana-float-a 2.5s ease-in-out infinite,cursor-slash .16s ease-out}
+.cursor-swords-moving .cursor-sword-b{animation:katana-float-b 2.9s ease-in-out infinite,cursor-slash-reverse .2s ease-out}
+@keyframes katana-float-a{0%,100%{translate:0 0;rotate:-8deg}50%{translate:8px -12px;rotate:3deg}}
+@keyframes katana-float-b{0%,100%{translate:0 0;rotate:8deg}50%{translate:-10px 11px;rotate:-5deg}}
+.ronin.samurai-art{right:13%;bottom:3%;width:clamp(190px,24vw,330px);height:clamp(350px,48vw,570px);opacity:1;z-index:4;filter:drop-shadow(0 0 16px #f5173a55);animation:ronin-breathe 3.2s ease-in-out infinite,ronin-shift 6s ease-in-out infinite}
+.samurai-art svg{width:100%;height:100%;overflow:visible}
+.samurai-cloak{transform-box:fill-box;transform-origin:50% 12%;animation:cloak-wave 3s ease-in-out infinite}
+.samurai-art:before,.samurai-art:after,.samurai-art i,.samurai-art b,.samurai-art em,.samurai-art strong{display:none}
+@media(max-width:760px){.ronin.samurai-art{right:0;bottom:7%;width:40vw;height:58vw;opacity:.88}}
+@media(hover:none),(pointer:coarse){.cursor-swords{display:none}}
