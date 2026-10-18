@@ -23,8 +23,15 @@ export default function CursorSwords() {
       const dy = event.clientY - lastY;
       angle = Math.atan2(dy, dx) * (180 / Math.PI);
       el.style.setProperty("--swing-angle", `${angle}deg`);
-      el.classList.toggle("cursor-swords-moving", Math.hypot(dx, dy) > 2);
+      const isMoving = Math.hypot(dx, dy) > 2;
       el.classList.add("cursor-swords-visible");
+      if (isMoving) {
+        el.style.setProperty("--splash-angle", `${angle}deg`);
+        el.classList.remove("cursor-swords-moving");
+        el.classList.remove("cursor-splash-burst");
+        void el.offsetWidth;
+        el.classList.add("cursor-swords-moving", "cursor-splash-burst");
+      }
       lastX = event.clientX;
       lastY = event.clientY;
     };
@@ -50,5 +57,6 @@ export default function CursorSwords() {
     <span className="cursor-sword cursor-sword-a"><i /></span>
     <span className="cursor-sword cursor-sword-b"><i /></span>
     <span className="cursor-cross-flash" />
+    <span className="cursor-red-splash"><i /><i /><i /><i /><i /><i /><i /><i /><b /></span>
   </div>;
 }
