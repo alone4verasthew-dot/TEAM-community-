@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const highlights = [
   {
     number: "01",
@@ -32,19 +34,19 @@ export default function HomePage() {
       <div className="ambient ambient-two" aria-hidden="true" />
 
       <header className="topbar">
-        <a className="brand" href="/" aria-label="TFY home">
+        <Link className="brand" href="/" aria-label="TFY home">
           <span className="brand-mark">t</span>
           <span>tfy<span className="brand-period">.</span></span>
-        </a>
+        </Link>
 
         <nav className="nav-links" aria-label="Main navigation">
           <a href="#why-tfy">Why TFY</a>
           <a href="#privacy">Privacy</a>
         </nav>
 
-        <a className="button button-quiet button-small" href="#member-access">
+        <Link className="button button-quiet button-small" href="#member-access">
           Member login <span aria-hidden="true">↗</span>
-        </a>
+        </Link>
       </header>
 
       <section className="hero" aria-labelledby="hero-title">
@@ -178,7 +180,7 @@ export default function HomePage() {
       </section>
 
       <footer className="footer">
-        <a className="brand footer-brand" href="/" aria-label="TFY home">
+        <Link className="brand footer-brand" href="/" aria-label="TFY home">
           <span className="brand-mark">t</span>
           <span>tfy<span className="brand-period">.</span></span>
         </a>
