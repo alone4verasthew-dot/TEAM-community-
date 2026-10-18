@@ -28,3 +28,29 @@
 @media(max-width:760px){.samurai-header{height:72px;padding:0 18px}.samurai-header nav{display:none}.samurai-logo span{font-size:18px}.samurai-logo strong{font-size:23px}.join-button{padding:11px 12px;font-size:9px;gap:8px}.samurai-hero{min-height:calc(92svh - 72px);padding:70px 24px 120px;align-items:center}.hero-brand{width:100%;max-width:590px}.hero-kicker{font-size:8px;letter-spacing:1.8px}.team-word{font-size:clamp(52px,15vw,95px)}.tfy-word{font-size:clamp(105px,28vw,170px)}.slogan{gap:9px;letter-spacing:4px;font-size:12px}.slogan span{width:20px}.hero-subtitle{font-size:11px;max-width:260px}.hero-buttons{flex-wrap:wrap}.vertical-kanji{left:8px;font-size:11px;opacity:.7}.moon{width:75vw;right:-8%;top:13%;opacity:.8}.torii{right:-3%;top:40%;width:42vw;height:43vw;opacity:.45}.pagoda{right:0;top:30%;opacity:.5;transform:scale(.75)}.ronin{right:4%;bottom:8%;opacity:.72;width:25vw;height:45vw}.katana-one{top:23%}.katana-two{bottom:14%}.side-index{display:none}.scroll-cue{bottom:23px}.hero-footnote{margin-top:28px;font-size:8px}.samurai-lower{padding:65px 24px 80px}}
 @media(max-width:390px){.samurai-hero{padding-left:19px;padding-right:19px}.hero-buttons{align-items:stretch;flex-direction:column;width:min(100%,260px)}.hero-buttons>*{justify-content:center}.hero-kicker{font-size:7px}.slogan{letter-spacing:2px}.vertical-kanji{display:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
+
+/* Cursor-controlled dual katanas */
+.cursor-swords{position:fixed;left:var(--cursor-x,50vw);top:var(--cursor-y,50vh);z-index:30;width:1px;height:1px;pointer-events:none;opacity:0;transform:translate3d(0,0,0);transition:opacity .12s ease}
+.cursor-swords-visible{opacity:1}
+.cursor-sword{position:absolute;left:-8px;top:-2px;width:clamp(70px,8vw,112px);height:4px;transform-origin:8px 50%;border-radius:2px;background:linear-gradient(180deg,#fff 0%,#cbd6e5 35%,#fff 60%,#ff2948 100%);box-shadow:0 0 5px #fff,0 0 13px #ff1737,0 0 27px #ff173766;will-change:transform}
+.cursor-sword:before{content:"";position:absolute;left:-13px;top:-5px;width:15px;height:14px;border-radius:3px;background:repeating-linear-gradient(45deg,#17090d 0 3px,#d21b38 4px 6px);border:1px solid #c9a27a;box-shadow:0 0 8px #ff1737}
+.cursor-sword:after{content:"";position:absolute;left:12px;top:-1px;width:calc(100% - 5px);height:2px;background:linear-gradient(90deg,#fff,transparent);filter:blur(2px)}
+.cursor-sword i{position:absolute;left:10px;top:-4px;width:3px;height:12px;background:#d7b88a;box-shadow:0 0 6px #ffddaa}
+.cursor-sword-a{transform:rotate(calc(var(--swing-angle,0deg) - 35deg)) translateX(2px)}
+.cursor-sword-b{transform:rotate(calc(var(--swing-angle,0deg) + 145deg)) scaleX(.78);opacity:.9}
+.cursor-swords-moving .cursor-sword-a{animation:cursor-slash .16s ease-out}
+.cursor-swords-moving .cursor-sword-b{animation:cursor-slash-reverse .2s ease-out}
+.cursor-cross-flash{position:absolute;left:-10px;top:-10px;width:20px;height:20px;border-radius:50%;opacity:0;background:radial-gradient(circle,#fff 0 2%,#ff2345 10%,#ff173755 35%,transparent 72%);transform:scale(.5)}
+.cursor-swords-moving .cursor-cross-flash{animation:cursor-contact .24s ease-out}
+@keyframes cursor-slash{0%{filter:brightness(2.5);translate:-9px 7px}100%{filter:brightness(1);translate:0 0}}
+@keyframes cursor-slash-reverse{0%{filter:brightness(2.5);translate:8px -7px}100%{filter:brightness(1);translate:0 0}}
+@keyframes cursor-contact{0%{opacity:1;transform:scale(.5)}55%{opacity:.95;transform:scale(2.1)}100%{opacity:0;transform:scale(3.4)}}
+/* Make the ronin's stance and blade movement more visible */
+.ronin{animation:ronin-breathe 3.4s ease-in-out infinite, ronin-shift 6s ease-in-out infinite}
+.ronin em{animation:blade-glint 2s ease-in-out infinite, ronin-blade-swing 3.6s ease-in-out infinite}
+.ronin strong{animation:cloak-wave 2.8s ease-in-out infinite}
+@keyframes ronin-shift{0%,100%{translate:0 0;rotate:-1deg}50%{translate:-10px -5px;rotate:1.5deg}}
+@keyframes ronin-blade-swing{0%,100%{transform:rotate(-35deg)}50%{transform:rotate(-23deg) translateX(-8px)}}
+@media(hover:none),(pointer:coarse){.cursor-swords{display:none}}
+@media(prefers-reduced-motion:reduce){.cursor-swords,.cursor-sword,.cursor-cross-flash{animation:none!important;transition:none!important}}
