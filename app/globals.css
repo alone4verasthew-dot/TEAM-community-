@@ -180,3 +180,47 @@
 
 /* Cursor interaction: simple hand-drawn red pen doodle, no glow or splash. */
 .cursor-doodle-canvas{position:fixed;inset:0;z-index:30;pointer-events:none;display:block}
+
+
+/* Cinematic samurai atmosphere: softer crimson, deeper charcoal, restrained texture. */
+.samurai-world{
+  background:
+    radial-gradient(ellipse at 76% 22%,rgba(91,13,27,.24) 0%,rgba(42,7,15,.13) 24%,transparent 48%),
+    radial-gradient(ellipse at 16% 70%,rgba(36,12,18,.18) 0%,transparent 42%),
+    linear-gradient(180deg,#08090b 0%,#0b080b 48%,#050507 100%);
+}
+.samurai-world:before{
+  background:
+    linear-gradient(90deg,rgba(3,4,6,.82) 0%,rgba(4,4,6,.42) 48%,rgba(4,4,6,.24) 100%),
+    linear-gradient(0deg,#050507 0%,transparent 25%,transparent 68%,rgba(3,4,6,.34) 100%);
+}
+.samurai-world:after{opacity:.075}
+.samurai-world .moon{
+  opacity:.58;
+  filter:saturate(.72) brightness(.76);
+  box-shadow:0 0 42px rgba(126,8,29,.18),0 0 110px rgba(80,5,20,.14);
+}
+.samurai-world .mountain-back{opacity:.42;filter:drop-shadow(0 0 18px rgba(115,13,31,.13))}
+.samurai-world .mountain-front{opacity:.62;background:linear-gradient(180deg,#170910,#050507)}
+.samurai-world .torii{opacity:.24;filter:drop-shadow(0 0 10px rgba(145,12,35,.22))}
+.samurai-world .pagoda{opacity:.27;filter:drop-shadow(0 0 16px rgba(145,12,35,.14))}
+.samurai-world .mist{opacity:.48;filter:blur(30px);background:linear-gradient(90deg,transparent,rgba(157,143,150,.055),rgba(185,126,139,.075),transparent)}
+.samurai-world .mist-two{opacity:.28}
+.samurai-world .embers{opacity:.12;animation-duration:7s}
+.samurai-lower{background:linear-gradient(180deg,#050507,#09080a 60%,#050507)}
+/* Progressive enhancement: a tiny scroll-linked shift on the atmospheric overlay only. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .samurai-world:before{
+      animation:cinematic-background-parallax linear both;
+      animation-timeline:scroll(root);
+    }
+    @keyframes cinematic-background-parallax{
+      from{transform:translateY(0)}
+      to{transform:translateY(-2.5%)}
+    }
+  }
+}
+@media (prefers-reduced-motion: reduce){
+  .samurai-world:before{animation:none!important;animation-timeline:auto!important;transform:none!important}
+}
