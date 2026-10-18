@@ -24,8 +24,8 @@ export default function HomePage() {
       <div className="embers" aria-hidden="true" />
 
       <header className="samurai-header">
-        <Link className="samurai-logo" href="/" aria-label="TEAM TFY home">
-          <span>TEAM</span><strong>ᵀᶠʸ</strong>
+        <Link className="samurai-logo" href="/" aria-label="𝑻𝑬𝑨𝑴 ᵀᶠʸ home">
+          <span>𝑻𝑬𝑨𝑴</span><strong>ᵀᶠʸ</strong>
         </Link>
         <nav aria-label="Main navigation">
           <a href="#home" className="active">HOME</a>
