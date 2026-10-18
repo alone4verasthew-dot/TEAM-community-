@@ -183,7 +183,7 @@ export default function HomePage() {
         <Link className="brand footer-brand" href="/" aria-label="TFY home">
           <span className="brand-mark">t</span>
           <span>tfy<span className="brand-period">.</span></span>
-        </a>
+        </Link>
         <p>A small space for your people.</p>
         <span className="copyright">© {new Date().getFullYear()} TFY Community</span>
       </footer>
