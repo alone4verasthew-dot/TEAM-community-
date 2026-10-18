@@ -77,7 +77,7 @@ export default function HomePage() {
             <path d="M24 480 Q175 405 350 468" stroke="#ff2447" strokeWidth="4" opacity=".78" filter="url(#ronin-red-glow)"/>
             <path d="M45 497 Q195 426 365 485" stroke="#f7e8eb" strokeWidth="2" opacity=".82"/>
           </g>
-        </svg>  </svg>
+        </svg>
       </div>
       <div className="embers" aria-hidden="true" />
 
