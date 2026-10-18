@@ -21,30 +21,49 @@ export default function HomePage() {
       <div className="katana katana-two" aria-hidden="true"><i /></div>
       <div className="katana katana-three" aria-hidden="true"><i /></div>
       <div className="ronin samurai-art" aria-hidden="true">
-        <svg viewBox="0 0 320 560" role="presentation">
+        <svg viewBox="0 0 520 680" role="presentation" className="samurai-illustration">
           <defs>
-            <linearGradient id="armor" x1="0" x2="1"><stop stopColor="#050407"/><stop offset=".48" stopColor="#270811"/><stop offset="1" stopColor="#080609"/></linearGradient>
-            <linearGradient id="steel" x1="0" x2="1"><stop stopColor="#8c9aa9"/><stop offset=".45" stopColor="#fff4f4"/><stop offset=".7" stopColor="#f51c3d"/><stop offset="1" stopColor="#5a0615"/></linearGradient>
+            <linearGradient id="armor" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#09070b"/><stop offset=".45" stopColor="#211018"/><stop offset=".72" stopColor="#08070a"/><stop offset="1" stopColor="#3b0918"/></linearGradient>
+            <linearGradient id="blade" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#aebbc9"/><stop offset=".38" stopColor="#fff"/><stop offset=".58" stopColor="#ff536a"/><stop offset=".78" stopColor="#fff"/><stop offset="1" stopColor="#790c20"/></linearGradient>
+            <linearGradient id="cloth" x1="0" y1="0" x2="1" y2="0"><stop stopColor="#050508"/><stop offset=".55" stopColor="#270812"/><stop offset="1" stopColor="#080609"/></linearGradient>
+            <filter id="red-glow"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
           </defs>
-          <g className="samurai-cloak">
-            <path d="M132 145 L62 180 L20 310 L65 365 L99 280 L83 455 L38 535 L126 507 L160 450 L190 530 L280 548 L243 450 L252 290 L295 363 L315 300 L265 178 L192 145Z" fill="url(#armor)" stroke="#651023" strokeWidth="3"/>
-            <path d="M90 196 L45 300 M235 194 L280 303 M92 380 L73 474 M231 380 L260 490" fill="none" stroke="#b20f2b" strokeWidth="3" opacity=".8"/>
+          <g className="samurai-hair" fill="#050407" stroke="#8c1027" strokeWidth="2">
+            <path d="M205 174 Q140 125 119 69 Q164 112 183 109 Q144 68 157 31 Q181 82 220 88 Q206 45 225 12 Q238 70 269 82 Q282 40 303 30 Q288 91 313 112 L291 176Z"/>
+            <path d="M207 135 Q157 141 117 118 Q159 163 188 163 M229 115 Q192 84 191 52 Q224 86 242 91"/>
           </g>
-          <path d="M115 150 L98 220 L122 310 L197 310 L224 220 L203 150Z" fill="url(#armor)" stroke="#a10d28" strokeWidth="3"/>
-          <path d="M122 174 L197 174 M114 204 L205 204 M120 236 L199 236 M130 268 L190 268" stroke="#751126" strokeWidth="7"/>
-          <path d="M133 130 L121 92 L145 60 L184 60 L209 92 L197 132 L178 150 L148 147Z" fill="#09070a" stroke="#a70c28" strokeWidth="3"/>
-          <path d="M112 88 L133 36 L174 17 L214 44 L225 86 L198 69 L148 69Z" fill="#080609" stroke="#a70c28" strokeWidth="4"/>
-          <path d="M132 89 L203 89 L191 111 L143 111Z" fill="#ed1838" opacity=".9"/>
-          <path d="M148 111 L184 111 L176 127 L153 127Z" fill="#030305"/>
-          <path d="M119 158 L71 205 L95 230 L143 191Z M203 158 L247 203 L224 232 L184 192Z" fill="url(#armor)" stroke="#8f1025" strokeWidth="3"/>
-          <path d="M235 219 L285 67" stroke="#070609" strokeWidth="15" strokeLinecap="round"/>
-          <path d="M247 204 L303 28" stroke="#d5dbe5" strokeWidth="7" strokeLinecap="round"/>
-          <path d="M252 189 L304 28" stroke="url(#steel)" strokeWidth="4" strokeLinecap="round"/>
-          <path d="M224 222 L254 232" stroke="#caa36c" strokeWidth="9" strokeLinecap="round"/>
-          <path d="M137 305 L132 433 L113 519 L151 519 L177 427 L184 305Z" fill="#080609" stroke="#711024" strokeWidth="3"/>
-          <path d="M184 305 L205 426 L222 518 L261 518 L241 412 L231 305Z" fill="#10070b" stroke="#711024" strokeWidth="3"/>
-          <path d="M107 526 L156 526 L160 545 L95 545Z M215 526 L263 526 L278 545 L211 545Z" fill="#050407" stroke="#8e1024" strokeWidth="3"/>
-          <path d="M138 147 L160 166 L181 147" fill="none" stroke="#e01838" strokeWidth="3"/>
+          <g className="samurai-body">
+            <path d="M209 222 Q143 241 101 321 L42 426 L105 452 L166 362 L149 489 L85 632 L169 642 L235 518 L277 637 L370 649 L326 517 L350 367 L404 447 L454 412 L385 291 Q352 233 297 218Z" fill="url(#cloth)" stroke="#8f1028" strokeWidth="4"/>
+            <path d="M176 260 L113 327 L74 418 M330 266 L389 352 L424 409 M169 389 L126 534 L111 608 M320 391 L344 532 L361 614" fill="none" stroke="#d31738" strokeWidth="3" opacity=".9"/>
+            <path d="M206 208 L179 289 L206 376 L304 379 L335 288 L300 211Z" fill="url(#armor)" stroke="#b31231" strokeWidth="4"/>
+            <path d="M193 250 L320 250 M186 278 L328 278 M194 308 L320 308 M204 339 L310 339" stroke="#610d22" strokeWidth="13"/>
+            <path d="M200 250 L317 250 M193 279 L323 279 M201 309 L315 309" stroke="#e02a45" strokeWidth="2" opacity=".75"/>
+            <path d="M201 208 L169 242 L195 278 L227 242 M303 210 L341 239 L319 278 L283 242" fill="#0a080c" stroke="#a8112b" strokeWidth="4"/>
+            <path d="M224 194 L211 156 L233 123 L276 122 L302 154 L291 196 L267 216 L240 211Z" fill="#0a080c" stroke="#c31938" strokeWidth="4"/>
+            <path d="M208 154 L219 103 L259 82 L298 105 L314 151 L282 135 L231 139Z" fill="#050407" stroke="#8e1028" strokeWidth="5"/>
+            <path d="M218 145 L299 143 L287 160 L229 162Z" fill="#ed1739" filter="url(#red-glow)"/>
+            <path d="M236 169 L277 168 L267 190 L242 190Z" fill="#030305"/>
+            <path d="M238 214 L261 231 L282 212" fill="none" stroke="#ff2545" strokeWidth="4"/>
+            <path d="M206 373 L191 414 L315 414 L301 374Z" fill="#09070a" stroke="#b5102c" strokeWidth="3"/>
+            <path d="M210 385 L205 407 M236 385 L233 409 M263 385 L262 409 M290 385 L292 409" stroke="#dc1b3c" strokeWidth="3"/>
+            <path d="M168 278 Q125 270 95 242 L75 261 L121 309 L182 326Z" fill="url(#armor)" stroke="#8e1028" strokeWidth="4"/>
+            <path d="M333 276 Q371 264 395 239 L416 260 L373 311 L326 326Z" fill="url(#armor)" stroke="#8e1028" strokeWidth="4"/>
+            <path d="M83 246 L49 228" stroke="#080609" strokeWidth="25" strokeLinecap="round"/>
+            <path d="M399 245 L430 216" stroke="#080609" strokeWidth="25" strokeLinecap="round"/>
+            <path d="M423 221 L490 45" stroke="#080609" strokeWidth="18" strokeLinecap="round"/>
+            <path d="M432 213 L504 28" stroke="#caa779" strokeWidth="11" strokeLinecap="round"/>
+            <path d="M438 198 L513 10" stroke="url(#blade)" strokeWidth="8" strokeLinecap="round" filter="url(#red-glow)"/>
+            <path d="M447 170 L507 22" stroke="#fff" strokeWidth="2" opacity=".95"/>
+            <path d="M415 214 L448 227" stroke="#d9b77d" strokeWidth="9" strokeLinecap="round"/>
+            <path d="M179 410 L169 516 L136 624 L186 627 L224 520 L244 410Z" fill="#080609" stroke="#9b1027" strokeWidth="4"/>
+            <path d="M244 410 L271 517 L302 629 L352 630 L323 509 L302 410Z" fill="#10070c" stroke="#9b1027" strokeWidth="4"/>
+            <path d="M129 623 L190 623 L199 650 L113 650Z M297 625 L354 625 L378 650 L293 650Z" fill="#050407" stroke="#bd1734" strokeWidth="4"/>
+            <path d="M178 439 L213 463 L187 485 L164 470 M302 438 L273 462 L302 486 L322 468" fill="none" stroke="#b71934" strokeWidth="4"/>
+          </g>
+          <g className="samurai-slash" fill="none" strokeLinecap="round">
+            <path d="M25 478 Q175 405 350 467" stroke="#ff2447" strokeWidth="4" opacity=".8" filter="url(#red-glow)"/>
+            <path d="M45 496 Q195 425 365 484" stroke="#fff1f2" strokeWidth="2" opacity=".9"/>
+          </g>
         </svg>
       </div>
       <div className="embers" aria-hidden="true" />
