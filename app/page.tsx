@@ -1,10 +1,12 @@
 import Link from "next/link";
+import CursorSwords from "./components/CursorSwords";
 
 const kanji = ["仲間", "成長", "未来"];
 
 export default function HomePage() {
   return (
     <main className="samurai-world">
+      <CursorSwords />
       <div className="moon" aria-hidden="true" />
       <div className="mountain mountain-back" aria-hidden="true" />
       <div className="mountain mountain-front" aria-hidden="true" />
