@@ -342,3 +342,5 @@
 }
 
 .samurai-world:before{background-color:rgba(0,0,0,var(--camera-alpha,0))}
+
+.cursor-doodle-canvas{filter:url(#goo) drop-shadow(0 0 5px #ff1737) drop-shadow(0 0 20px rgba(255,23,55,.88)) drop-shadow(0 0 42px rgba(255,23,55,.5))}
