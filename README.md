@@ -4,14 +4,14 @@ TFY is a mobile-first, invite-only community concept designed for a small circle
 
 ## Current stage
 
-This first commit set contains the public landing page and Next.js project foundation. Authentication, invite validation, membership approvals, database policies, messaging, and calling are **not implemented yet**.
+This first commit set contains the public landing page and Next.js project foundation. The Supabase database foundation and typed browser/server clients are set up on the `feat/supabase-connection` branch. Signup/login screens, invite-token verification, admin bootstrap, messaging, and calling are still pending.
 
 ## Stack
 
 - Next.js App Router
 - React + TypeScript
 - Plain CSS with responsive dark styling
-- Supabase (planned for authentication, database, and realtime features)
+- Supabase (authentication and database foundation; member-facing flows are being built)
 - Vercel (planned for hosting)
 
 ## Requirements
@@ -24,8 +24,12 @@ This first commit set contains the public landing page and Next.js project found
 
 ```bash
 npm install
+copy .env.example .env.local
+# Edit .env.local with your Supabase project URL and publishable key
 npm run dev
 ```
+
+On macOS/Linux, use `cp .env.example .env.local` instead of the `copy` command. Never use a Supabase secret/service-role key in `NEXT_PUBLIC_*` variables.
 
 Open http://localhost:3000.
 
@@ -47,8 +51,8 @@ npm run build
 ## Planned implementation order
 
 1. Confirm the landing page and hosting pipeline.
-2. Set up Supabase project, schema, and row-level security.
-3. Implement signup, invite tokens, email verification, approval queue, and server-enforced member cap.
+2. Set up Supabase project, schema, row-level security, and typed clients.
+3. Implement signup/login behind invite validation, email verification, approval queue, and server-enforced member cap.
 4. Add profiles, member directory, communities, and admin controls.
 5. Add private messaging and abuse reporting.
 6. Evaluate voice/video provider pricing and implement calls.
