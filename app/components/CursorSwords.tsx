@@ -193,7 +193,10 @@ export default function CursorSwords() {
         if (layer.selector === ".torii") el.style.opacity = String(progress < 0.62 ? 0.72 : Math.max(0, 0.72 * (1 - (progress - 0.62) / 0.28)));
       }
       const root = document.querySelector<HTMLElement>(".samurai-world");
-      if (root) root.style.setProperty("--camera-progress", String(progress));
+      if (root) {
+        root.style.setProperty("--camera-progress", String(progress));
+        root.style.setProperty("--camera-alpha", String(progress * 0.22));
+      }
     };
 
     const draw = (now: number) => {
@@ -202,7 +205,7 @@ export default function CursorSwords() {
         renderEmbers(now);
         updateCamera();
       }
-      raf = requestAnimationFrame(draw);
+      if (!reduced) raf = requestAnimationFrame(draw);
     };
 
     resize();
@@ -211,7 +214,7 @@ export default function CursorSwords() {
     window.addEventListener("pointerdown", splat, { passive: true });
     window.addEventListener("blur", leave);
     document.documentElement.addEventListener("pointerleave", leave);
-    raf = requestAnimationFrame(draw);
+    if (!reduced) raf = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(raf);
@@ -222,6 +225,7 @@ export default function CursorSwords() {
       document.documentElement.removeEventListener("pointerleave", leave);
       const root = document.querySelector<HTMLElement>(".samurai-world");
       root?.style.removeProperty("--camera-progress");
+      root?.style.removeProperty("--camera-alpha");
       for (const selector of [".moon", ".mountain-back", ".mountain-front", ".torii", ".pagoda", ".ronin"]) {
         const el = document.querySelector<HTMLElement>(selector);
         if (el) { el.style.removeProperty("translate"); el.style.removeProperty("scale"); }
