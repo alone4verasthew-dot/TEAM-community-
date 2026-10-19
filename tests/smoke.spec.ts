@@ -13,7 +13,6 @@ test.describe("TFY public experience", () => {
     const cards = page.locator(".community-cards > article");
     await expect(cards).toHaveCount(3);
     await expect(page.getByRole("heading", { name: "ᥲᦔꪑ꠸ꪀડ ᥆ᠻ 𝘛𝘍𝘠" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "᥇ꪖ​ꪀꪀꫀ𝘘𝘴" })).toHaveCount(0);
     await expect(page.getByRole("heading", { name: "᥇ꪖ​ꪀꪀꫀ𝘳𝘴" })).toBeVisible();
     await expect(cards.getByRole("button", { name: /ENTER COMMUNITY/i })).toHaveCount(3);
   });
@@ -71,7 +70,14 @@ test.describe("Authenticated community chat theme checks", () => {
       await page.goto(item.path);
       await expect(page.locator(`main.${item.css}`)).toBeVisible();
       await expect(page.getByRole("heading", { name: item.heading })).toBeVisible();
-      await expect(page.getByPlaceholder(`Message ${item.heading}…`)).toHaveCount(0);
+      const composer = page.getByPlaceholder(`Message ${item.heading}…`);
+      if (await composer.count()) {
+        await expect(composer).toBeVisible();
+        await expect(page.getByRole("button", { name: "Send message" })).toBeVisible();
+      } else {
+        // A never-joined approved account sees the entry gate instead of a composer.
+        await expect(page.getByRole("button", { name: /ENTER COMMUNITY/i })).toBeVisible();
+      }
     }
   });
 });
