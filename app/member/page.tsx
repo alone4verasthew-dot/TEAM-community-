@@ -43,10 +43,11 @@ export default async function MemberPage() {
         <h1>Welcome, {displayName}.</h1>
         {isApproved ? (
           <>
-            <p className="auth-intro">Your membership is approved. Your private community space is the next stage being built.</p>
+            <p className="auth-intro">Your membership is approved. You can now find approved members and start private one-to-one conversations.</p>
             <div className="member-status member-status-approved">MEMBER APPROVED</div>
             <p className="member-detail">Username: @{profile.username || "not set"}</p>
             <p className="member-detail">Access role: {profile.role}</p>
+            <Link className="member-messages-link" href="/messages">OPEN PRIVATE MESSAGES ↗</Link>
             {profile.role === "admin" ? <Link className="admin-dashboard-link" href="/admin">OPEN ADMIN DASHBOARD ↗</Link> : null}
           </>
         ) : isRejected ? (
