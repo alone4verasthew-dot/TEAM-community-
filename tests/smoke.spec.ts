@@ -69,7 +69,7 @@ test.describe("Authenticated community chat theme checks", () => {
     for (const item of cases) {
       await page.goto(item.path);
       await expect(page.locator(`main.${item.css}`)).toBeVisible();
-      await expect(page.getByRole("heading", { name: item.heading })).toBeVisible();
+      await expect(page.getByRole("heading", { name: item.heading, exact: true })).toBeVisible();
       const composer = page.getByPlaceholder(`Message ${item.heading}…`);
       if (await composer.count()) {
         await expect(composer).toBeVisible();
