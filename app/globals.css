@@ -1452,3 +1452,87 @@
   .community-card-admins h3 { font-size:16px !important; letter-spacing:.055em !important; }
   .community-card-banners h3 { font-size:25px !important; letter-spacing:.025em !important; }
 }
+
+
+/* Stronger contrast between the Admin command-room and creative Banners card */
+.community-card-admins {
+  border:1px solid rgba(224,189,131,.58) !important;
+  border-radius:3px !important;
+  background:
+    linear-gradient(135deg,rgba(48,35,17,.38),transparent 42%),
+    repeating-linear-gradient(135deg,rgba(224,189,131,.025) 0 1px,transparent 1px 10px),
+    linear-gradient(155deg,#17140e 0%,#0b0908 72%) !important;
+  box-shadow:inset 0 0 0 4px rgba(224,189,131,.035),0 18px 48px rgba(0,0,0,.28) !important;
+}
+.community-card-admins::before {
+  opacity:1 !important;
+  background:
+    linear-gradient(135deg,transparent 0 79%,rgba(224,189,131,.13) 79.1% 79.5%,transparent 79.6%),
+    radial-gradient(ellipse at 100% 0%,rgba(224,189,131,.19),transparent 58%) !important;
+}
+.community-card-admins::after {
+  height:3px !important;
+  background:linear-gradient(90deg,#fff0c2,#b68b4f 36%,#f1d6a0 54%,transparent 92%) !important;
+}
+.community-card-admins .community-card-symbol {
+  border-radius:4px !important;
+  transform:none !important;
+  background:linear-gradient(145deg,#352817,#15100a) !important;
+  box-shadow:inset 0 0 0 3px rgba(224,189,131,.06),0 0 22px rgba(218,180,112,.12) !important;
+}
+.community-card-admins h3 {
+  padding:0 0 11px;
+  border-bottom:1px solid rgba(224,189,131,.26);
+  text-shadow:0 0 18px rgba(218,180,112,.13);
+}
+
+.community-card-banners {
+  border:1px solid rgba(189,131,255,.67) !important;
+  border-radius:18px 5px 18px 5px !important;
+  background:
+    radial-gradient(ellipse at 0% 100%,rgba(189,131,255,.13),transparent 48%),
+    repeating-linear-gradient(135deg,rgba(189,131,255,.034) 0 2px,transparent 2px 14px),
+    linear-gradient(145deg,#160e23 0%,#09070e 77%) !important;
+  box-shadow:inset 0 0 0 1px rgba(189,131,255,.05),0 18px 48px rgba(0,0,0,.3) !important;
+}
+.community-card-banners::before {
+  opacity:1 !important;
+  background:
+    linear-gradient(135deg,rgba(189,131,255,.12),transparent 32%),
+    radial-gradient(ellipse at 100% 0%,rgba(189,131,255,.2),transparent 58%) !important;
+}
+.community-card-banners::after {
+  top:14px !important;
+  left:auto !important;
+  right:14px !important;
+  width:40px !important;
+  height:4px !important;
+  background:linear-gradient(90deg,#a66aff,#ffd7ff) !important;
+  box-shadow:0 7px 0 rgba(189,131,255,.45),0 14px 0 rgba(189,131,255,.2) !important;
+}
+.community-card-banners .community-card-symbol {
+  border-radius:13px !important;
+  transform:rotate(-7deg) !important;
+  background:linear-gradient(145deg,#39224f,#171020) !important;
+  box-shadow:0 8px 22px rgba(189,131,255,.15),inset 0 0 18px rgba(189,131,255,.11) !important;
+}
+.community-card-banners h3 {
+  display:inline-block;
+  width:auto !important;
+  max-width:100%;
+  margin:0 0 16px !important;
+  padding:2px 0 7px;
+  transform:skewX(-5deg);
+  border-bottom:2px solid rgba(189,131,255,.6);
+  text-shadow:0 0 24px rgba(184,120,255,.3);
+  filter:drop-shadow(0 0 13px rgba(184,120,255,.28));
+}
+.community-card-banners .community-card-kicker {
+  font-size:8px !important;
+  letter-spacing:.23em !important;
+}
+@media(max-width:700px) {
+  .community-card-admins { border-radius:3px !important; }
+  .community-card-banners { border-radius:15px 4px 15px 4px !important; }
+  .community-card-banners::after { top:13px !important; right:13px !important; }
+}
