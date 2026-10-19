@@ -79,23 +79,47 @@ export default function HomePage() {
       <div className="embers" aria-hidden="true" />
 
       <header className="samurai-header">
-        <Link className="samurai-logo" href="/" aria-label="𝑻𝑬𝑨𝑴 ᵀᶠʸ home">
-          <span>𝑻𝑬𝑨𝑴</span><strong>ᵀᶠʸ</strong>
+        <Link className="samurai-logo" href="/" aria-label="么 𝑻𝑬𝑨𝑴 ᵀᶠʸ乂">
+          <span className="brand-kanji">么</span>{" "}
+          <span>𝑻𝑬𝑨𝑴</span>{" "}
+          <strong>ᵀᶠʸ</strong><span className="brand-kanji">乂</span>
+          <svg className="brand-emb" viewBox="0 0 64 64" aria-hidden="true">
+            <circle cx="32" cy="32" r="29" fill="#ff173712" stroke="#ff173766" />
+            <g fill="#10060b" stroke="#ff344c" strokeWidth="1.2" strokeLinejoin="round">
+              <path d="M11 48 43 14 48 10 46 18 15 51Z"/><path d="M53 48 21 14 16 10 18 18 49 51Z"/>
+              <path d="M17 44 11 39 15 35 21 41Z"/><path d="M47 44 53 39 49 35 43 41Z"/>
+            </g>
+            <path d="M18 44 43 17M46 44 21 17" stroke="#f4eee9" strokeWidth="1" opacity=".85"/>
+          </svg>
         </Link>
         <nav aria-label="Main navigation">
           <a href="#home" className="active">HOME</a>
-          <a href="#about">THE WAY</a>
+          <a href="#way">THE WAY</a>
           <a href="#community">COMMUNITY</a>
           <a href="#members">MEMBERS</a>
         </nav>
-        <Link className="join-button" href="#join">JOIN THE TEAM <span>↗</span></Link>
+        <a className="join-button" href="mailto:admin@tfy.community?subject=TFY%20invite%20request">JOIN THE TEAM <span>↗</span></a>
       </header>
 
       <section className="samurai-hero" id="home">
         <div className="vertical-kanji" aria-hidden="true">{kanji.map((word) => <span key={word}>{word}</span>)}</div>
         <div className="hero-brand" id="about">
           <p className="hero-kicker"><span /> A PRIVATE CIRCLE • A SHARED PATH</p>
-          <h1 className="tfy-logo-lockup"><span className="team-word">𝑻𝑬𝑨𝑴</span><span className="tfy-word">ᵀᶠʸ</span></h1>
+          <h1 className="tfy-logo-lockup" aria-label="么 𝑻𝑬𝑨𝑴 ᵀᶠʸ乂">
+            <span className="brand-full-line">
+              <span className="brand-kanji">么</span>{" "}
+              <span className="team-word">𝑻𝑬𝑨𝑴</span>{" "}
+              <span className="tfy-word">ᵀᶠʸ</span><span className="brand-kanji">乂</span>
+              <svg className="brand-emb" viewBox="0 0 64 64" aria-hidden="true">
+                <circle cx="32" cy="32" r="29" fill="#ff173712" stroke="#ff173766" />
+                <g fill="#10060b" stroke="#ff344c" strokeWidth="1.2" strokeLinejoin="round">
+                  <path d="M11 48 43 14 48 10 46 18 15 51Z"/><path d="M53 48 21 14 16 10 18 18 49 51Z"/>
+                  <path d="M17 44 11 39 15 35 21 41Z"/><path d="M47 44 53 39 49 35 43 41Z"/>
+                </g>
+                <path d="M18 44 43 17M46 44 21 17" stroke="#f4eee9" strokeWidth="1" opacity=".85"/>
+              </svg>
+            </span>
+          </h1>
           <div className="slogan"><span />TO FIND YOURSELF<span /></div>
           <p className="hero-subtitle">Walk your path. Find your people. Become more.</p>
           <div className="hero-buttons" id="join">
@@ -137,7 +161,10 @@ export default function HomePage() {
         <a className="join-button join-main" href="mailto:admin@tfy.community?subject=TFY%20invite%20request">REQUEST AN INVITE <span>↗</span></a>
         <div className="lower-rule" />
       </section>
-      <footer className="gate-footer"><span>么 𝑻𝑬𝑨𝑴 ᵀᶠʸ乂</span><span>TO FIND YOURSELF</span></footer>
+      <footer className="gate-footer">
+        <span className="footer-brand" aria-label="么 𝑻𝑬𝑨𝑴 ᵀᶠʸ乂"><span className="brand-kanji">么</span>{" "}<span>𝑻𝑬𝑨𝑴</span>{" "}<strong>ᵀᶠʸ</strong><span className="brand-kanji">乂</span></span>
+        <span>TO FIND YOURSELF</span>
+      </footer>
     </main>
   );
 }
