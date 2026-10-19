@@ -24,7 +24,7 @@ export default async function MemberPage() {
         <section className="auth-panel">
           <Link className="auth-brand" href="/">么 TEAM <strong>ᵀᶠʸ</strong> 乂</Link>
           <h1>Profile not ready</h1>
-          <p className="auth-intro">We couldn't load your TFY profile. Please refresh, or sign out and try again.</p>
+          <p className="auth-intro">We could not load your TFY profile. Please refresh, or sign out and try again.</p>
           <form action={signOutAction}><button className="auth-submit" type="submit">SIGN OUT</button></form>
         </section>
       </main>
