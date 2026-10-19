@@ -14,9 +14,6 @@ export default function HomePage() {
       <div className="pagoda" aria-hidden="true"><i /><b /><em /><strong /></div>
       <div className="mist mist-one" aria-hidden="true" />
       <div className="mist mist-two" aria-hidden="true" />
-      <div className="petal-field" aria-hidden="true">
-        {Array.from({ length: 24 }, (_, i) => <span key={i} style={{ "--i": i } as React.CSSProperties} />)}
-      </div>
       <div className="katana katana-one" aria-hidden="true"><i /></div>
       <div className="katana katana-two" aria-hidden="true"><i /></div>
       <div className="katana katana-three" aria-hidden="true"><i /></div>
@@ -103,7 +100,7 @@ export default function HomePage() {
           <p className="hero-subtitle">Walk your path. Find your people. Become more.</p>
           <div className="hero-buttons" id="join">
             <a className="join-button join-main" href="mailto:admin@tfy.community?subject=TFY%20invite%20request">REQUEST AN INVITE <span>↗</span></a>
-            <a className="ghost-button" href="#community">ENTER THE WORLD <span>↓</span></a>
+            <a className="ghost-button" href="#way">ENTER THE WORLD <span>↓</span></a>
           </div>
           <div className="hero-footnote"><span className="red-dot" /> INVITE ONLY <i /> 80 MEMBERS MAX</div>
         </div>
@@ -111,12 +108,36 @@ export default function HomePage() {
         <div className="side-index">01 <span /> THE AWAKENING</div>
       </section>
 
-      <section className="samurai-lower" id="community">
-        <p className="lower-eyebrow">ONE TEAM <span>•</span> ONE JOURNEY <span>•</span> TO FIND YOURSELF</p>
+      <section className="samurai-lower gate-panel" id="way">
+        <p className="lower-eyebrow">THE WAY <span>•</span> TO FIND YOURSELF</p>
         <h2>Your path. <span>Your people.</span></h2>
-        <p>A private place for your circle — built around trust, real conversations, and belonging.</p>
+        <div className="gate-steps">
+          <article><b>01</b><h3>WALK YOUR PATH</h3><p>Every member begins alone, with a purpose of their own.</p></article>
+          <article><b>02</b><h3>FIND YOUR PEOPLE</h3><p>A circle of up to 80, approved one by one.</p></article>
+          <article><b>03</b><h3>BECOME MORE</h3><p>Grow together through messages, calls and shared goals.</p></article>
+        </div>
         <div className="lower-rule" />
       </section>
+      <section className="samurai-lower gate-panel" id="community">
+        <p className="lower-eyebrow">ONE TEAM <span>•</span> ONE JOURNEY</p>
+        <h2>THE <span>COMMUNITY</span></h2>
+        <p>A private place for your circle — built around trust, real conversations, and belonging.</p>
+        <div className="gate-steps">
+          <article><h3>COMMUNITY ONE</h3><p>A place to connect and share the journey.</p></article>
+          <article><h3>COMMUNITY TWO</h3><p>Build consistency with people who get it.</p></article>
+          <article><h3>COMMUNITY THREE</h3><p>Keep growing together, one step at a time.</p></article>
+        </div>
+        <div className="lower-rule" />
+      </section>
+      <section className="samurai-lower gate-panel" id="members">
+        <p className="lower-eyebrow">INVITE ONLY <span>•</span> LIMITED CIRCLE</p>
+        <div className="member-limit">80</div>
+        <h2>MEMBERS <span>MAXIMUM</span></h2>
+        <p>Invite only, approved by an admin. Start by requesting an invite.</p>
+        <a className="join-button join-main" href="mailto:admin@tfy.community?subject=TFY%20invite%20request">REQUEST AN INVITE <span>↗</span></a>
+        <div className="lower-rule" />
+      </section>
+      <footer className="gate-footer"><span>么 𝑻𝑬𝑨𝑴 ᵀᶠʸ乂</span><span>TO FIND YOURSELF</span></footer>
     </main>
   );
 }
