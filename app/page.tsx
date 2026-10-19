@@ -44,6 +44,7 @@ export default function HomePage() {
           <a href="#way">THE WAY</a>
           <a href="#community">COMMUNITY</a>
           <a href="#members">MEMBERS</a>
+          <Link href="/login" aria-label="Member login">MEMBER LOGIN</Link>
         </nav>
         <a className="join-button" href="mailto:admin@tfy.community?subject=TFY%20invite%20request">JOIN THE TEAM <span>↗</span></a>
       </header>
