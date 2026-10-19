@@ -4,7 +4,7 @@ TFY is a mobile-first, invite-only community concept designed for a small circle
 
 ## Current stage
 
-This first commit set contains the public landing page and Next.js project foundation. The Supabase database foundation, typed browser/server clients, login/signup screens, invite-only signup trigger, email-confirmation callback, and approval-aware member page are set up on the `feat/supabase-connection` branch. The initial confirmed account has been bootstrapped as admin. The admin dashboard supports pending membership review and single-use invite codes with cinematic samurai styling. Private one-to-one messaging is implemented for approved members, with database RLS restricting each conversation to its two participants. Messaging and calling remain pending.
+This first commit set contains the public landing page and Next.js project foundation. The Supabase database foundation, typed browser/server clients, login/signup screens, invite-only signup trigger, email-confirmation callback, and approval-aware member page are set up on the `feat/supabase-connection` branch. The initial confirmed account has been bootstrapped as admin. The admin dashboard supports pending membership review and single-use invite codes with cinematic samurai styling. Private one-to-one messaging is implemented for approved members, with database RLS restricting each conversation to its two participants. Real-time message subscriptions, group messaging, read receipts, and calling remain pending.
 
 ## Stack
 
@@ -46,7 +46,7 @@ npm run build
 - Do not add real API keys, passwords, or private member data to this repository.
 - Invitation-code use and the 80-approved-member cap are enforced by database logic. End-to-end authentication and access-control testing is still required before production use.
 - Member login, invitation-code signup, email-confirmation callback, and approval-aware member status screens are implemented on the feature branch. New users need a valid invitation code, confirm their email, and wait for admin approval.
-- Messaging, calling, and admin UI are not implemented. The first admin must be bootstrapped securely after the initial account is verified.
+- Direct one-to-one messaging and the admin dashboard are implemented on the feature branch. Real-time updates, group chats, message deletion, reporting, and calling are not implemented yet.
 
 ## Planned implementation order
 
@@ -54,7 +54,7 @@ npm run build
 2. Set up Supabase project, schema, row-level security, and typed clients.
 3. Test signup/email verification and admin member-review/invite management locally.
 4. Add profile editing, community group chat, and admin controls.
-5. Add private messaging and abuse reporting.
+5. Add real-time messaging, group chats, and abuse reporting.
 6. Evaluate voice/video provider pricing and implement calls.
 7. Test access control, mobile layout, and production deployment.
 
