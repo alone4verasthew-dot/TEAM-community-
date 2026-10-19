@@ -103,6 +103,7 @@ export default async function ConversationPage({ params, searchParams }: Convers
           </Link>
           <div className="chat-nav">
             <Link href="/messages">ALL CHATS</Link>
+            <Link href="/#community">COMMUNITIES</Link>
             {viewer.role === "admin" ? <Link href="/admin">ADMIN DOJO</Link> : null}
             <form action={signOutAction}>
               <button type="submit">SIGN OUT</button>
