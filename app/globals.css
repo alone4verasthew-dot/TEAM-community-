@@ -592,3 +592,126 @@
 
 .member-login-hint { margin: 14px 0 0; color: #b9adb1; font: 10px Arial, sans-serif; letter-spacing: .5px; }
 .member-login-hint a { color: #ff6475; text-decoration: underline; text-underline-offset: 4px; margin-left: 5px; }
+
+
+/* TFY admin dashboard */
+.admin-page { display: block; padding: 0 clamp(14px, 4vw, 48px) 48px; }
+.admin-shell { position: relative; z-index: 1; width: min(100%, 1080px); margin: 0 auto; }
+.admin-header {
+  min-height: 78px; display: flex; align-items: center; justify-content: space-between;
+  gap: 18px; border-bottom: 1px solid rgba(255,255,255,.1); margin-bottom: 42px;
+}
+.admin-brand { margin: 0; }
+.admin-header-actions { display: flex; align-items: center; gap: 18px; }
+.admin-top-link, .admin-signout {
+  background: transparent; color: #d8cbd0; border: 1px solid rgba(255,255,255,.17);
+  padding: 11px 13px; font: 700 10px Arial,sans-serif; letter-spacing: 1px; cursor: pointer;
+}
+.admin-top-link:hover, .admin-signout:hover { border-color: #ff4356; color: #fff; }
+.admin-intro { max-width: 760px; margin-bottom: 30px; }
+.admin-intro h1 {
+  margin: 0; font: 600 clamp(31px, 5.2vw, 52px)/1.16 'Cinzel',serif; letter-spacing: -.03em;
+}
+.admin-intro h1 span { color: #ff596d; }
+.admin-intro .admin-muted { max-width: 590px; margin-top: 16px; }
+.admin-eyebrow { color: #ff4356; font: 800 10px Arial,sans-serif; letter-spacing: .19em; margin: 0 0 10px; }
+.admin-muted { color: #b8abb0; font: 13px/1.8 'Noto Sans Telugu',Arial,sans-serif; margin: 10px 0 20px; }
+.admin-small-note { color: #91848a; font: 11px/1.7 'Noto Sans Telugu',Arial,sans-serif; margin: 12px 0 0; }
+.admin-stats { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; margin: 28px 0; }
+.admin-stat {
+  min-width: 0; padding: 19px 20px; border: 1px solid rgba(255,255,255,.11);
+  background: rgba(13,8,12,.78); display: flex; flex-direction: column; gap: 8px;
+}
+.admin-stat-label { color: #a99da2; font: 700 9px Arial,sans-serif; letter-spacing: .14em; }
+.admin-stat strong { color: #fff; font: 600 34px 'Cinzel',serif; }
+.admin-stat strong small { color: #b9adb1; font-size: 15px; }
+.admin-stat-word { font-size: 23px !important; color: #a5edcc !important; }
+.admin-stat-foot { color: #9e9197; font: 11px 'Noto Sans Telugu',Arial,sans-serif; }
+.admin-panel {
+  padding: clamp(19px, 3vw, 30px); margin: 20px 0;
+  border: 1px solid rgba(255,255,255,.12); background: rgba(11,7,10,.87);
+  box-shadow: 0 18px 60px rgba(0,0,0,.15);
+}
+.admin-panel-heading { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+.admin-panel-heading h2 {
+  margin: 0; color: #fff; font: 600 clamp(21px,3vw,28px)/1.25 'Cinzel',serif;
+}
+.admin-panel-icon { color: #ff4356; font-size: 24px; }
+.admin-count {
+  display: inline-grid; place-items: center; min-width: 26px; height: 26px; padding: 0 7px;
+  margin-left: 6px; border: 1px solid rgba(255,67,86,.45); color: #ff8693;
+  font: 700 11px Arial,sans-serif; vertical-align: middle;
+}
+.invite-create-form { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.2fr) auto; align-items: end; gap: 12px; }
+.invite-create-form label { grid-column: 1 / -1; color: #eee2e5; font: 600 12px Arial,sans-serif; margin-bottom: -5px; }
+.invite-create-form select {
+  min-height: 46px; background: #09080b; color: #fff; border: 1px solid rgba(255,255,255,.16);
+  padding: 10px; font: 13px Arial,sans-serif;
+}
+.admin-primary-button, .admin-secondary-button, .admin-approve-button, .admin-reject-button {
+  min-height: 44px; padding: 12px 14px; cursor: pointer; font: 800 10px Arial,sans-serif; letter-spacing: .08em;
+}
+.admin-primary-button { border: 1px solid #ff3048; background: #d9102d; color: #fff; }
+.admin-primary-button:hover { background: #f51b39; }
+.admin-primary-button:disabled { opacity: .6; cursor: wait; }
+.admin-secondary-button { border: 1px solid rgba(255,255,255,.23); background: transparent; color: #fff; }
+.admin-secondary-button:hover { border-color: #ff596d; }
+.invite-result { margin-top: 20px; padding: 17px; border: 1px solid rgba(255,67,86,.38); background: rgba(160,0,26,.1); }
+.invite-code { display: block; color: #fff; background: #070608; padding: 15px; border: 1px dashed rgba(255,120,136,.4); overflow-wrap: anywhere; font: 12px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace; }
+.invite-result-footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 12px; }
+.invite-result-footer .admin-muted { margin: 0; font-size: 11px; }
+.admin-alert { padding: 12px 14px; margin: 18px 0; font: 12px/1.7 'Noto Sans Telugu',Arial,sans-serif; }
+.admin-alert-success { color: #c0f1d7; border-left: 2px solid #50c88a; background: rgba(40,150,100,.1); }
+.admin-alert-error { color: #ffd1d6; border-left: 2px solid #ff4356; background: rgba(160,0,26,.16); }
+.admin-empty { padding: 29px 12px 12px; text-align: center; color: #b8abb0; }
+.admin-empty-mark { display: inline-grid; place-items: center; width: 43px; height: 43px; border: 1px solid rgba(80,200,138,.45); border-radius: 50%; color: #8ce4b6; font-size: 20px; }
+.admin-empty h3 { color: #fff; font: 600 20px 'Cinzel',serif; margin: 14px 0 6px; }
+.admin-empty p { font: 12px 'Noto Sans Telugu',Arial,sans-serif; }
+.admin-member-list { margin-top: 18px; }
+.admin-member-row {
+  display: flex; align-items: center; gap: 15px; padding: 17px 0;
+  border-top: 1px solid rgba(255,255,255,.09);
+}
+.admin-avatar {
+  width: 42px; height: 42px; flex: 0 0 42px; display: grid; place-items: center;
+  border: 1px solid rgba(255,67,86,.4); background: rgba(160,0,26,.12);
+  color: #ff8693; font: 600 18px 'Cinzel',serif;
+}
+.admin-avatar-approved { border-color: rgba(80,200,138,.4); color: #a5edcc; background: rgba(40,150,100,.08); }
+.admin-member-info { min-width: 0; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+.admin-member-info strong { color: #fff; font: 600 14px 'Noto Sans Telugu',Arial,sans-serif; overflow-wrap: anywhere; }
+.admin-member-info span, .admin-member-info small { color: #a99da2; font: 11px/1.6 'Noto Sans Telugu',Arial,sans-serif; }
+.admin-member-info small { color: #81767b; font-size: 10px; }
+.admin-member-actions { display: flex; gap: 8px; }
+.admin-approve-button { border: 1px solid rgba(80,200,138,.45); background: rgba(40,150,100,.12); color: #a5edcc; }
+.admin-approve-button:hover { background: rgba(40,150,100,.22); }
+.admin-reject-button { border: 1px solid rgba(255,67,86,.35); background: transparent; color: #ff9aa5; }
+.admin-reject-button:hover { background: rgba(160,0,26,.18); }
+.admin-role-chip { border: 1px solid rgba(255,255,255,.15); padding: 6px 9px; color: #c1b4b9; font: 10px Arial,sans-serif; text-transform: uppercase; }
+.admin-approved-row { padding: 12px 0; }
+.admin-footer { padding-top: 20px; color: #81767b; font: 9px Arial,sans-serif; letter-spacing: .18em; text-align: center; }
+.admin-footer span { color: #ff4356; padding: 0 6px; }
+.admin-dashboard-link { display: inline-flex; margin: 18px 0 3px; padding: 13px 15px; border: 1px solid rgba(255,67,86,.5); color: #ff8997; font: 800 10px Arial,sans-serif; letter-spacing: .12em; }
+.admin-dashboard-link:hover { color: #fff; border-color: #ff4356; background: rgba(160,0,26,.15); }
+@media (max-width: 740px) {
+  .admin-page { padding: 0 12px 32px; }
+  .admin-header { margin-bottom: 30px; min-height: 68px; }
+  .admin-header-actions { gap: 7px; }
+  .admin-top-link, .admin-signout { padding: 10px 8px; font-size: 9px; }
+  .admin-stats { grid-template-columns: 1fr; gap: 9px; }
+  .admin-stat { padding: 14px 16px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 5px 10px; }
+  .admin-stat-label, .admin-stat-foot { grid-column: 1; }
+  .admin-stat strong { grid-column: 2; grid-row: 1 / span 2; font-size: 26px; }
+  .invite-create-form { grid-template-columns: 1fr; }
+  .invite-create-form label { grid-column: auto; }
+  .admin-member-row { flex-wrap: wrap; gap: 10px; }
+  .admin-member-info { min-width: calc(100% - 60px); }
+  .admin-member-actions { width: 100%; padding-left: 52px; }
+  .admin-member-actions form { flex: 1; }
+  .admin-member-actions button { width: 100%; }
+  .invite-result-footer { align-items: flex-start; flex-direction: column; }
+}
+@media (max-width: 390px) {
+  .admin-brand { gap: 3px; font-size: 14px; }
+  .admin-brand .auth-mark { font-size: 18px; }
+}
