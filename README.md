@@ -4,7 +4,7 @@ TFY is a mobile-first, invite-only community concept designed for a small circle
 
 ## Current stage
 
-This first commit set contains the public landing page and Next.js project foundation. The Supabase database foundation and typed browser/server clients are set up on the `feat/supabase-connection` branch. Signup/login screens, invite-token verification, admin bootstrap, messaging, and calling are still pending.
+This first commit set contains the public landing page and Next.js project foundation. The Supabase database foundation, typed browser/server clients, login/signup screens, invite-only signup trigger, email-confirmation callback, and approval-aware member page are set up on the `feat/supabase-connection` branch. First-admin bootstrap still needs to be completed after the first account confirms its email; messaging and calling remain pending.
 
 ## Stack
 
@@ -44,15 +44,15 @@ npm run build
 ## Important security notes
 
 - Do not add real API keys, passwords, or private member data to this repository.
-- The invite-only policy and 80-member limit must be enforced on the server/database before this site is used by real members.
-- Member login, invitation-code signup, email-confirmation callback, and approval-aware member status screens are added on the feature branch. New users need a valid one-use invitation code, confirm their email, and wait for admin approval.
-- No login, messaging, calling, or admin functionality is active in this stage.
+- Invitation-code use and the 80-approved-member cap are enforced by database logic. End-to-end authentication and access-control testing is still required before production use.
+- Member login, invitation-code signup, email-confirmation callback, and approval-aware member status screens are implemented on the feature branch. New users need a valid invitation code, confirm their email, and wait for admin approval.
+- Messaging, calling, and admin UI are not implemented. The first admin must be bootstrapped securely after the initial account is verified.
 
 ## Planned implementation order
 
 1. Confirm the landing page and hosting pipeline.
 2. Set up Supabase project, schema, row-level security, and typed clients.
-3. Implement signup/login behind invite validation, email verification, approval queue, and server-enforced member cap.
+3. Test signup/email verification locally and bootstrap the first approved admin account.
 4. Add profiles, member directory, communities, and admin controls.
 5. Add private messaging and abuse reporting.
 6. Evaluate voice/video provider pricing and implement calls.
