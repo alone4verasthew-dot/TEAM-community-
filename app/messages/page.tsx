@@ -2,10 +2,10 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOutAction } from "@/app/auth/actions";
-import { startDirectConversationAction } from "./actions";
+import { sendDirectMessageAction, startDirectConversationAction } from "./actions";
 
 type MessagesPageProps = {
-  searchParams: Promise<{ notice?: string }>;
+  searchParams: Promise<{ notice?: string; conversation?: string; new?: string }>;
 };
 
 const notices: Record<string, string> = {
@@ -34,19 +34,15 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
   const { data: claimData } = await supabase.auth.getClaims();
   const userId = claimData?.claims?.sub;
 
-  if (!userId || typeof userId !== "string") {
-    redirect("/login");
-  }
+  if (!userId || typeof userId !== "string") redirect("/login");
 
   const { data: viewer } = await supabase
     .from("profiles")
-    .select("status, role, username, display_name")
+    .select("status, role")
     .eq("id", userId)
     .maybeSingle();
 
-  if (viewer?.status !== "approved") {
-    redirect("/member");
-  }
+  if (viewer?.status !== "approved") redirect("/member");
 
   const { data: conversations } = await supabase
     .from("direct_conversations")
@@ -81,14 +77,11 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
   ]);
 
   const otherProfiles = new Map<string, { id: string; username: string | null; display_name: string | null }>();
-  for (const profile of profilesResult.data ?? []) {
-    otherProfiles.set(profile.id, profile);
-  }
+  for (const profile of profilesResult.data ?? []) otherProfiles.set(profile.id, profile);
+
   const latestMessages = new Map<string, { body: string; sender_id: string; created_at: string }>();
   for (const message of messagesResult.data ?? []) {
-    if (!latestMessages.has(message.conversation_id)) {
-      latestMessages.set(message.conversation_id, message);
-    }
+    if (!latestMessages.has(message.conversation_id)) latestMessages.set(message.conversation_id, message);
   }
 
   const conversationByOtherId = new Map<string, string>();
@@ -99,6 +92,21 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
     conversationByOtherId.set(otherId, conversation.id);
   }
 
+  const activeConversation = conversationRows.find((conversation) => conversation.id === params.conversation);
+  const activeOtherId = activeConversation
+    ? activeConversation.participant_low === userId
+      ? activeConversation.participant_high
+      : activeConversation.participant_low
+    : null;
+  const activeOther = activeOtherId ? otherProfiles.get(activeOtherId) : undefined;
+  const activeMessagesResult = activeConversation
+    ? await supabase
+        .from("direct_messages")
+        .select("id, sender_id, body, created_at")
+        .eq("conversation_id", activeConversation.id)
+        .order("created_at", { ascending: true })
+    : { data: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+  const activeMessages = activeMessagesResult.data ?? [];
   const notice = params.notice ? notices[params.notice] : undefined;
 
   return (
@@ -124,35 +132,34 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
             {viewer.role === "admin" ? <Link href="/admin">ADMIN DOJO</Link> : null}
             <Link href="/#community">COMMUNITIES</Link>
             <Link href="/member">MEMBER VIEW</Link>
-            <form action={signOutAction}>
-              <button type="submit">SIGN OUT</button>
-            </form>
+            <form action={signOutAction}><button type="submit">SIGN OUT</button></form>
           </div>
         </header>
 
         <section className="chat-heading">
-          <p className="admin-eyebrow">PRIVATE CHANNEL · APPROVED MEMBERS</p>
+          <p className="admin-eyebrow">TFY DIRECT · APPROVED MEMBERS</p>
           <h1>Messages <span>with your circle.</span></h1>
-          <p className="chat-subtitle">Direct chats and your TFY community spaces, all in one place.</p>
+          <p className="chat-subtitle">Private chats, with the people who make your path matter.</p>
         </section>
 
         {notice ? <p className="admin-alert admin-alert-error" role="status">{notice}</p> : null}
 
-        <div className="chat-directory-layout">
-          <section className="chat-list-panel" aria-labelledby="conversations-heading">
+        <div className="chat-inbox-layout">
+          <aside className="chat-list-panel chat-inbox-sidebar" aria-labelledby="conversations-heading">
             <div className="chat-panel-heading">
               <div>
-                <p className="admin-eyebrow">YOUR PRIVATE SPACE</p>
-                <h2 id="conversations-heading">Conversations</h2>
+                <p className="admin-eyebrow">YOUR INBOX</p>
+                <h2 id="conversations-heading">Messages</h2>
               </div>
-              <span className="chat-count">{conversationRows.length.toString().padStart(2, "0")}</span>
+              <Link className="chat-compose-new" href="/messages?new=1" aria-label="Start a new message" title="New message">＋</Link>
             </div>
 
             {conversationRows.length === 0 ? (
-              <div className="chat-empty">
+              <div className="chat-empty chat-empty-compact">
                 <span className="chat-empty-mark">言</span>
-                <h3>Quiet, for now.</h3>
-                <p>Choose an approved member to open your first private conversation.</p>
+                <h3>No chats yet</h3>
+                <p>Start a private conversation with an approved TFY member.</p>
+                <Link className="chat-open-button" href="/messages?new=1">NEW MESSAGE ↗</Link>
               </div>
             ) : (
               <div className="chat-conversation-list">
@@ -163,60 +170,118 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
                   const other = otherProfiles.get(otherId);
                   const latest = latestMessages.get(conversation.id);
                   const name = other?.display_name || other?.username || "TFY member";
+                  const selected = conversation.id === activeConversation?.id;
                   return (
-                    <Link className="chat-conversation-row" href={`/messages/${conversation.id}`} key={conversation.id}>
+                    <Link
+                      className={selected ? "chat-conversation-row chat-conversation-row-active" : "chat-conversation-row"}
+                      href={`/messages?conversation=${conversation.id}`}
+                      key={conversation.id}
+                      aria-current={selected ? "page" : undefined}
+                    >
                       <span className="chat-avatar">{initials(name)}</span>
                       <span className="chat-conversation-copy">
                         <strong>{name}</strong>
                         <small>@{other?.username || "member"}</small>
-                        <span className="chat-preview">{latest ? `${latest.sender_id === userId ? "You: " : ""}${latest.body}` : "Begin your conversation"}</span>
+                        <span className="chat-preview">{latest ? `${latest.sender_id === userId ? "You: " : ""}${latest.body}` : "Start a conversation"}</span>
                       </span>
-                      <span className="chat-conversation-time">{latest ? formatTime(latest.created_at) : "OPEN ↗"}</span>
+                      <span className="chat-conversation-time">{latest ? formatTime(latest.created_at) : ""}</span>
                     </Link>
                   );
                 })}
               </div>
             )}
-          </section>
+            <Link className="chat-sidebar-community-link" href="/#community">么 <span>Explore TFY communities</span> ↗</Link>
+          </aside>
 
-          <section className="chat-list-panel chat-members-panel" aria-labelledby="members-heading">
-            <div className="chat-panel-heading">
-              <div>
-                <p className="admin-eyebrow">THE APPROVED CIRCLE</p>
-                <h2 id="members-heading">Find a member</h2>
-              </div>
-              <span className="chat-count">{(newMembersResult.data ?? []).length.toString().padStart(2, "0")}</span>
-            </div>
-            <p className="chat-panel-intro">Only approved members appear here. Start a private conversation without exposing anyone's email address.</p>
-
-            {(newMembersResult.data ?? []).length === 0 ? (
-              <div className="chat-empty chat-empty-compact">
-                <h3>You are the first in this circle.</h3>
-                <p>Approved members will appear here as they join.</p>
-              </div>
+          <section className="chat-list-panel chat-inbox-main" aria-label="Selected conversation">
+            {activeConversation && activeOther ? (
+              <>
+                <div className="chat-inbox-thread-header">
+                  <div className="chat-thread-person">
+                    <span className="chat-avatar chat-thread-avatar">{initials(activeOther.display_name || activeOther.username || "T")}</span>
+                    <div>
+                      <h2>{activeOther.display_name || activeOther.username || "TFY member"}</h2>
+                      <p className="chat-thread-username">@{activeOther.username || "member"}</p>
+                    </div>
+                  </div>
+                  <span className="chat-secure-label"><span /> PRIVATE CHAT</span>
+                </div>
+                <div className="chat-inbox-message-stream" aria-label="Conversation messages">
+                  {activeMessages.length === 0 ? (
+                    <div className="chat-thread-empty">
+                      <span>言</span>
+                      <h2>Say hello.</h2>
+                      <p>Your conversation is private to you and {activeOther.display_name || activeOther.username || "this member"}.</p>
+                    </div>
+                  ) : (
+                    activeMessages.map((message) => {
+                      const own = message.sender_id === userId;
+                      return (
+                        <article className={own ? "chat-message-row chat-message-row-own" : "chat-message-row"} key={message.id}>
+                          <div className={own ? "chat-message-bubble chat-message-bubble-own" : "chat-message-bubble"}>
+                            <p>{message.body}</p>
+                            <time dateTime={message.created_at}>{formatTime(message.created_at)}</time>
+                          </div>
+                        </article>
+                      );
+                    })
+                  )}
+                </div>
+                <form action={sendDirectMessageAction} className="chat-inbox-compose">
+                  <input type="hidden" name="conversation_id" value={activeConversation.id} />
+                  <input type="hidden" name="return_to" value="inbox" />
+                  <label className="sr-only" htmlFor="inbox-message-body">Write a message</label>
+                  <textarea id="inbox-message-body" name="body" rows={2} maxLength={4000} required placeholder="Message…" />
+                  <button type="submit" aria-label="Send message">➤</button>
+                </form>
+                <p className="chat-inbox-privacy">Only the two approved participants can read this conversation.</p>
+              </>
+            ) : params.new === "1" ? (
+              <>
+                <div className="chat-panel-heading chat-new-message-heading">
+                  <div>
+                    <p className="admin-eyebrow">NEW CONVERSATION</p>
+                    <h2>Find a member</h2>
+                  </div>
+                  <Link className="chat-back-link" href="/messages">CANCEL</Link>
+                </div>
+                <p className="chat-panel-intro">Choose an approved TFY member to start a private conversation.</p>
+                {(newMembersResult.data ?? []).length === 0 ? (
+                  <div className="chat-empty"><h3>You are the first in this circle.</h3><p>Approved members will appear here as they join.</p></div>
+                ) : (
+                  <div className="chat-member-list chat-new-member-list">
+                    {(newMembersResult.data ?? []).map((member) => {
+                      const name = member.display_name || member.username || "TFY member";
+                      const existingConversation = conversationByOtherId.get(member.id);
+                      return (
+                        <article className="chat-member-row" key={member.id}>
+                          <span className="chat-avatar chat-avatar-small">{initials(name)}</span>
+                          <span className="chat-member-copy"><strong>{name}</strong><small>@{member.username || "member"}</small></span>
+                          {existingConversation ? (
+                            <Link className="chat-open-button" href={`/messages?conversation=${existingConversation}`}>OPEN CHAT ↗</Link>
+                          ) : (
+                            <form action={startDirectConversationAction}>
+                              <input type="hidden" name="other_user_id" value={member.id} />
+                              <button className="chat-open-button" type="submit">MESSAGE ↗</button>
+                            </form>
+                          )}
+                        </article>
+                      );
+                    })}
+                  </div>
+                )}
+              </>
             ) : (
-              <div className="chat-member-list">
-                {(newMembersResult.data ?? []).map((member) => {
-                  const name = member.display_name || member.username || "TFY member";
-                  const existingConversation = conversationByOtherId.get(member.id);
-                  return (
-                    <article className="chat-member-row" key={member.id}>
-                      <span className="chat-avatar chat-avatar-small">{initials(name)}</span>
-                      <span className="chat-member-copy">
-                        <strong>{name}</strong>
-                        <small>@{member.username || "member"}</small>
-                      </span>
-                      {existingConversation ? (
-                        <Link className="chat-open-button" href={`/messages/${existingConversation}`}>OPEN CHAT ↗</Link>
-                      ) : (
-                        <form action={startDirectConversationAction}>
-                          <input type="hidden" name="other_user_id" value={member.id} />
-                          <button className="chat-open-button" type="submit">MESSAGE ↗</button>
-                        </form>
-                      )}
-                    </article>
-                  );
-                })}
+              <div className="chat-inbox-welcome">
+                <span className="chat-inbox-logo">么</span>
+                <h2>Your TFY inbox.</h2>
+                <p>Select a conversation on the left, or start a new message to connect with your circle.</p>
+                <Link className="chat-open-button" href="/messages?new=1">NEW MESSAGE <span>↗</span></Link>
+                <div className="chat-inbox-community-prompt">
+                  <strong>Looking for the group?</strong>
+                  <p>Enter one of your TFY communities to talk with the whole circle.</p>
+                  <Link href="/#community">EXPLORE COMMUNITIES ↗</Link>
+                </div>
               </div>
             )}
           </section>
