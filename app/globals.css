@@ -392,3 +392,23 @@
 @media(prefers-reduced-motion:reduce){
   .samurai-world #world .fog,.samurai-world #world .mist,.samurai-world #world #smr *{animation:none!important}
 }
+
+
+/* Keep the gate silhouette unobstructed by the foreground samurai */
+.samurai-world .ronin.samurai-art{
+  right:-2.2vw;
+  bottom:0;
+  width:clamp(230px,26vw,385px);
+  height:min(60vh,520px);
+  opacity:.93;
+}
+.samurai-world #world #gate{filter:drop-shadow(0 0 18px rgba(255,18,44,.48)) drop-shadow(0 0 38px rgba(255,18,44,.15))}
+@media(max-width:760px){
+  .samurai-world .ronin.samurai-art{
+    right:-18px;
+    bottom:0;
+    width:clamp(190px,52vw,285px);
+    height:min(44vh,360px);
+    opacity:.78;
+  }
+}
