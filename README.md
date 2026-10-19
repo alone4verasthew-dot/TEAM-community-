@@ -35,11 +35,36 @@ Open http://localhost:3000.
 
 ## Validation
 
+Run the code checks locally:
+
 ```bash
 npm run typecheck
 npm run lint
 npm run build
 ```
+
+### Browser smoke tests (Playwright)
+
+Install dependencies and the Chromium browser once:
+
+```bash
+npm install
+npx playwright install chromium
+```
+
+Run the browser tests:
+
+```bash
+npm run test:e2e
+```
+
+For the interactive Playwright test runner:
+
+```bash
+npm run test:e2e:ui
+```
+
+The smoke suite checks the three community cards, mobile card layout, sign-in and unauthenticated access redirects. An additional authenticated theme test runs only when `TFY_E2E_EMAIL` and `TFY_E2E_PASSWORD` are supplied in the local shell; it does not send messages or join communities. Use an approved test account and never put credentials in source files. By default, Playwright starts the Next.js dev server itself and reuses an existing local server when available.
 
 ## Important security notes
 
