@@ -276,3 +276,19 @@
  .samurai-world .slogan{letter-spacing:clamp(2px,1vw,6px);gap:9px}
  .samurai-world .hero-buttons{flex-wrap:wrap}
 }
+
+
+/* TFY Gate sections */
+.gate-panel{min-height:56vh;scroll-margin-top:24px;padding:clamp(64px,9vw,120px) clamp(20px,8vw,120px);background:radial-gradient(ellipse at 50% 0%,#31071155,transparent 62%),linear-gradient(180deg,#050507,#0b0307);border-top:1px solid #ff17372b}
+.gate-panel h2{letter-spacing:.04em}
+.gate-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;max-width:1100px;margin:42px auto 0;text-align:left}
+.gate-steps article{position:relative;min-height:160px;padding:26px 24px;border:1px solid #ff173733;background:linear-gradient(145deg,#16060cbb,#080609dd);box-shadow:inset 0 0 30px #ff173708;backdrop-filter:blur(8px)}
+.gate-steps article>b{font:700 12px Arial,sans-serif;letter-spacing:2px;color:var(--red)}
+.gate-steps h3{margin:15px 0 10px;font:600 12px Arial,sans-serif;letter-spacing:2px;color:#f5eeee}
+.gate-steps article p{margin:0;color:#b9a9ad;font:12px/1.8 Arial,sans-serif}
+.member-limit{font-size:clamp(90px,18vw,180px);font-weight:900;line-height:1;color:#ff1737;text-shadow:0 0 35px #ff173744}
+.gate-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:28px clamp(20px,5.5vw,88px);border-top:1px solid #ff17372b;background:#050507;color:#9e898f;font:10px Arial,sans-serif;letter-spacing:2px}
+.gate-footer span:first-child{color:#f5eeee;font-family:serif;font-size:16px;letter-spacing:0}
+@media(max-width:760px){.gate-steps{grid-template-columns:1fr;gap:12px}.gate-steps article{min-height:0;padding:22px}.gate-footer{flex-direction:column;text-align:center}.samurai-header nav{gap:12px}.samurai-header nav a{font-size:8px;letter-spacing:1px}}
+@media(max-width:480px){.samurai-header{padding-inline:16px}.samurai-header nav a:nth-child(3){display:none}.samurai-header .join-button{padding:10px;font-size:8px;gap:6px}.gate-panel{padding-inline:18px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
