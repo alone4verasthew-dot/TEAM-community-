@@ -107,7 +107,7 @@ export default function HomePage() {
           <article className="community-card-banners">
             <span className="community-card-symbol" aria-hidden="true">旗</span>
             <p className="community-card-kicker">THE CREATIVE CORNER · 03</p>
-            <h3>BANNERS</h3>
+            <h3>᥇ꪖ​ꪀꪀꫀ𝘳𝘴</h3>
             <p>Share banners, visuals and creative designs for the TFY circle.</p>
             <form action={enterCommunityAction}><input type="hidden" name="slug" value="community-three" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form>
           </article>
