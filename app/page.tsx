@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CursorSwords from "./components/CursorSwords";
+import GateWorld from "./components/GateWorld";
 
 const kanji = ["仲間", "成長", "未来"];
 
@@ -29,16 +30,7 @@ export default function HomePage() {
         </defs>
       </svg>
       <CursorSwords />
-      <div className="moon" aria-hidden="true" />
-      <div className="mountain mountain-back" aria-hidden="true" />
-      <div className="mountain mountain-front" aria-hidden="true" />
-      <div className="torii" aria-hidden="true"><i /><b /><em /></div>
-      <div className="pagoda" aria-hidden="true"><i /><b /><em /><strong /></div>
-      <div className="mist mist-one" aria-hidden="true" />
-      <div className="mist mist-two" aria-hidden="true" />
-      <div className="katana katana-one" aria-hidden="true"><i /></div>
-      <div className="katana katana-two" aria-hidden="true"><i /></div>
-      <div className="katana katana-three" aria-hidden="true"><i /></div>
+      <GateWorld />
       <div className="ronin samurai-art" aria-hidden="true">
         <svg viewBox="0 0 520 680" role="presentation" className="samurai-illustration">
           <defs>
@@ -98,7 +90,6 @@ export default function HomePage() {
           </g>
         </svg>
       </div>
-      <div className="embers" aria-hidden="true" />
 
       <header className="samurai-header">
         <Link className="samurai-logo" href="/" aria-label="么 𝑻𝑬𝑨𝑴 ᵀᶠʸ乂">
