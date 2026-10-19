@@ -22,16 +22,6 @@ export async function signupAction(formData: FormData) {
 
   const supabase = await createClient();
 
-  // A cheap, non-consuming validation improves the message shown to the user.
-  // The auth.users trigger validates and consumes the code atomically on signup.
-  const { data: inviteIsValid, error: inviteCheckError } = await supabase.rpc(
-    "is_invite_valid",
-    { p_token: inviteCode },
-  );
-  if (inviteCheckError || inviteIsValid !== true) {
-    redirect("/signup?error=invite");
-  }
-
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   const { data, error } = await supabase.auth.signUp({
     email,
