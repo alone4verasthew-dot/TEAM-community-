@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
   // This flow only supports a fixed internal destination; never redirect to a URL supplied by the visitor.
-  const next = requestUrl.searchParams.get("next") === "/member" ? "/member" : "/member";
+  const next = "/member";
 
   if (code) {
     const supabase = await createClient();
