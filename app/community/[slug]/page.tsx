@@ -49,6 +49,11 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
     .eq("profile_id", userId)
     .maybeSingle();
 
+  const chatTheme = slug === "community-two" ? "admins" : slug === "community-three" ? "banners" : "tfy";
+  const chatTitle = chatTheme === "admins" ? "ADMINS TFY" : chatTheme === "banners" ? "BANNERS TFY" : "TFY COMMUNITY";
+  const chatIcon = chatTheme === "admins" ? "🛡" : chatTheme === "banners" ? "旗" : "么";
+  const chatEyebrow = chatTheme === "admins" ? "THE COMMAND ROOM · PRIVATE CHAT" : chatTheme === "banners" ? "THE CREATIVE STUDIO · GROUP CHAT" : "THE TFY CIRCLE · PRIVATE GROUP CHAT";
+
   const noticeText: Record<string, string> = {
     "invalid-message": "Messages must contain 1–4,000 characters.",
     "community-unavailable": "This community is no longer available.",
@@ -82,7 +87,7 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
   }
 
   return (
-    <main className="auth-page chat-page community-chat-page">
+    <main className={`auth-page chat-page community-chat-page community-theme-${chatTheme}`}>
       <div className="chat-atmosphere" aria-hidden="true">
         <div className="chat-moon" />
         <div className="chat-mist chat-mist-one" />
@@ -103,13 +108,13 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
         <section className="community-chat-panel">
           <div className="community-chat-heading">
             <Link className="chat-back-link" href="/#community">← ALL COMMUNITIES</Link>
-            <span className="community-live-pill"><i /> TFY COMMUNITY</span>
+            <span className="community-live-pill"><i /> {chatTitle}</span>
           </div>
           <div className="community-title-row">
-            <span className="community-icon">么</span>
+            <span className="community-icon">{chatIcon}</span>
             <div>
-              <p className="admin-eyebrow">PRIVATE GROUP CHAT</p>
-              <h1>{community.name}</h1>
+              <p className="admin-eyebrow">{chatEyebrow}</p>
+              <h1 className="community-chat-title">{chatTitle}</h1>
               <p>{community.description}</p>
             </div>
           </div>
@@ -120,7 +125,7 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
             <div className="community-join-state">
               <span className="community-join-mark">仲間</span>
               <h2>Step into your circle.</h2>
-              <p>Join {community.name} to read messages and talk with approved TFY members.</p>
+              <p>Join {chatTitle} to read messages and talk with approved TFY members.</p>
               <form action={enterCommunityAction}>
                 <input type="hidden" name="slug" value={community.slug} />
                 <button className="community-enter-primary" type="submit">ENTER COMMUNITY <span>↗</span></button>
@@ -129,14 +134,14 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
           ) : (
             <>
               <div className="community-chat-status">
-                <span>GROUP CONVERSATION</span>
+                <span>{chatTitle} · GROUP CHAT</span>
                 <span>{messages.length} {messages.length === 1 ? "MESSAGE" : "MESSAGES"}</span>
               </div>
               <div className="community-message-stream" aria-label="Community group messages" aria-live="polite">
                 {messages.length === 0 ? (
                   <div className="community-thread-empty">
                     <span>言</span>
-                    <h2>Start the conversation.</h2>
+                    <h2>Welcome to {chatTitle}.</h2>
                     <p>Your circle is here. Say hello and set the tone.</p>
                   </div>
                 ) : (
@@ -160,7 +165,7 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
                 <input type="hidden" name="slug" value={community.slug} />
                 <input type="hidden" name="community_id" value={community.id} />
                 <label className="sr-only" htmlFor="community-message-body">Message your community</label>
-                <textarea id="community-message-body" name="body" rows={2} maxLength={4000} required placeholder={`Message ${community.name}…`} />
+                <textarea id="community-message-body" name="body" rows={2} maxLength={4000} required placeholder={`Message ${chatTitle}…`} />
                 <button type="submit" aria-label="Send message">➤</button>
               </form>
               <p className="community-privacy-note">Only approved members who entered this community can read or send group messages.</p>
