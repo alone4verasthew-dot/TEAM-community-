@@ -589,3 +589,6 @@
   .auth-panel { padding: 24px 19px; }
   .auth-brand { margin-bottom: 28px; }
 }
+
+.member-login-hint { margin: 14px 0 0; color: #b9adb1; font: 10px Arial, sans-serif; letter-spacing: .5px; }
+.member-login-hint a { color: #ff6475; text-decoration: underline; text-underline-offset: 4px; margin-left: 5px; }
