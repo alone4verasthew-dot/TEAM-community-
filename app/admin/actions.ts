@@ -44,7 +44,6 @@ export async function reviewMemberAction(formData: FormData) {
   if (action === "approve") {
     const { error } = await supabase.rpc("admin_approve_member", {
       p_user_id: userId,
-      p_community_id: null,
     });
     if (error) {
       redirect("/admin?notice=approve-failed");
