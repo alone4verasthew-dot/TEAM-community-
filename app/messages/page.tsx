@@ -122,6 +122,7 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
           </Link>
           <div className="chat-nav">
             {viewer.role === "admin" ? <Link href="/admin">ADMIN DOJO</Link> : null}
+            <Link href="/#community">COMMUNITIES</Link>
             <Link href="/member">MEMBER VIEW</Link>
             <form action={signOutAction}>
               <button type="submit">SIGN OUT</button>
@@ -131,8 +132,8 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
 
         <section className="chat-heading">
           <p className="admin-eyebrow">PRIVATE CHANNEL · APPROVED MEMBERS</p>
-          <h1>Words between <span>warriors.</span></h1>
-          <p className="chat-subtitle">Private one-to-one conversations, visible only to the two approved members.</p>
+          <h1>Messages <span>with your circle.</span></h1>
+          <p className="chat-subtitle">Direct chats and your TFY community spaces, all in one place.</p>
         </section>
 
         {notice ? <p className="admin-alert admin-alert-error" role="status">{notice}</p> : null}
