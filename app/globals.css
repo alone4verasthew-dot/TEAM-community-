@@ -340,3 +340,5 @@
   .samurai-world .hero-brand h1.tfy-logo-lockup .brand-full-line .brand-kanji{font-size:clamp(19px,4.8vw,28px)}
   .samurai-world .hero-brand h1.tfy-logo-lockup .brand-full-line .brand-emb{width:clamp(18px,4.8vw,28px);margin-left:4px}
 }
+
+.samurai-world:before{background-color:rgba(0,0,0,var(--camera-alpha,0))}
