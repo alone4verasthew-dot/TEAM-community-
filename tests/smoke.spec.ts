@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 test.describe("TFY public experience", () => {
   test("landing page loads with the TFY brand and community section", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("link", { name: /MEMBER LOGIN/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Member login", exact: true })).toBeVisible();
     await expect(page.getByRole("heading", { name: /THE COMMUNITY/i })).toBeVisible();
     await expect(page.getByRole("heading", { name: "🦅:𝘛𝘌𝘈𝘔 (;™🕷️∆)𝘛 𝘍 𝘠🍁" })).toBeVisible();
   });
