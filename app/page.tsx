@@ -6,6 +6,28 @@ const kanji = ["仲間", "成長", "未来"];
 export default function HomePage() {
   return (
     <main className="samurai-world">
+      <svg width="0" height="0" aria-hidden="true" style={{ position: "absolute" }}>
+        <defs>
+          <symbol id="emb" viewBox="-62 -62 124 124">
+            <circle r="52" fill="rgba(224,18,31,.14)" stroke="rgba(255,42,56,.55)" strokeWidth="1.2" />
+            <g id="katana-emblem" transform="rotate(-38)" fill="#0b0204" stroke="#ff2a38" strokeWidth="1.1" strokeLinejoin="round">
+              <path d="M10 -2.6Q38 -3.2 66 -11Q62 -4.4 57 -1.5Q34 1.6 10 2.6Z" />
+              <path d="M12 1.6Q36 .6 58 -2" stroke="#fff" strokeWidth=".7" opacity=".85" fill="none" />
+              <rect x="6" y="-3.4" width="4.5" height="6.8" />
+              <ellipse cx="3.5" cy="0" rx="2.4" ry="8.2" />
+              <rect x="-38" y="-3" width="40" height="6" rx="1.5" />
+              <path d="M-35 -3l4 6M-29 -3l4 6M-23 -3l4 6M-17 -3l4 6M-11 -3l4 6M-5 -3l4 6" strokeWidth=".7" opacity=".8" />
+              <rect x="-41.5" y="-3.5" width="3.5" height="7" rx="1" />
+            </g>
+            <use href="#katana-emblem" transform="scale(-1 1)" />
+          </symbol>
+          <filter id="goo" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feColorMatrix in="blur" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 20 -8" result="goo" />
+            <feBlend in="SourceGraphic" in2="goo" />
+          </filter>
+        </defs>
+      </svg>
       <CursorSwords />
       <div className="moon" aria-hidden="true" />
       <div className="mountain mountain-back" aria-hidden="true" />
@@ -83,14 +105,7 @@ export default function HomePage() {
           <span className="brand-kanji">么</span>{" "}
           <span>𝑻𝑬𝑨𝑴</span>{" "}
           <strong>ᵀᶠʸ</strong><span className="brand-kanji">乂</span>
-          <svg className="brand-emb" viewBox="0 0 64 64" aria-hidden="true">
-            <circle cx="32" cy="32" r="29" fill="#ff173712" stroke="#ff173766" />
-            <g fill="#10060b" stroke="#ff344c" strokeWidth="1.2" strokeLinejoin="round">
-              <path d="M11 48 43 14 48 10 46 18 15 51Z"/><path d="M53 48 21 14 16 10 18 18 49 51Z"/>
-              <path d="M17 44 11 39 15 35 21 41Z"/><path d="M47 44 53 39 49 35 43 41Z"/>
-            </g>
-            <path d="M18 44 43 17M46 44 21 17" stroke="#f4eee9" strokeWidth="1" opacity=".85"/>
-          </svg>
+          <svg className="brand-emb" viewBox="-62 -62 124 124" aria-hidden="true"><use href="#emb" /></svg>
         </Link>
         <nav aria-label="Main navigation">
           <a href="#home" className="active">HOME</a>
@@ -110,14 +125,7 @@ export default function HomePage() {
               <span className="brand-kanji">么</span>{" "}
               <span className="team-word">𝑻𝑬𝑨𝑴</span>{" "}
               <span className="tfy-word">ᵀᶠʸ</span><span className="brand-kanji">乂</span>
-              <svg className="brand-emb" viewBox="0 0 64 64" aria-hidden="true">
-                <circle cx="32" cy="32" r="29" fill="#ff173712" stroke="#ff173766" />
-                <g fill="#10060b" stroke="#ff344c" strokeWidth="1.2" strokeLinejoin="round">
-                  <path d="M11 48 43 14 48 10 46 18 15 51Z"/><path d="M53 48 21 14 16 10 18 18 49 51Z"/>
-                  <path d="M17 44 11 39 15 35 21 41Z"/><path d="M47 44 53 39 49 35 43 41Z"/>
-                </g>
-                <path d="M18 44 43 17M46 44 21 17" stroke="#f4eee9" strokeWidth="1" opacity=".85"/>
-              </svg>
+              <svg className="brand-emb" viewBox="-62 -62 124 124" aria-hidden="true"><use href="#emb" /></svg>
             </span>
           </h1>
           <div className="slogan"><span />TO FIND YOURSELF<span /></div>
