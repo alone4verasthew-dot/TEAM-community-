@@ -326,3 +326,17 @@
 @media(prefers-reduced-motion:reduce){
   .embers-canvas,.ink-cursor-glow,.cursor-doodle-canvas{display:none!important}
 }
+
+
+/* Higher-specificity lockup rules override the original two-line headline styles */
+.samurai-world .hero-brand h1.tfy-logo-lockup .brand-full-line{display:flex;align-items:center;gap:0;white-space:nowrap;width:max-content;max-width:100%}
+.samurai-world .hero-brand h1.tfy-logo-lockup .brand-full-line .team-word{font-size:clamp(32px,6.2vw,96px);letter-spacing:-.075em;line-height:.9}
+.samurai-world .hero-brand h1.tfy-logo-lockup .brand-full-line .tfy-word{font-size:clamp(42px,8vw,122px);letter-spacing:-.06em;line-height:.9;margin:0 0 0 4px;position:static;transform:skew(-8deg)}
+.samurai-world .hero-brand h1.tfy-logo-lockup .brand-full-line .brand-kanji{font-size:clamp(22px,3.3vw,46px);line-height:1;color:var(--red);font-family:"Noto Sans CJK JP","Yu Gothic","Microsoft YaHei",sans-serif}
+.samurai-world .hero-brand h1.tfy-logo-lockup .brand-full-line .brand-emb{width:clamp(23px,3.3vw,46px);height:auto;flex:0 0 auto;margin-left:8px}
+@media(max-width:760px){
+  .samurai-world .hero-brand h1.tfy-logo-lockup .brand-full-line .team-word{font-size:clamp(29px,7.2vw,54px)}
+  .samurai-world .hero-brand h1.tfy-logo-lockup .brand-full-line .tfy-word{font-size:clamp(38px,9.4vw,70px);margin-left:2px}
+  .samurai-world .hero-brand h1.tfy-logo-lockup .brand-full-line .brand-kanji{font-size:clamp(19px,4.8vw,28px)}
+  .samurai-world .hero-brand h1.tfy-logo-lockup .brand-full-line .brand-emb{width:clamp(18px,4.8vw,28px);margin-left:4px}
+}
