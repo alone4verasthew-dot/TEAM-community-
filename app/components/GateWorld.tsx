@@ -136,6 +136,59 @@ export default function GateWorld() {
           </g>
         </g>
       </svg>
+      <div className="gate-walker" aria-hidden="true">
+        <svg viewBox="0 0 180 300" role="presentation">
+          <defs>
+            <linearGradient id="walker-shadow" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stopColor="#10080c" />
+              <stop offset=".6" stopColor="#030204" />
+              <stop offset="1" stopColor="#27040b" />
+            </linearGradient>
+            <filter id="walker-blur" x="-30%" y="-20%" width="160%" height="150%">
+              <feGaussianBlur stdDeviation="2.4" />
+            </filter>
+          </defs>
+          <ellipse cx="90" cy="285" rx="58" ry="8" fill="#ff172d" opacity=".13" filter="url(#walker-blur)" />
+          <g className="walker-cloak" fill="url(#walker-shadow)" stroke="#5b0b19" strokeOpacity=".45" strokeWidth="1.4" strokeLinejoin="round">
+            <path d="M67 75 47 88 32 131 24 184 36 191 54 145 49 198 32 269 56 276 80 209 93 156Z" />
+            <path d="M98 75 119 90 139 132 143 179 132 190 116 146 120 205 145 268 120 276 94 207 83 157Z" />
+          </g>
+          <g className="walker-leg-left" transform="translate(70 146)" fill="url(#walker-shadow)" stroke="#3b080f" strokeWidth="1">
+            <path d="M-10 0 11 0 8 48 -5 83 -17 126 -34 126 -27 80 -18 44Z" />
+            <path d="M-34 121 -12 121 -2 134 -37 134Z" />
+          </g>
+          <g className="walker-leg-right" transform="translate(96 146)" fill="url(#walker-shadow)" stroke="#3b080f" strokeWidth="1">
+            <path d="M-10 0 11 0 15 46 25 83 36 125 19 131 0 87 -8 49Z" />
+            <path d="M18 124 38 119 48 132 17 137Z" />
+          </g>
+          <g className="walker-torso" fill="url(#walker-shadow)" stroke="#5b0b19" strokeOpacity=".45" strokeWidth="1.4" strokeLinejoin="round">
+            <path d="M65 72Q88 63 106 75L119 119 108 157 55 157 42 119Z" />
+            <path d="M64 83 77 110 91 136 104 112 111 91 120 124 100 164 76 164 47 125Z" />
+            <path d="M50 107 69 119 85 150 76 164 57 142 42 123Z" fill="#050306" />
+            <path d="M103 106 91 124 84 149 100 163 118 132 120 117Z" fill="#050306" />
+          </g>
+          <g className="walker-arm-left" transform="translate(52 88)" fill="url(#walker-shadow)" stroke="#4e0916" strokeWidth="1.3">
+            <path d="M0 0 -13 15 -19 53 -6 72 4 66 -4 48 11 22Z" />
+            <path d="M-7 67 3 62 9 73 0 83 -8 80Z" fill="#030204" />
+          </g>
+          <g className="walker-arm-right" transform="translate(113 88)" fill="url(#walker-shadow)" stroke="#4e0916" strokeWidth="1.3">
+            <path d="M0 0 13 16 22 48 11 71 0 65 8 45 -9 23Z" />
+            <path d="M10 65 1 62 -5 73 4 83 12 78Z" fill="#030204" />
+          </g>
+          <g className="walker-head" fill="#030204" stroke="#4e0916" strokeWidth="1.3" strokeLinejoin="round">
+            <path d="M62 45Q52 24 72 17L92 15Q112 25 104 47L97 65 71 65Z" />
+            <path d="M44 35Q51 10 83 9Q114 10 124 34L114 39 55 40Z" />
+            <path d="M62 23 50 8 66 16M103 22 116 8 112 25" fill="#090307" />
+            <path d="M56 37Q84 30 114 37L107 43H63Z" fill="#070306" />
+          </g>
+          <g className="walker-sword" fill="none" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M119 88 141 53 145 55 124 94Z" stroke="#12070b" strokeWidth="8" />
+            <path d="M124 85 147 48" stroke="#a9a1a3" strokeOpacity=".42" strokeWidth="2.2" />
+            <path d="M116 91 130 99" stroke="#6d1221" strokeWidth="5" />
+            <path d="M113 90 128 99" stroke="#10060a" strokeWidth="2" />
+          </g>
+        </svg>
+      </div>
       <div className="fog f2" />
       <div className="mist" />
       <div className="fog f1" />
