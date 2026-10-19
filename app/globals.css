@@ -412,3 +412,61 @@
     opacity:.78;
   }
 }
+
+
+/* Shadow ronin walks from the foreground into the torii opening */
+.samurai-world #world .gate-walker{
+  position:absolute;z-index:5;left:calc(46% - clamp(58px,7.2vw,112px)/2);bottom:1%;
+  width:clamp(58px,7.2vw,112px);height:clamp(112px,19vh,190px);
+  pointer-events:none;opacity:0;transform-origin:50% 100%;
+  animation:shadow-ronin-enter 11s cubic-bezier(.42,0,.28,1) infinite;
+  filter:drop-shadow(0 0 8px rgba(255,22,43,.18));
+}
+.samurai-world #world .gate-walker svg{display:block;width:100%;height:100%;overflow:visible}
+.samurai-world #world .gate-walker .walker-leg-left,
+.samurai-world #world .gate-walker .walker-leg-right,
+.samurai-world #world .gate-walker .walker-arm-left,
+.samurai-world #world .gate-walker .walker-arm-right{transform-box:fill-box;transform-origin:50% 5%}
+.samurai-world #world .gate-walker .walker-leg-left{animation:shadow-leg-left .72s ease-in-out infinite}
+.samurai-world #world .gate-walker .walker-leg-right{animation:shadow-leg-right .72s ease-in-out infinite}
+.samurai-world #world .gate-walker .walker-arm-left{animation:shadow-arm-left .72s ease-in-out infinite}
+.samurai-world #world .gate-walker .walker-arm-right{animation:shadow-arm-right .72s ease-in-out infinite}
+.samurai-world #world .gate-walker .walker-torso{transform-box:fill-box;transform-origin:50% 100%;animation:shadow-ronin-bob .72s ease-in-out infinite}
+.samurai-world #world .gate-walker .walker-cloak{transform-box:fill-box;transform-origin:50% 0%;animation:shadow-cloak-sway 2.2s ease-in-out infinite alternate}
+@keyframes shadow-ronin-enter{
+  0%,4%{opacity:0;transform:translate(0,0) scale(1)}
+  9%{opacity:.88;transform:translate(0,0) scale(1)}
+  25%{opacity:.88;transform:translate(3vw,-5vh) scale(.82)}
+  44%{opacity:.82;transform:translate(7vw,-12vh) scale(.61)}
+  63%{opacity:.72;transform:translate(11vw,-18vh) scale(.4)}
+  75%{opacity:.46;transform:translate(13vw,-21vh) scale(.27)}
+  84%{opacity:.12;transform:translate(13.5vw,-22vh) scale(.19)}
+  90%,100%{opacity:0;transform:translate(13.5vw,-22vh) scale(.16)}
+}
+@keyframes shadow-leg-left{0%,100%{transform:rotate(20deg)}50%{transform:rotate(-20deg)}}
+@keyframes shadow-leg-right{0%,100%{transform:rotate(-20deg)}50%{transform:rotate(20deg)}}
+@keyframes shadow-arm-left{0%,100%{transform:rotate(-15deg)}50%{transform:rotate(16deg)}}
+@keyframes shadow-arm-right{0%,100%{transform:rotate(16deg)}50%{transform:rotate(-15deg)}}
+@keyframes shadow-ronin-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@keyframes shadow-cloak-sway{from{transform:skewX(-1deg)}to{transform:skewX(2deg)}}
+@media(max-width:760px){
+  .samurai-world #world .gate-walker{
+    left:calc(37% - clamp(48px,15vw,68px)/2);
+    width:clamp(48px,15vw,68px);height:clamp(98px,20vh,150px);
+    animation-name:shadow-ronin-enter-mobile;
+  }
+}
+@keyframes shadow-ronin-enter-mobile{
+  0%,4%{opacity:0;transform:translate(0,0) scale(1)}
+  9%{opacity:.88;transform:translate(0,0) scale(1)}
+  25%{opacity:.88;transform:translate(2vw,-5vh) scale(.82)}
+  44%{opacity:.82;transform:translate(4vw,-12vh) scale(.6)}
+  63%{opacity:.72;transform:translate(7vw,-18vh) scale(.39)}
+  75%{opacity:.44;transform:translate(9vw,-21vh) scale(.26)}
+  84%{opacity:.1;transform:translate(10vw,-22vh) scale(.18)}
+  90%,100%{opacity:0;transform:translate(10vw,-22vh) scale(.15)}
+}
+@media(prefers-reduced-motion:reduce){
+  .samurai-world #world .gate-walker{animation:none;opacity:.65;left:calc(55% - 25px);bottom:2%;transform:scale(.5)}
+  .samurai-world #world .gate-walker *{animation:none!important}
+}
