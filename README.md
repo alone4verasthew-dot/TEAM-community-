@@ -4,7 +4,7 @@ TFY is a mobile-first, invite-only community concept designed for a small circle
 
 ## Current stage
 
-This first commit set contains the public landing page and Next.js project foundation. The Supabase database foundation, typed browser/server clients, login/signup screens, invite-only signup trigger, email-confirmation callback, and approval-aware member page are set up on the `feat/supabase-connection` branch. The initial confirmed account has been bootstrapped as admin. The admin dashboard now supports pending membership review and single-use invite code creation, with a cinematic samurai theme, floating embers/kanji, crimson-moon atmosphere, and reduced-motion support. Messaging and calling remain pending.
+This first commit set contains the public landing page and Next.js project foundation. The Supabase database foundation, typed browser/server clients, login/signup screens, invite-only signup trigger, email-confirmation callback, and approval-aware member page are set up on the `feat/supabase-connection` branch. The initial confirmed account has been bootstrapped as admin. The admin dashboard supports pending membership review and single-use invite codes with cinematic samurai styling. Private one-to-one messaging is implemented for approved members, with database RLS restricting each conversation to its two participants. Messaging and calling remain pending.
 
 ## Stack
 
@@ -53,7 +53,7 @@ npm run build
 1. Confirm the landing page and hosting pipeline.
 2. Set up Supabase project, schema, row-level security, and typed clients.
 3. Test signup/email verification and admin member-review/invite management locally.
-4. Add profiles, member directory, communities, and admin controls.
+4. Add profile editing, community group chat, and admin controls.
 5. Add private messaging and abuse reporting.
 6. Evaluate voice/video provider pricing and implement calls.
 7. Test access control, mobile layout, and production deployment.
