@@ -80,7 +80,10 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
       : Promise.resolve({ data: [] as { conversation_id: string; body: string; sender_id: string; created_at: string }[] }),
   ]);
 
-  const otherProfiles = new Map((profilesResult.data ?? []).map((profile) => [profile.id, profile]));
+  const otherProfiles = new Map<string, { id: string; username: string | null; display_name: string | null }>();
+  for (const profile of profilesResult.data ?? []) {
+    otherProfiles.set(profile.id, profile);
+  }
   const latestMessages = new Map<string, { body: string; sender_id: string; created_at: string }>();
   for (const message of messagesResult.data ?? []) {
     if (!latestMessages.has(message.conversation_id)) {
