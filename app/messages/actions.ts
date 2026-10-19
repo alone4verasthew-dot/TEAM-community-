@@ -44,7 +44,7 @@ export async function startDirectConversationAction(formData: FormData) {
     redirect("/messages?notice=start-failed");
   }
 
-  redirect(`/messages/${conversationId}`);
+  redirect(`/messages?conversation=${conversationId}`);
 }
 
 export async function sendDirectMessageAction(formData: FormData) {
@@ -66,5 +66,6 @@ export async function sendDirectMessageAction(formData: FormData) {
     redirect("/messages?notice=send-failed");
   }
 
-  redirect(`/messages/${conversationId}`);
+  const returnToInbox = String(formData.get("return_to") ?? "") === "inbox";
+  redirect(returnToInbox ? `/messages?conversation=${conversationId}` : `/messages/${conversationId}`);
 }
