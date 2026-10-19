@@ -28,7 +28,9 @@ jobs:
       - name: Summarize dependency audit
         run: |
           npm audit --json > npm-audit.json || true
-          node -e 'const r = require("./npm-audit.json"); const v = r.vulnerabilities || {}; console.log(JSON.stringify({ counts: r.metadata?.vulnerabilities, packages: Object.entries(v).map(([name, x]) => ({ name, severity: x.severity, range: x.range, fixAvailable: x.fixAvailable, via: x.via.map(y => typeof y === "string" ? y : y.title) })) }, null, 2))'
+          node -e 'const r = require("./npm-audit.json"); const v = r.vulnerabilities || {}; console.log("Full dependency tree:"); console.log(JSON.stringify({ counts: r.metadata?.vulnerabilities, packages: Object.entries(v).map(([name, x]) => ({ name, severity: x.severity, range: x.range, fixAvailable: x.fixAvailable, via: x.via.map(y => typeof y === "string" ? y : y.title) })) }, null, 2))'
+          npm audit --omit=dev --json > npm-audit-production.json || true
+          node -e 'const r = require("./npm-audit-production.json"); const v = r.vulnerabilities || {}; console.log("Production dependencies only:"); console.log(JSON.stringify({ counts: r.metadata?.vulnerabilities, packages: Object.entries(v).map(([name, x]) => ({ name, severity: x.severity, range: x.range, fixAvailable: x.fixAvailable, via: x.via.map(y => typeof y === "string" ? y : y.title) })) }, null, 2))'
       - name: Lint
         run: npm run lint
       - name: TypeScript check
