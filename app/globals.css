@@ -1536,3 +1536,24 @@
   .community-card-banners { border-radius:15px 4px 15px 4px !important; }
   .community-card-banners::after { top:13px !important; right:13px !important; }
 }
+
+
+/* Use the user's requested Unicode lettering for the Banners community name */
+.community-card-banners h3 {
+  font-family:'Noto Sans Telugu',serif !important;
+  font-size:clamp(23px,2.3vw,31px) !important;
+  line-height:1.5 !important;
+  letter-spacing:.015em !important;
+  font-weight:700 !important;
+  transform:none !important;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  -webkit-text-fill-color:#ead5ff !important;
+  color:#ead5ff !important;
+  background:none !important;
+  filter:drop-shadow(0 0 10px rgba(184,120,255,.32)) !important;
+  text-shadow:0 0 22px rgba(184,120,255,.24);
+}
+@media(max-width:700px) {
+  .community-card-banners h3 { font-size:26px !important; }
+}
