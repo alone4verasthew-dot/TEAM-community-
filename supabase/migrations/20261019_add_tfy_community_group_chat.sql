@@ -49,7 +49,7 @@ grant select, insert on public.community_messages to authenticated;
 insert into public.communities (slug, name, description, is_active)
 values
   ('community-one', '🦅:𝘛𝘌𝘈𝘔 (;™🕷️∆)𝘛 𝘍 𝘠🍁', 'One circle. One path. One TFY family.', true),
-  ('community-two', 'ADMINS OF TFY', 'Coordinate, plan and keep the TFY community moving forward.', true),
+  ('community-two', 'ᥲᦔꪑ꠸ꪀડ ᥆ᠻ 𝘛𝘍𝘠', 'Coordinate, plan and keep the TFY community moving forward.', true),
   ('community-three', '᥇ꪖ​ꪀꪀꫀ𝘳𝘴', 'Share banners, visuals and creative designs for the TFY circle.', true)
 on conflict (slug) do update
 set name = excluded.name,
