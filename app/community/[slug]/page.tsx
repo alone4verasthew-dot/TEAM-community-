@@ -4,6 +4,9 @@ import { createClient } from "@/lib/supabase/server";
 import { signOutAction } from "@/app/auth/actions";
 import { enterCommunityAction, sendCommunityMessageAction } from "../actions";
 
+// These pages render user-specific data and must never be prerendered or shared-cached.
+export const dynamic = "force-dynamic";
+
 type CommunityPageProps = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ notice?: string }>;

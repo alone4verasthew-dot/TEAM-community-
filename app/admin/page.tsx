@@ -5,6 +5,9 @@ import { signOutAction } from "@/app/auth/actions";
 import { reviewMemberAction } from "./actions";
 import InviteCreator from "./InviteCreator";
 
+// These pages render user-specific data and must never be prerendered or shared-cached.
+export const dynamic = "force-dynamic";
+
 type AdminPageProps = {
   searchParams: Promise<{ notice?: string }>;
 };

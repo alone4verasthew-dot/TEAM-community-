@@ -3,6 +3,9 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOutAction } from "@/app/auth/actions";
 
+// These pages render user-specific data and must never be prerendered or shared-cached.
+export const dynamic = "force-dynamic";
+
 export default async function MemberPage() {
   const supabase = await createClient();
   const { data: claimData } = await supabase.auth.getClaims();
