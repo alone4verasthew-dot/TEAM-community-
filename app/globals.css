@@ -224,3 +224,25 @@
 @media (prefers-reduced-motion: reduce){
   .samurai-world:before{animation:none!important;animation-timeline:auto!important;transform:none!important}
 }
+
+
+/* Full-body ronin framing fix: keep the entire illustration inside the hero viewport. */
+.samurai-world .samurai-hero{position:relative;isolation:isolate;}
+.samurai-world .ronin.samurai-art{
+  right:clamp(0px,4vw,64px);
+  bottom:0;
+  width:clamp(260px,32vw,470px);
+  height:min(72vh,620px);
+  z-index:5;
+  opacity:1;
+}
+.samurai-world .samurai-illustration{width:100%;height:100%;display:block;overflow:visible;}
+@media(max-width:760px){
+  .samurai-world .ronin.samurai-art{
+    right:-8px;
+    bottom:0;
+    width:clamp(230px,58vw,340px);
+    height:min(52vh,430px);
+    opacity:.94;
+  }
+}
