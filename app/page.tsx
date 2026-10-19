@@ -67,6 +67,7 @@ export default function HomePage() {
             <a className="join-button join-main" href="mailto:admin@tfy.community?subject=TFY%20invite%20request">REQUEST AN INVITE <span>↗</span></a>
             <a className="ghost-button" href="#way">ENTER THE WORLD <span>↓</span></a>
           </div>
+          <p className="member-login-hint">Already a member? <Link href="/login">MEMBER LOGIN ↗</Link></p>
           <div className="hero-footnote"><span className="red-dot" /> INVITE ONLY <i /> 80 MEMBERS MAX</div>
         </div>
         <div className="scroll-cue"><span className="mouse"><i /></span><span>SCROLL TO EXPLORE</span><b>⌄</b></div>
