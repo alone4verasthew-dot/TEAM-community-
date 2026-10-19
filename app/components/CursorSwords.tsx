@@ -182,19 +182,19 @@ export default function CursorSwords() {
         { selector: "#far", depth: 14, scale: 0.16 },
         { selector: "#gate", depth: 22, scale: 2.7 },
         { selector: "#near", depth: 30, scale: 0.5 },
-        { selector: ".ronin.samurai-art", depth: 36, scale: -0.55 },
+        { selector: "#ron", depth: 26, scale: -0.55 },
       ];
       for (const layer of layers) {
         const el = document.querySelector<HTMLElement>(layer.selector);
         if (!el) continue;
         const isGate = layer.selector === "#gate";
-        const isRonin = layer.selector === ".ronin.samurai-art";
+        const isRonin = layer.selector === "#ron";
         const scale = isGate
           ? 1 + progress * layer.scale
           : isRonin
             ? Math.max(0.45, 1 + progress * layer.scale)
             : 1 + progress * layer.scale;
-        el.style.translate = (mx * layer.depth) + "px " + (my * layer.depth - progress * layer.depth * (isRonin ? 1.4 : 0.15)) + "px";
+        el.style.translate = (mx * layer.depth) + "px " + (my * layer.depth - progress * height * (isRonin ? 0.1 : 0.15)) + "px";
         el.style.scale = String(scale);
         if (isGate) el.style.opacity = String(progress < 0.8 ? 1 : Math.max(0, 1 - (progress - 0.8) * 5));
       }
@@ -232,7 +232,7 @@ export default function CursorSwords() {
       const root = document.querySelector<HTMLElement>(".samurai-world");
       root?.style.removeProperty("--camera-progress");
       root?.style.removeProperty("--camera-alpha");
-      for (const selector of ["#sky", "#far", "#gate", "#near", ".ronin.samurai-art"]) {
+      for (const selector of ["#sky", "#far", "#gate", "#near", "#ron"]) {
         const el = document.querySelector<HTMLElement>(selector);
         if (el) { el.style.removeProperty("translate"); el.style.removeProperty("scale"); }
       }

@@ -98,77 +98,50 @@ export default function GateWorld() {
 
       <svg className="ly" id="near" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
         <defs>
-          <radialGradient id="roninRim">
-            <stop offset="0" stopColor="#ff263d" stopOpacity=".42" />
-            <stop offset="1" stopColor="#ff263d" stopOpacity="0" />
+          <radialGradient id="rg">
+            <stop offset="0" stopColor="#ff2a38" stopOpacity=".5" />
+            <stop offset="1" stopColor="#ff2a38" stopOpacity="0" />
           </radialGradient>
         </defs>
         <path d="M-90 804 95 670 252 738 440 642 637 760 638 920H-90Z" fill="#090106" />
         <path d="M1215 900 1268 788 1388 706 1464 734 1600 656 1710 736V930Z" fill="#090106" />
         <path d="M0 822Q270 782 530 832T1040 824T1600 810V930H0Z" fill="#050103" />
 
+        <g id="smr" transform="translate(1450 708) scale(-1.35 1.35)">
+          <ellipse cx="10" cy="-110" rx="110" ry="150" fill="url(#rg)" />
+          <g className="br2" fill="#050102" stroke="rgba(255,42,56,.62)" strokeWidth="1.2" strokeLinejoin="round">
+            <line x1="-14" y1="-128" x2="-20" y2="-236" stroke="#2a0a10" strokeWidth="2.6" />
+            <g className="flag2"><path d="M-20 -234L-66 -224L-60 -184L-18 -198Z" fill="#8f0c18" stroke="#ff4a55" /><circle cx="-41" cy="-208" r="9" fill="none" stroke="#ff8a94" strokeWidth="2" /></g>
+            <path d="M-6 -86L-30 -46L-50 -6" stroke="rgba(255,42,56,.6)" strokeWidth="20" strokeLinecap="round" fill="none" />
+            <path d="M-6 -86L-30 -46L-50 -6" stroke="#050102" strokeWidth="17" strokeLinecap="round" fill="none" />
+            <path d="M10 -86L40 -56L44 -8" stroke="rgba(255,42,56,.6)" strokeWidth="20" strokeLinecap="round" fill="none" />
+            <path d="M10 -86L40 -56L44 -8" stroke="#050102" strokeWidth="17" strokeLinecap="round" fill="none" />
+            <path className="hk" d="M-20 -96L24 -96L60 -52L56 -20L38 -14L10 -44L-8 -20L-48 -16L-46 -50Z" />
+            <path d="M32 -8L64 -8L70 0L28 3Z" /><path d="M-62 -6L-36 -6L-30 2L-66 3Z" />
+            <path d="M-20 -102L22 -102L28 -66L-26 -66Z" />
+            <path d="M-14 -102V-66M-4 -102V-66M6 -102V-66M16 -102V-66M-24 -82H26" stroke="rgba(255,42,56,.5)" fill="none" />
+            <path d="M-18 -154L18 -154L24 -104L-22 -104Z" />
+            <path d="M-20 -142H22M-21 -130H23M-22 -118H23" stroke="rgba(255,42,56,.5)" fill="none" />
+            <path d="M10 -146L32 -124L62 -136" stroke="rgba(255,42,56,.6)" strokeWidth="14" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            <path d="M10 -146L32 -124L62 -136" stroke="#050102" strokeWidth="11" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+            <path d="M2 -158L32 -152L34 -142L2 -148Z" /><path d="M2 -148L34 -142L35 -130L3 -136Z" /><path d="M3 -136L35 -130L34 -119L4 -125Z" />
+            <rect x="-2" y="-162" width="10" height="12" /><circle cx="6" cy="-171" r="10" /><path d="M12 -174L23 -169L23 -158L12 -158Z" />
+            <path d="M-9 -173Q6 -197 23 -175L25 -170L-11 -170Z" /><path d="M17 -178L36 -173L25 -169Z" />
+            <path d="M-10 -170L-36 -162L-34 -154L-8 -160Z" /><path d="M-10 -160L-36 -152L-34 -144L-8 -150Z" />
+            <path d="M4 -190Q-14 -206 -10 -236Q3 -216 10 -194Z" /><path d="M12 -190Q32 -204 36 -232Q19 -214 10 -194Z" />
+          </g>
+          <g className="kt">
+            <path d="M40 -122L64 -141L67 -137L43 -117Z" fill="#150408" stroke="rgba(255,42,56,.62)" strokeWidth="1.2" strokeLinejoin="round" />
+            <ellipse cx="64" cy="-139" rx="3" ry="8.5" transform="rotate(-38 64 -139)" fill="#1b0a0e" stroke="#c9a23a" strokeWidth="1" />
+            <path d="M62 -140Q110 -176 156 -218L160 -214Q114 -170 66 -134Z" fill="#eef1f8" stroke="#fff" strokeWidth=".6" style={{ filter: "drop-shadow(0 0 4px #ff2a38) drop-shadow(0 0 12px #ff1f2d)" }} />
+            <path className="gl2" d="M68 -140Q112 -172 154 -212" fill="none" />
+          </g>
+        </g>
+
       </svg>
-      <div className="gate-walker" aria-hidden="true">
-        <svg viewBox="0 0 180 300" role="presentation">
-          <defs>
-            <linearGradient id="walker-shadow" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#10080c" />
-              <stop offset=".6" stopColor="#030204" />
-              <stop offset="1" stopColor="#27040b" />
-            </linearGradient>
-            <filter id="walker-blur" x="-30%" y="-20%" width="160%" height="150%">
-              <feGaussianBlur stdDeviation="2.4" />
-            </filter>
-          </defs>
-          <ellipse cx="90" cy="285" rx="58" ry="8" fill="#ff172d" opacity=".13" filter="url(#walker-blur)" />
-          <g className="walker-cloak" fill="url(#walker-shadow)" stroke="#5b0b19" strokeOpacity=".45" strokeWidth="1.4" strokeLinejoin="round">
-            <path d="M67 75 47 88 32 131 24 184 36 191 54 145 49 198 32 269 56 276 80 209 93 156Z" />
-            <path d="M98 75 119 90 139 132 143 179 132 190 116 146 120 205 145 268 120 276 94 207 83 157Z" />
-          </g>
-          <g transform="translate(70 146)">
-            <g className="walker-leg-left" fill="url(#walker-shadow)" stroke="#3b080f" strokeWidth="1">
-            <path d="M-10 0 11 0 8 48 -5 83 -17 126 -34 126 -27 80 -18 44Z" />
-            <path d="M-34 121 -12 121 -2 134 -37 134Z" />
-            </g>
-          </g>
-          <g transform="translate(96 146)">
-            <g className="walker-leg-right" fill="url(#walker-shadow)" stroke="#3b080f" strokeWidth="1">
-            <path d="M-10 0 11 0 15 46 25 83 36 125 19 131 0 87 -8 49Z" />
-            <path d="M18 124 38 119 48 132 17 137Z" />
-            </g>
-          </g>
-          <g className="walker-torso" fill="url(#walker-shadow)" stroke="#5b0b19" strokeOpacity=".45" strokeWidth="1.4" strokeLinejoin="round">
-            <path d="M65 72Q88 63 106 75L119 119 108 157 55 157 42 119Z" />
-            <path d="M64 83 77 110 91 136 104 112 111 91 120 124 100 164 76 164 47 125Z" />
-            <path d="M50 107 69 119 85 150 76 164 57 142 42 123Z" fill="#050306" />
-            <path d="M103 106 91 124 84 149 100 163 118 132 120 117Z" fill="#050306" />
-          </g>
-          <g transform="translate(52 88)">
-            <g className="walker-arm-left" fill="url(#walker-shadow)" stroke="#4e0916" strokeWidth="1.3">
-            <path d="M0 0 -13 15 -19 53 -6 72 4 66 -4 48 11 22Z" />
-            <path d="M-7 67 3 62 9 73 0 83 -8 80Z" fill="#030204" />
-            </g>
-          </g>
-          <g transform="translate(113 88)">
-            <g className="walker-arm-right" fill="url(#walker-shadow)" stroke="#4e0916" strokeWidth="1.3">
-            <path d="M0 0 13 16 22 48 11 71 0 65 8 45 -9 23Z" />
-            <path d="M10 65 1 62 -5 73 4 83 12 78Z" fill="#030204" />
-            </g>
-          </g>
-          <g className="walker-head" fill="#030204" stroke="#4e0916" strokeWidth="1.3" strokeLinejoin="round">
-            <path d="M62 45Q52 24 72 17L92 15Q112 25 104 47L97 65 71 65Z" />
-            <path d="M44 35Q51 10 83 9Q114 10 124 34L114 39 55 40Z" />
-            <path d="M62 23 50 8 66 16M103 22 116 8 112 25" fill="#090307" />
-            <path d="M56 37Q84 30 114 37L107 43H63Z" fill="#070306" />
-          </g>
-          <g className="walker-sword" fill="none" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M119 88 141 53 145 55 124 94Z" stroke="#12070b" strokeWidth="8" />
-            <path d="M124 85 147 48" stroke="#a9a1a3" strokeOpacity=".42" strokeWidth="2.2" />
-            <path d="M116 91 130 99" stroke="#6d1221" strokeWidth="5" />
-            <path d="M113 90 128 99" stroke="#10060a" strokeWidth="2" />
-          </g>
-        </svg>
-      </div>
+      <svg className="ly" id="ron" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+        <image id="rimg" href="/ronin.png" x="915" y="538" width="170" height="302" preserveAspectRatio="none" />
+      </svg>
       <div className="fog f2" />
       <div className="mist" />
       <div className="fog f1" />
