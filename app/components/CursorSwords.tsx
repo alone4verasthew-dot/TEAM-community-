@@ -51,6 +51,11 @@ export default function CursorSwords() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       sizeCanvas(ink, inkCtx);
       sizeCanvas(embers, emberCtx);
+      const viewBox = width / Math.max(1, height) < 1 ? "470 0 1060 900" : "0 0 1600 900";
+      document.querySelectorAll<SVGSVGElement>(".samurai-world #world svg.ly").forEach((layer) => {
+        layer.setAttribute("viewBox", viewBox);
+        layer.setAttribute("preserveAspectRatio", "xMidYMid slice");
+      });
       for (const p of particles) {
         p.x = Math.min(width, p.x);
         p.y = Math.min(height, p.y);
