@@ -208,7 +208,6 @@ export type Database = {
       admin_reject_member: { Args: { p_user_id: string }; Returns: undefined }
       is_admin: { Args: never; Returns: boolean }
       is_approved_member: { Args: never; Returns: boolean }
-      is_invite_valid: { Args: { p_token: string }; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
