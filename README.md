@@ -29,7 +29,7 @@ copy .env.example .env.local
 npm run dev
 ```
 
-On macOS/Linux, use `cp .env.example .env.local` instead of the `copy` command. Never use a Supabase secret/service-role key in `NEXT_PUBLIC_*` variables.
+On macOS/Linux, use `cp .env.example .env.local` instead of the `copy` command. Set `NEXT_PUBLIC_SITE_URL` to `http://localhost:3000` locally. When auth is deployed later, set it to the real site URL in hosting environment variables. Never use a Supabase secret/service-role key in `NEXT_PUBLIC_*` variables.
 
 Open http://localhost:3000.
 
@@ -57,3 +57,8 @@ npm run build
 5. Add private messaging and abuse reporting.
 6. Evaluate voice/video provider pricing and implement calls.
 7. Test access control, mobile layout, and production deployment.
+
+
+## Supabase Auth redirect setup
+
+For local email confirmation, add `http://localhost:3000/**` to Supabase Auth's Additional Redirect URLs. Keep the Site URL set to the intended primary site (do not change it to localhost for local testing). Set `NEXT_PUBLIC_SITE_URL` to the current app origin in each environment.
