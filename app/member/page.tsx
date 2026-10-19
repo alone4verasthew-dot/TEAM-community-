@@ -47,6 +47,7 @@ export default async function MemberPage() {
             <div className="member-status member-status-approved">MEMBER APPROVED</div>
             <p className="member-detail">Username: @{profile.username || "not set"}</p>
             <p className="member-detail">Access role: {profile.role}</p>
+            {profile.role === "admin" ? <Link className="admin-dashboard-link" href="/admin">OPEN ADMIN DASHBOARD ↗</Link> : null}
           </>
         ) : isRejected ? (
           <>
