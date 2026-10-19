@@ -1,6 +1,7 @@
 import Link from "next/link";
 import CursorSwords from "./components/CursorSwords";
 import GateWorld from "./components/GateWorld";
+import { enterCommunityAction } from "./community/actions";
 
 const kanji = ["仲間", "成長", "未来"];
 
@@ -89,9 +90,9 @@ export default function HomePage() {
         <h2>THE <span>COMMUNITY</span></h2>
         <p>A private place for your circle — built around trust, real conversations, and belonging.</p>
         <div className="gate-steps">
-          <article><h3>COMMUNITY ONE</h3><p>A place to connect and share the journey.</p></article>
-          <article><h3>COMMUNITY TWO</h3><p>Build consistency with people who get it.</p></article>
-          <article><h3>COMMUNITY THREE</h3><p>Keep growing together, one step at a time.</p></article>
+          <article><h3>COMMUNITY ONE</h3><p>A place to connect and share the journey.</p><form action={enterCommunityAction}><input type="hidden" name="slug" value="community-one" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form></article>
+          <article><h3>COMMUNITY TWO</h3><p>Build consistency with people who get it.</p><form action={enterCommunityAction}><input type="hidden" name="slug" value="community-two" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form></article>
+          <article><h3>COMMUNITY THREE</h3><p>Keep growing together, one step at a time.</p><form action={enterCommunityAction}><input type="hidden" name="slug" value="community-three" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form></article>
         </div>
         <div className="lower-rule" />
       </section>
