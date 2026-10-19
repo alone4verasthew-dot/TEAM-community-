@@ -45,7 +45,7 @@ npm run build
 
 - Do not add real API keys, passwords, or private member data to this repository.
 - The invite-only policy and 80-member limit must be enforced on the server/database before this site is used by real members.
-- The current invite-request links are placeholders and do not create accounts or send email.
+- Member login, invitation-code signup, email-confirmation callback, and approval-aware member status screens are added on the feature branch. New users need a valid one-use invitation code, confirm their email, and wait for admin approval.
 - No login, messaging, calling, or admin functionality is active in this stage.
 
 ## Planned implementation order
