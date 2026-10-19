@@ -292,3 +292,37 @@
 @media(max-width:760px){.gate-steps{grid-template-columns:1fr;gap:12px}.gate-steps article{min-height:0;padding:22px}.gate-footer{flex-direction:column;text-align:center}.samurai-header nav{gap:12px}.samurai-header nav a{font-size:8px;letter-spacing:1px}}
 @media(max-width:480px){.samurai-header{padding-inline:16px}.samurai-header nav a:nth-child(3){display:none}.samurai-header .join-button{padding:10px;font-size:8px;gap:6px}.gate-panel{padding-inline:18px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+
+/* Gate atmosphere, scroll camera and full Unicode brand lockup */
+.embers-canvas{position:fixed;inset:0;z-index:4;width:100%;height:100%;pointer-events:none;opacity:.8}
+.ink-cursor-glow{position:fixed;left:0;top:0;z-index:29;width:58px;height:58px;border-radius:50%;pointer-events:none;opacity:0;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(255,32,53,.24),rgba(255,20,45,.1) 42%,transparent 72%);mix-blend-mode:screen;filter:blur(1px);transition:opacity .15s ease}
+.cursor-doodle-canvas{z-index:30;filter:drop-shadow(0 0 5px #ff1737) drop-shadow(0 0 18px rgba(255,23,55,.72))}
+.samurai-world:before{background-color:rgba(0,0,0,calc(var(--camera-progress,0)*.22))}
+.samurai-logo{gap:3px;align-items:center}
+.samurai-logo .brand-kanji{font-size:12px;color:var(--red);font-family:"Noto Sans CJK JP","Yu Gothic","Microsoft YaHei",sans-serif;line-height:1;text-shadow:0 0 10px #ff1737aa}
+.brand-emb{display:block;flex:0 0 auto;width:20px;height:20px;margin-left:7px;filter:drop-shadow(0 0 6px #ff173777)}
+.tfy-logo-lockup{width:100%;overflow:visible}
+.brand-full-line{display:flex;align-items:center;gap:0;white-space:nowrap;transform-origin:left center;line-height:.9}
+.brand-full-line .brand-kanji{color:var(--red);font:700 clamp(22px,3.3vw,46px)/1 "Noto Sans CJK JP","Yu Gothic","Microsoft YaHei",sans-serif;text-shadow:0 0 12px #ff1737aa;flex:0 0 auto}
+.brand-full-line .team-word{font-size:clamp(32px,6.2vw,96px);letter-spacing:-.075em;line-height:.9}
+.brand-full-line .tfy-word{font-size:clamp(42px,8vw,122px);margin:0 0 0 4px;line-height:.9}
+.brand-full-line .brand-emb{width:clamp(23px,3.3vw,46px);height:auto;margin-left:8px}
+.footer-brand{display:flex;justify-content:center;align-items:center;gap:4px;color:#f4eee9;font-family:"Cambria Math","Segoe UI Symbol","STIX Two Math","Noto Sans Math",serif;font-size:clamp(17px,2vw,24px);letter-spacing:0;line-height:1.2}
+.footer-brand .brand-kanji{font-size:.7em;color:var(--red);font-family:"Noto Sans CJK JP","Yu Gothic","Microsoft YaHei",sans-serif;text-shadow:0 0 10px #ff1737aa}
+.footer-brand strong{color:var(--red);font-size:.85em;text-shadow:0 0 12px #ff1737aa}
+.gate-panel,.gate-panel *{scroll-margin-top:20px}
+@media(max-width:760px){
+  .samurai-logo{gap:2px}
+  .samurai-logo .brand-kanji{font-size:10px}
+  .samurai-logo .brand-emb{display:none}
+  .brand-full-line .team-word{font-size:clamp(29px,7.2vw,54px)}
+  .brand-full-line .tfy-word{font-size:clamp(38px,9.4vw,70px);margin-left:2px}
+  .brand-full-line .brand-kanji{font-size:clamp(19px,4.8vw,28px)}
+  .brand-full-line .brand-emb{width:clamp(18px,4.8vw,28px);margin-left:4px}
+  .ink-cursor-glow{display:none}
+  .embers-canvas{opacity:.58}
+}
+@media(prefers-reduced-motion:reduce){
+  .embers-canvas,.ink-cursor-glow,.cursor-doodle-canvas{display:none!important}
+}
