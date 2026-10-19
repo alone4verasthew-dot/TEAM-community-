@@ -114,7 +114,7 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
+      },
       direct_conversations: {
         Row: {
           created_at: string
