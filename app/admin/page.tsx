@@ -118,6 +118,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
           </Link>
           <div className="admin-live-status"><span className="admin-live-dot" /> DOJO SYSTEM ONLINE</div>
           <div className="admin-header-actions">
+            <Link className="admin-top-link" href="/messages">PRIVATE MESSAGES</Link>
             <Link className="admin-top-link" href="/member">MEMBER VIEW</Link>
             <form action={signOutAction}>
               <button className="admin-signout" type="submit">SIGN OUT</button>
