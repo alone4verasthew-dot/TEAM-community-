@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Noto+Sans+Telugu:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Bungee&family=Cinzel:wght@400;500;600;700;800;900&family=Orbitron:wght@400;500;600;700;800;900&family=Noto+Sans+Telugu:wght@400;500;600;700&display=swap');
 :root{color-scheme:dark;--red:#ff1737;--blood:#9d001a;--paper:#f4eee9;--ink:#050507}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#050507;color:var(--paper);font-family:'Cinzel','Noto Sans Telugu',serif;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}::selection{background:#ff1737;color:#fff}
 .samurai-world{position:relative;min-height:100vh;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 72% 22%,#570611 0,transparent 34%),linear-gradient(180deg,#080508 0%,#14050b 48%,#030304 100%)}
@@ -1415,4 +1415,40 @@
 }
 @media(prefers-reduced-motion:reduce) {
   .community-cards article { transition:none !important; }
+}
+
+
+/* Signature type treatments: admins = futuristic command, banners = creative poster */
+.community-card-admins h3 {
+  font-family:'Orbitron',sans-serif !important;
+  font-weight:800 !important;
+  font-size:clamp(15px,1.45vw,19px) !important;
+  line-height:1.55 !important;
+  letter-spacing:.075em !important;
+  text-transform:uppercase;
+  color:#f6d79e;
+  background:linear-gradient(110deg,#fff2c8 0%,#dcb878 43%,#fff4d7 65%,#9a753d 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 12px rgba(218,180,112,.19));
+}
+.community-card-banners h3 {
+  font-family:'Bungee',sans-serif !important;
+  font-weight:400 !important;
+  font-size:clamp(21px,2.15vw,29px) !important;
+  line-height:1.35 !important;
+  letter-spacing:.045em !important;
+  text-transform:uppercase;
+  color:#e3c5ff;
+  background:linear-gradient(100deg,#fff 0%,#d4a7ff 38%,#a16cff 68%,#f2d7ff 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 13px rgba(184,120,255,.3));
+  text-shadow:none;
+}
+@media(max-width:700px) {
+  .community-card-admins h3 { font-size:16px !important; letter-spacing:.055em !important; }
+  .community-card-banners h3 { font-size:25px !important; letter-spacing:.025em !important; }
 }
