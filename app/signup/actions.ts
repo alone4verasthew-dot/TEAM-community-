@@ -49,7 +49,7 @@ export async function signupAction(formData: FormData) {
 
   if (error) {
     const message = error.message.toLowerCase();
-    if (message.includes("invitation code") || message.includes("invite") || message.includes("database error saving new user")) {
+    if (message.includes("invitation code") || message.includes("invite")) {
       redirect("/signup?error=invite");
     }
     if (message.includes("username") || message.includes("duplicate key")) {
