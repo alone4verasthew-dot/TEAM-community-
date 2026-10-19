@@ -100,7 +100,7 @@ export default function HomePage() {
           <article className="community-card-admins">
             <span className="community-card-symbol" aria-hidden="true">🛡</span>
             <p className="community-card-kicker">THE COMMAND ROOM · 02</p>
-            <h3>ADMINS OF TFY</h3>
+            <h3>ᥲᦔꪑ꠸ꪀડ ᥆ᠻ 𝘛𝘍𝘠</h3>
             <p>Coordinate, plan and keep the TFY community moving forward.</p>
             <form action={enterCommunityAction}><input type="hidden" name="slug" value="community-two" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form>
           </article>
