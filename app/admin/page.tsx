@@ -67,11 +67,56 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
 
   return (
     <main className="auth-page admin-page">
+      <div className="admin-atmosphere" aria-hidden="true">
+        <div className="admin-blood-moon" />
+        <div className="admin-fog admin-fog-one" />
+        <div className="admin-fog admin-fog-two" />
+        <svg className="admin-landscape-art" viewBox="0 0 1440 520" preserveAspectRatio="xMidYMax slice">
+          <defs>
+            <linearGradient id="adminMountain" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#280510" />
+              <stop offset="1" stopColor="#050407" />
+            </linearGradient>
+            <linearGradient id="adminGateGlow" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stopColor="#8c0b25" stopOpacity="0" />
+              <stop offset=".5" stopColor="#ff334e" stopOpacity=".65" />
+              <stop offset="1" stopColor="#8c0b25" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          <path d="M0 330 130 245 245 300 398 174 535 290 695 205 840 305 995 185 1115 280 1270 166 1440 278V520H0Z" fill="url(#adminMountain)" />
+          <path d="M0 390 180 323 355 365 515 295 660 355 835 286 1010 372 1180 297 1325 350 1440 310V520H0Z" fill="#080508" />
+          <g fill="none" stroke="#a3132c" strokeOpacity=".25" strokeWidth="2">
+            <path d="M995 390V270M1120 390V270M970 286H1145M980 264Q1060 235 1135 264" />
+            <path d="M1022 390V300M1092 390V300M1010 310H1105" strokeWidth="5" />
+            <path d="M125 520V390M210 520V390M105 405H230M115 382Q168 358 220 382" />
+          </g>
+          <path d="M0 454Q300 415 520 455T960 440T1440 430V520H0Z" fill="#030304" />
+          <path d="M0 455Q300 416 520 455T960 440T1440 430" stroke="url(#adminGateGlow)" strokeWidth="1.5" fill="none" />
+        </svg>
+        <span className="admin-kanji admin-kanji-one">道</span>
+        <span className="admin-kanji admin-kanji-two">誠</span>
+        <span className="admin-kanji admin-kanji-three">仲間</span>
+        <span className="admin-ember admin-ember-1" />
+        <span className="admin-ember admin-ember-2" />
+        <span className="admin-ember admin-ember-3" />
+        <span className="admin-ember admin-ember-4" />
+        <span className="admin-ember admin-ember-5" />
+        <span className="admin-ember admin-ember-6" />
+        <span className="admin-ember admin-ember-7" />
+        <span className="admin-ember admin-ember-8" />
+        <span className="admin-ember admin-ember-9" />
+        <span className="admin-ember admin-ember-10" />
+        <span className="admin-ember admin-ember-11" />
+        <span className="admin-ember admin-ember-12" />
+        <span className="admin-sword-sheen admin-sword-one" />
+        <span className="admin-sword-sheen admin-sword-two" />
+      </div>
       <div className="admin-shell">
         <header className="admin-header">
           <Link className="auth-brand admin-brand" href="/">
             <span className="auth-mark">么</span> TEAM <strong>ᵀᶠʸ</strong> <span className="auth-mark">乂</span>
           </Link>
+          <div className="admin-live-status"><span className="admin-live-dot" /> DOJO SYSTEM ONLINE</div>
           <div className="admin-header-actions">
             <Link className="admin-top-link" href="/member">MEMBER VIEW</Link>
             <form action={signOutAction}>
@@ -82,7 +127,13 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
 
         <section className="admin-intro">
           <p className="admin-eyebrow">PRIVATE CIRCLE · ADMIN CONTROL</p>
-          <h1>Protect the circle.<br /><span>Grow it thoughtfully.</span></h1>
+          <div className="admin-title-row">
+            <h1>Protect the circle.<br /><span>Grow it thoughtfully.</span></h1>
+            <div className="admin-title-seal" aria-hidden="true">
+              <span>侍</span>
+              <small>TFY</small>
+            </div>
+          </div>
           <p className="admin-muted">
             Review membership requests, keep track of the 80-member limit, and issue private invitation codes.
           </p>
