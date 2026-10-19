@@ -89,10 +89,28 @@ export default function HomePage() {
         <p className="lower-eyebrow">ONE TEAM <span>•</span> ONE JOURNEY</p>
         <h2>THE <span>COMMUNITY</span></h2>
         <p>A private place for your circle — built around trust, real conversations, and belonging.</p>
-        <div className="gate-steps">
-          <article><h3>COMMUNITY ONE</h3><p>A place to connect and share the journey.</p><form action={enterCommunityAction}><input type="hidden" name="slug" value="community-one" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form></article>
-          <article><h3>COMMUNITY TWO</h3><p>Build consistency with people who get it.</p><form action={enterCommunityAction}><input type="hidden" name="slug" value="community-two" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form></article>
-          <article><h3>COMMUNITY THREE</h3><p>Keep growing together, one step at a time.</p><form action={enterCommunityAction}><input type="hidden" name="slug" value="community-three" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form></article>
+        <div className="gate-steps community-cards">
+          <article className="community-card-eagle">
+            <span className="community-card-symbol" aria-hidden="true">🦅</span>
+            <p className="community-card-kicker">THE MAIN CIRCLE · 01</p>
+            <h3>🦅:𝘛𝘌𝘈𝘔 (;™🕷️∆)𝘛 𝘍 𝘠🍁</h3>
+            <p>One circle. One path. One TFY family.</p>
+            <form action={enterCommunityAction}><input type="hidden" name="slug" value="community-one" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form>
+          </article>
+          <article className="community-card-admins">
+            <span className="community-card-symbol" aria-hidden="true">🛡</span>
+            <p className="community-card-kicker">THE COMMAND ROOM · 02</p>
+            <h3>ADMINS OF TFY</h3>
+            <p>Coordinate, plan and keep the TFY community moving forward.</p>
+            <form action={enterCommunityAction}><input type="hidden" name="slug" value="community-two" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form>
+          </article>
+          <article className="community-card-banners">
+            <span className="community-card-symbol" aria-hidden="true">旗</span>
+            <p className="community-card-kicker">THE CREATIVE CORNER · 03</p>
+            <h3>BANNERS</h3>
+            <p>Share banners, visuals and creative designs for the TFY circle.</p>
+            <form action={enterCommunityAction}><input type="hidden" name="slug" value="community-three" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form>
+          </article>
         </div>
         <div className="lower-rule" />
       </section>
