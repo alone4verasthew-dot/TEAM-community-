@@ -109,3 +109,34 @@ export async function createInviteAction(
     }),
   };
 }
+
+export async function manageMemberAccessAction(formData: FormData) {
+  const { supabase, userId } = await requireAdmin();
+  const targetId = String(formData.get("user_id") ?? "");
+  const operation = String(formData.get("operation") ?? "");
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(targetId) || targetId === userId) {
+    redirect("/admin?notice=access-failed");
+  }
+
+  let error;
+  if (operation === "grant-admin" || operation === "remove-admin") {
+    ({ error } = await supabase.rpc("admin_set_member_role", {
+      p_user_id: targetId,
+      p_role: operation === "grant-admin" ? "admin" : "member",
+    }));
+  } else if (operation === "grant-banner" || operation === "remove-banner") {
+    ({ error } = await supabase.rpc("admin_set_banner_membership", {
+      p_user_id: targetId,
+      p_is_banner: operation === "grant-banner",
+    }));
+  } else {
+    redirect("/admin?notice=invalid-request");
+  }
+
+  if (error) redirect("/admin?notice=access-failed");
+  revalidatePath("/admin");
+  revalidatePath("/member");
+  revalidatePath("/community/community-three");
+  revalidatePath("/community/community-two");
+  redirect("/admin?notice=access-updated");
+}
