@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOutAction } from "@/app/auth/actions";
+import RoleBadges from "@/app/components/role-badges";
 
 // These pages render user-specific data and must never be prerendered or shared-cached.
 export const dynamic = "force-dynamic";
@@ -35,6 +36,8 @@ export default async function MemberPage() {
   }
 
   const displayName = profile.display_name || profile.username || "TFY member";
+  const { data: bannerCommunity } = await supabase.from("communities").select("id").eq("slug", "community-three").maybeSingle();
+  const { data: bannerMembership } = bannerCommunity && profile.status === "approved" ? await supabase.from("memberships").select("community_id").eq("community_id", bannerCommunity.id).eq("profile_id", userId).maybeSingle() : { data: null };
   const isApproved = profile.status === "approved";
   const isRejected = profile.status === "rejected";
 
@@ -48,6 +51,7 @@ export default async function MemberPage() {
           <>
             <p className="auth-intro">Your membership is approved. You can now find approved members and start private one-to-one conversations.</p>
             <div className="member-status member-status-approved">MEMBER APPROVED</div>
+            <RoleBadges isBanner={Boolean(bannerMembership)} isAdmin={profile.role === "admin"} />
             <p className="member-detail">Username: @{profile.username || "not set"}</p>
             <p className="member-detail">Access role: {profile.role}</p>
             <Link className="member-messages-link" href="/messages">OPEN PRIVATE MESSAGES ↗</Link>
