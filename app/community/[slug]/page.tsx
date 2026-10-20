@@ -70,7 +70,8 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
 
   let messages: { id: string; sender_id: string; body: string; created_at: string }[] = [];
   let senderNames = new Map<string, string>();
-  if (membership) {
+  const canUseChat = Boolean(membership) || viewer.role === "admin";
+  if (canUseChat) {
     const { data } = await supabase
       .from("community_messages")
       .select("id, sender_id, body, created_at")
@@ -127,7 +128,7 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
 
           {notice ? <p className="admin-alert admin-alert-error" role="status">{notice}</p> : null}
 
-          {!membership ? (
+          {!canUseChat ? (
             <div className="community-join-state">
               <span className="community-join-mark">仲間</span>
               <h2>Step into your circle.</h2>
