@@ -2,10 +2,31 @@ import Link from "next/link";
 import CursorSwords from "./components/CursorSwords";
 import GateWorld from "./components/GateWorld";
 import { enterCommunityAction } from "./community/actions";
+import { createClient } from "@/lib/supabase/server";
 
 const kanji = ["仲間", "成長", "未来"];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = await createClient();
+  const { data: claimData } = await supabase.auth.getClaims();
+  const userId = claimData?.claims?.sub;
+  let role: string | null = null;
+  let isBannerMember = false;
+
+  if (typeof userId === "string") {
+    const { data: profile } = await supabase.from("profiles").select("role, status").eq("id", userId).maybeSingle();
+    if (profile?.status === "approved") {
+      role = profile.role;
+      if (role !== "admin") {
+        const { data: bannerCommunity } = await supabase.from("communities").select("id").eq("slug", "community-three").maybeSingle();
+        if (bannerCommunity) {
+          const { data: bannerMembership } = await supabase.from("memberships").select("community_id").eq("community_id", bannerCommunity.id).eq("profile_id", userId).maybeSingle();
+          isBannerMember = Boolean(bannerMembership);
+        }
+      }
+    }
+  }
+
   return (
     <main className="samurai-world">
       <svg width="0" height="0" aria-hidden="true" style={{ position: "absolute" }}>
@@ -97,20 +118,20 @@ export default function HomePage() {
             <p>One circle. One path. One TFY family.</p>
             <form action={enterCommunityAction}><input type="hidden" name="slug" value="community-one" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form>
           </article>
-          <article className="community-card-admins">
+          {role === "admin" ? <article className="community-card-admins">
             <span className="community-card-symbol" aria-hidden="true">🛡</span>
             <p className="community-card-kicker">THE COMMAND ROOM · 02</p>
             <h3>ᥲᦔꪑ꠸ꪀડ ᥆ᠻ 𝘛𝘍𝘠</h3>
             <p>Coordinate, plan and keep the TFY community moving forward.</p>
             <form action={enterCommunityAction}><input type="hidden" name="slug" value="community-two" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form>
-          </article>
-          <article className="community-card-banners">
+          </article> : null}
+          {role === "admin" || isBannerMember ? <article className="community-card-banners">
             <span className="community-card-symbol" aria-hidden="true">旗</span>
             <p className="community-card-kicker">THE CREATIVE CORNER · 03</p>
             <h3>᥇ꪖ​ꪀꪀꫀ𝘳𝘴</h3>
             <p>Share banners, visuals and creative designs for the TFY circle.</p>
             <form action={enterCommunityAction}><input type="hidden" name="slug" value="community-three" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form>
-          </article>
+          </article> : null}
         </div>
         <div className="lower-rule" />
       </section>
