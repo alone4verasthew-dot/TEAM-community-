@@ -18,12 +18,13 @@ export default function ForgotPasswordPage() {
 
     try {
       const supabase = createClient();
-      const redirectTo = `${window.location.origin}/reset-password`;
-      const { error: requestError } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo });
+      const { error: requestError } = await supabase.auth.resetPasswordForEmail(email.trim());
       if (requestError) throw requestError;
-      setStatus("If an account exists for that email, a password reset link will arrive shortly. Check your inbox and spam folder.");
+      sessionStorage.setItem("tfy-password-reset-email", email.trim());
+      setStatus("If an account exists for that email, a reset code will arrive shortly. Check your inbox and spam folder, then enter the code on the next screen.");
+      window.location.assign("/reset-password");
     } catch {
-      setError("We couldn't send the reset email right now. Please try again in a moment.");
+      setError("We couldn't send the reset code right now. Please wait a while and try again.");
     } finally {
       setLoading(false);
     }
@@ -37,7 +38,7 @@ export default function ForgotPasswordPage() {
         </Link>
         <p className="auth-eyebrow">ACCOUNT RECOVERY</p>
         <h1>Find your way back.</h1>
-        <p className="auth-intro">Enter the email linked to your TFY account. We&apos;ll send you a secure password reset link.</p>
+        <p className="auth-intro">Enter the email linked to your TFY account. We&apos;ll send you a one-time reset code.</p>
 
         {status ? <p className="auth-notice" role="status">{status}</p> : null}
         {error ? <p className="auth-error" role="alert">{error}</p> : null}
@@ -54,7 +55,7 @@ export default function ForgotPasswordPage() {
             required
           />
           <button className="auth-submit" type="submit" disabled={loading}>
-            {loading ? "SENDING..." : "SEND RESET LINK"} <span>↗</span>
+            {loading ? "SENDING CODE..." : "SEND RESET CODE"} <span>↗</span>
           </button>
         </form>
 
