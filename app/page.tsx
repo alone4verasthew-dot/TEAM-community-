@@ -106,6 +106,7 @@ export default async function HomePage() {
         </div>
         <div className="lower-rule" />
       </section>
+      {role ? (
       <section className="samurai-lower gate-panel" id="community">
         <p className="lower-eyebrow">ONE TEAM <span>•</span> ONE JOURNEY</p>
         <h2>THE <span>COMMUNITY</span></h2>
@@ -135,6 +136,7 @@ export default async function HomePage() {
         </div>
         <div className="lower-rule" />
       </section>
+      ) : null}
       <section className="samurai-lower gate-panel" id="members">
         <p className="lower-eyebrow">INVITE ONLY <span>•</span> LIMITED CIRCLE</p>
         <div className="member-limit">80</div>
