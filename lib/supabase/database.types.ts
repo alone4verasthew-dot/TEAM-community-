@@ -330,6 +330,8 @@ export type Database = {
         Returns: undefined
       }
       admin_reject_member: { Args: { p_user_id: string }; Returns: undefined }
+      admin_set_member_role: { Args: { p_role: string; p_user_id: string }; Returns: undefined }
+      admin_set_banner_membership: { Args: { p_is_banner: boolean; p_user_id: string }; Returns: undefined }
       is_admin: { Args: never; Returns: boolean }
       is_approved_member: { Args: never; Returns: boolean }
       start_direct_conversation: {
