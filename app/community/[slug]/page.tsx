@@ -44,6 +44,7 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
     .maybeSingle();
 
   if (!community || (!community.is_active && viewer.role !== "admin")) notFound();
+  if (community.slug === "community-two" && viewer.role !== "admin") notFound();
 
   const { data: membership } = await supabase
     .from("memberships")
@@ -51,6 +52,8 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
     .eq("community_id", community.id)
     .eq("profile_id", userId)
     .maybeSingle();
+
+  if (community.slug === "community-three" && viewer.role !== "admin" && !membership) notFound();
 
   const chatTheme = slug === "community-two" ? "admins" : slug === "community-three" ? "banners" : "tfy";
   const chatTitle = chatTheme === "admins" ? "ADMINS TFY" : chatTheme === "banners" ? "BANNERS TFY" : "TFY COMMUNITY";
