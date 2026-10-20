@@ -50,7 +50,7 @@ export async function enterCommunityAction(formData: FormData) {
     .eq("profile_id", userId)
     .maybeSingle();
 
-  if (!membership) {
+  if (!membership && !(community.slug === "community-three" && role === "admin")) {
     const { error } = await supabase.from("memberships").insert({
       community_id: community.id,
       profile_id: userId,
