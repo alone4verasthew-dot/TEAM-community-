@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { signupAction } from "./actions";
+import { PasswordField } from "../components/password-field";
 
 type SignupPageProps = {
   searchParams: Promise<{ error?: string; message?: string }>;
@@ -40,8 +41,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
           <input id="signup-username" name="username" type="text" autoComplete="username" minLength={4} maxLength={20} pattern="[a-zA-Z0-9_]{4,20}" required />
           <label htmlFor="signup-email">Email address</label>
           <input id="signup-email" name="email" type="email" autoComplete="email" required />
-          <label htmlFor="signup-password">Password <span className="auth-label-note">8+ characters</span></label>
-          <input id="signup-password" name="password" type="password" autoComplete="new-password" minLength={8} required />
+          <PasswordField id="signup-password" name="password" label="Password" autoComplete="new-password" showRequirements />
           <label htmlFor="signup-invite-code">Invitation code</label>
           <input id="signup-invite-code" name="invite_code" type="password" autoComplete="off" required />
           <button className="auth-submit" type="submit">REQUEST ACCESS <span>↗</span></button>
