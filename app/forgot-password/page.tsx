@@ -37,7 +37,7 @@ export default function ForgotPasswordPage() {
         </Link>
         <p className="auth-eyebrow">ACCOUNT RECOVERY</p>
         <h1>Find your way back.</h1>
-        <p className="auth-intro">Enter the email linked to your TFY account. We'll send you a secure password reset link.</p>
+        <p className="auth-intro">Enter the email linked to your TFY account. We&apos;ll send you a secure password reset link.</p>
 
         {status ? <p className="auth-notice" role="status">{status}</p> : null}
         {error ? <p className="auth-error" role="alert">{error}</p> : null}
