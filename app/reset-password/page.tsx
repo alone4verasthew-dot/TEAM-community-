@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { PasswordField } from "@/app/components/password-field";
 import { createClient } from "@/lib/supabase/client";
