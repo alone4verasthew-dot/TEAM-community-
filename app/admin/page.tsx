@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOutAction } from "@/app/auth/actions";
-import { reviewMemberAction } from "./actions";
+import { manageMemberAccessAction, reviewMemberAction } from "./actions";
 import InviteCreator from "./InviteCreator";
 
 // These pages render user-specific data and must never be prerendered or shared-cached.
@@ -18,6 +18,8 @@ const notices: Record<string, { text: string; kind: "success" | "error" }> = {
   "approve-failed": { text: "Approval failed. The member cap may have been reached, or the request may no longer be pending.", kind: "error" },
   "reject-failed": { text: "Reject action failed. Refresh the page and try again.", kind: "error" },
   "invalid-request": { text: "That request could not be processed. Refresh and try again.", kind: "error" },
+  "access-updated": { text: "Member access updated.", kind: "success" },
+  "access-failed": { text: "Member access could not be updated. Refresh and try again.", kind: "error" },
 };
 
 function formatDate(value: string) {
@@ -63,6 +65,9 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
       .maybeSingle(),
   ]);
 
+  const { data: bannerCommunity } = await supabase.from("communities").select("id").eq("slug", "community-three").maybeSingle();
+  const { data: bannerRows } = bannerCommunity ? await supabase.from("memberships").select("profile_id").eq("community_id", bannerCommunity.id) : { data: [] };
+  const bannerMemberIds = new Set((bannerRows ?? []).map((row) => row.profile_id));
   const allProfiles = profiles ?? [];
   const pendingProfiles = allProfiles.filter((profile) => profile.status === "pending");
   const approvedProfiles = allProfiles.filter((profile) => profile.status === "approved");
@@ -239,6 +244,19 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
                     <span>@{profile.username || "username not set"}</span>
                   </div>
                   <span className="admin-role-chip">{profile.role}</span>
+                  <div className="admin-member-actions admin-access-actions">
+                    <form action={manageMemberAccessAction}>
+                      <input type="hidden" name="user_id" value={profile.id} />
+                      <input type="hidden" name="operation" value={profile.role === "admin" ? "remove-admin" : "grant-admin"} />
+                      <button className="admin-top-link" type="submit">{profile.role === "admin" ? "REMOVE ADMIN" : "MAKE ADMIN"}</button>
+                    </form>
+                    <form action={manageMemberAccessAction}>
+                      <input type="hidden" name="user_id" value={profile.id} />
+                      <input type="hidden" name="operation" value={bannerMemberIds.has(profile.id) ? "remove-banner" : "grant-banner"} />
+                      <button className="admin-top-link" type="submit">{bannerMemberIds.has(profile.id) ? "REMOVE BANNER" : "ADD BANNER"}</button>
+                    </form>
+                    <span className="admin-muted">{bannerMemberIds.has(profile.id) ? "Banner member" : "Not Banner"}</span>
+                  </div>
                 </article>
               ))}
             </div>
