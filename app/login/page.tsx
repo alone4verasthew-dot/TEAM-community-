@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { loginAction } from "./actions";
+import { PasswordField } from "../components/password-field";
 
 type LoginPageProps = {
   searchParams: Promise<{ error?: string; message?: string }>;
@@ -32,8 +33,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         <form action={loginAction} className="auth-form">
           <label htmlFor="login-email">Email address</label>
           <input id="login-email" name="email" type="email" autoComplete="email" required />
-          <label htmlFor="login-password">Password</label>
-          <input id="login-password" name="password" type="password" autoComplete="current-password" required />
+          <PasswordField id="login-password" name="password" label="Password" autoComplete="current-password" />
           <button className="auth-submit" type="submit">SIGN IN <span>↗</span></button>
         </form>
 
