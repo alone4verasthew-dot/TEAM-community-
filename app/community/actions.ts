@@ -16,19 +16,19 @@ async function requireApprovedMember() {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("status")
+    .select("status, role")
     .eq("id", userId)
     .maybeSingle();
 
   if (profile?.status !== "approved") redirect("/member");
-  return { supabase, userId };
+  return { supabase, userId, role: profile.role };
 }
 
 export async function enterCommunityAction(formData: FormData) {
   const slug = String(formData.get("slug") ?? "");
   if (!SLUG_PATTERN.test(slug)) redirect("/#community");
 
-  const { supabase, userId } = await requireApprovedMember();
+  const { supabase, userId, role } = await requireApprovedMember();
   const { data: community } = await supabase
     .from("communities")
     .select("id, slug")
@@ -37,6 +37,11 @@ export async function enterCommunityAction(formData: FormData) {
     .maybeSingle();
 
   if (!community) redirect("/#community");
+  if (community.slug === "community-two" && role !== "admin") redirect("/member?notice=community-restricted");
+  if (community.slug === "community-three" && role !== "admin") {
+    const { data: bannerMembership } = await supabase.from("memberships").select("community_id").eq("community_id", community.id).eq("profile_id", userId).maybeSingle();
+    if (!bannerMembership) redirect("/member?notice=community-restricted");
+  }
 
   const { data: membership } = await supabase
     .from("memberships")
