@@ -13,7 +13,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
     credentials: "Email or password is incorrect. Please try again.",
     confirmation: "Email confirmation link could not be used. Request a fresh link or sign in again.",
   };
-  const notice = params.message === "signed-out" ? "You have been signed out." : "";
+  const notice = params.message === "signed-out" ? "You have been signed out." : params.message === "password-updated" ? "Password updated successfully. Sign in with your new password." : "";
 
   return (
     <main className="auth-page">
@@ -34,6 +34,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           <label htmlFor="login-email">Email address</label>
           <input id="login-email" name="email" type="email" autoComplete="email" required />
           <PasswordField id="login-password" name="password" label="Password" autoComplete="current-password" />
+          <div style={{ textAlign: "right", marginTop: "-0.35rem" }}><Link href="/forgot-password" className="auth-home-link">Forgot password?</Link></div>
           <button className="auth-submit" type="submit">SIGN IN <span>↗</span></button>
         </form>
 
