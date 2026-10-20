@@ -91,7 +91,17 @@ export async function sendCommunityMessageAction(formData: FormData) {
     .eq("profile_id", userId)
     .maybeSingle();
 
-  if (!membership) redirect(`/community/${slug}?notice=not-a-member`);
+  const { data: viewer } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", userId)
+    .maybeSingle();
+
+  const adminPrivateAccess = viewer?.role === "admin" &&
+    (slug === "community-two" || slug === "community-three");
+  if (!membership && !adminPrivateAccess) {
+    redirect(`/community/${slug}?notice=not-a-member`);
+  }
 
   const { error } = await supabase.from("community_messages").insert({
     community_id: communityId,
