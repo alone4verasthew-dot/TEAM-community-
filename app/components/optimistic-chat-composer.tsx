@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 type SendResult = { ok: boolean; error?: string; message?: { id: string; body: string; created_at: string } };
@@ -12,7 +12,7 @@ type Props = {
   formClassName: string;
   placeholder: string;
   buttonLabel?: string;
-  community?: boolean;
+  community?: boolean;\n  confirmedMessageIds: string[];
 };
 
 export default function OptimisticChatComposer({
@@ -25,11 +25,11 @@ export default function OptimisticChatComposer({
 }: Props) {
   const router = useRouter();
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [optimisticBody, setOptimisticBody] = useState("");
+  const [optimisticMessage, setOptimisticMessage] = useState<{ id: string | null; body: string } | null>(null);
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
 
-  function submit(event: React.FormEvent<HTMLFormElement>) {
+  useEffect(() => {\n    if (optimisticMessage?.id && confirmedMessageIds.includes(optimisticMessage.id)) {\n      setOptimisticMessage(null);\n    }\n  }, [confirmedMessageIds, optimisticMessage]);\n\n  function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (isPending) return;
 
@@ -42,14 +42,14 @@ export default function OptimisticChatComposer({
     }
 
     setError("");
-    setOptimisticBody(body);
+    setOptimisticMessage({ id: null, body });
     if (inputRef.current) inputRef.current.value = "";
 
     startTransition(async () => {
       try {
         const result = await action(formData);
         if (!result.ok) {
-          setOptimisticBody("");
+          setOptimisticMessage(null);
           setError(result.error || "Message could not be sent. Please try again.");
           if (inputRef.current) inputRef.current.value = body;
           return;
@@ -58,7 +58,7 @@ export default function OptimisticChatComposer({
         // Keep the instant preview visible while the refreshed server message list arrives.
         window.setTimeout(() => setOptimisticBody(""), 900);
       } catch {
-        setOptimisticBody("");
+        setOptimisticMessage(null);
         setError("Connection issue. Please try sending again.");
         if (inputRef.current) inputRef.current.value = body;
       }
@@ -67,10 +67,10 @@ export default function OptimisticChatComposer({
 
   return (
     <>
-      {optimisticBody ? (
+      {optimisticMessage ? (
         <div className={community ? "community-message-row community-message-row-own optimistic-message" : "chat-message-row chat-message-row-own optimistic-message"} aria-live="polite">
           <div className={community ? "community-message-bubble community-message-bubble-own" : "chat-message-bubble chat-message-bubble-own"}>
-            <p>{optimisticBody}</p>
+            <p>{optimisticMessage.body}</p>
             <time>Sending…</time>
           </div>
         </div>
