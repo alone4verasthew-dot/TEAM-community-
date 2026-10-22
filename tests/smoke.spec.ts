@@ -1,27 +1,25 @@
 import { test, expect } from "@playwright/test";
 
 test.describe("TFY public experience", () => {
-  test("landing page loads with the TFY brand and community section", async ({ page }) => {
+  test("landing page loads with the TFY brand without exposing private communities", async ({ page }) => {
     await page.goto("/");
-    await expect(page.getByRole("link", { name: "Member login", exact: true })).toBeVisible();
-    await expect(page.getByRole("heading", { name: /THE COMMUNITY/i })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "🦅:𝘛𝘌𝘈𝘔 (;™🕷️∆)𝘛 𝘍 𝘠🍁" })).toBeVisible();
+    await expect(page.getByRole("link", { name: /MEMBER LOGIN/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /TO FIND YOURSELF/i })).toBeVisible();
+    await expect(page.locator("#community")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: /ENTER COMMUNITY/i })).toHaveCount(0);
   });
 
-  test("all three community cards have an Enter Community button", async ({ page }) => {
-    await page.goto("/");
-    const cards = page.locator(".community-cards > article");
-    await expect(cards).toHaveCount(3);
-    await expect(page.getByRole("heading", { name: "ᥲᦔꪑ꠸ꪀડ ᥆ᠻ 𝘛𝘍𝘠" })).toBeVisible();
-    await expect(page.getByRole("heading", { name: "᥇ꪖ​ꪀꪀꫀ𝘳𝘴" })).toBeVisible();
-    await expect(cards.getByRole("button", { name: /ENTER COMMUNITY/i })).toHaveCount(3);
+  test("logged-out visitors cannot see any private community cards", async ({ page }) => {
+    await page.goto("/#community");
+    await expect(page.locator(".community-cards > article")).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "ᥲᦔꪑ꠸ꪀડ ᥆ᠻ 𝘛𝘍𝘠" })).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "᥇ꪖ​ꪀꪀꫀ𝘳𝘴" })).toHaveCount(0);
   });
 
-  test("community cards remain accessible on a narrow mobile viewport", async ({ page }) => {
+  test("logged-out homepage remains usable on a narrow mobile viewport", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/#community");
-    await expect(page.locator(".community-cards > article")).toHaveCount(3);
-    await expect(page.locator(".community-cards").getByRole("button", { name: /ENTER COMMUNITY/i })).toHaveCount(3);
+    await expect(page.locator(".community-cards > article")).toHaveCount(0);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     expect(overflow, "the page should not overflow horizontally at 390px").toBe(false);
   });
