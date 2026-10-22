@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOutAction } from "@/app/auth/actions";
 import { sendDirectMessageAction, startDirectConversationAction } from "./actions";
+import OptimisticChatComposer from "@/app/components/optimistic-chat-composer";
 
 // These pages render user-specific data and must never be prerendered or shared-cached.
 export const dynamic = "force-dynamic";
@@ -230,13 +231,12 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
                     })
                   )}
                 </div>
-                <form action={sendDirectMessageAction} className="chat-inbox-compose">
-                  <input type="hidden" name="conversation_id" value={activeConversation.id} />
-                  <input type="hidden" name="return_to" value="inbox" />
-                  <label className="sr-only" htmlFor="inbox-message-body">Write a message</label>
-                  <textarea id="inbox-message-body" name="body" rows={2} maxLength={4000} required placeholder="Message…" />
-                  <button type="submit" aria-label="Send message">➤</button>
-                </form>
+                <OptimisticChatComposer
+                  action={sendDirectMessageAction}
+                  hiddenFields={[{ name: "conversation_id", value: activeConversation.id }, { name: "return_to", value: "inbox" }]}
+                  formClassName="chat-inbox-compose"
+                  placeholder="Message…"
+                />
                 <p className="chat-inbox-privacy">Only the two approved participants can read this conversation.</p>
               </>
             ) : params.new === "1" ? (
