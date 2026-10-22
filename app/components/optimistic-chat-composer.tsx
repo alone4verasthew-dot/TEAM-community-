@@ -3,7 +3,11 @@
 import { useEffect, useRef, useState, useTransition, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
-type SendResult = { ok: boolean; error?: string; message?: { id: string; body: string; created_at: string } };
+type SendResult = {
+  ok: boolean;
+  error?: string;
+  message?: { id: string; body: string; created_at: string };
+};
 type SendAction = (formData: FormData) => Promise<SendResult>;
 
 type Props = {
@@ -12,7 +16,8 @@ type Props = {
   formClassName: string;
   placeholder: string;
   buttonLabel?: string;
-  community?: boolean;\n  confirmedMessageIds: string[];
+  community?: boolean;
+  confirmedMessageIds: string[];
 };
 
 export default function OptimisticChatComposer({
@@ -22,6 +27,7 @@ export default function OptimisticChatComposer({
   placeholder,
   buttonLabel = "➤",
   community = false,
+  confirmedMessageIds,
 }: Props) {
   const router = useRouter();
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -29,12 +35,17 @@ export default function OptimisticChatComposer({
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
 
-  useEffect(() => {\n    if (optimisticMessage?.id && confirmedMessageIds.includes(optimisticMessage.id)) {\n      setOptimisticMessage(null);\n    }\n  }, [confirmedMessageIds, optimisticMessage]);\n\n  function submit(event: FormEvent<HTMLFormElement>) {
+  useEffect(() => {
+    if (optimisticMessage?.id && confirmedMessageIds.includes(optimisticMessage.id)) {
+      setOptimisticMessage(null);
+    }
+  }, [confirmedMessageIds, optimisticMessage]);
+
+  function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (isPending) return;
 
-    const form = event.currentTarget;
-    const formData = new FormData(form);
+    const formData = new FormData(event.currentTarget);
     const body = String(formData.get("body") ?? "").trim();
     if (!body || body.length > 4000) {
       setError("Messages must contain 1–4,000 characters.");
@@ -54,9 +65,8 @@ export default function OptimisticChatComposer({
           if (inputRef.current) inputRef.current.value = body;
           return;
         }
+        setOptimisticMessage({ id: result.message?.id ?? null, body });
         router.refresh();
-        // Keep the instant preview visible while the refreshed server message list arrives.
-        window.setTimeout(() => setOptimisticBody(""), 900);
       } catch {
         setOptimisticMessage(null);
         setError("Connection issue. Please try sending again.");
@@ -71,7 +81,7 @@ export default function OptimisticChatComposer({
         <div className={community ? "community-message-row community-message-row-own optimistic-message" : "chat-message-row chat-message-row-own optimistic-message"} aria-live="polite">
           <div className={community ? "community-message-bubble community-message-bubble-own" : "chat-message-bubble chat-message-bubble-own"}>
             <p>{optimisticMessage.body}</p>
-            <time>Sending…</time>
+            <time>{optimisticMessage.id ? "Sent" : "Sending…"}</time>
           </div>
         </div>
       ) : null}
