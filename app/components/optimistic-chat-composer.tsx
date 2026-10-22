@@ -17,6 +17,7 @@ type Props = {
   placeholder: string;
   buttonLabel?: string;
   community?: boolean;
+  thread?: boolean;
   confirmedMessageIds: string[];
 };
 
@@ -27,6 +28,7 @@ export default function OptimisticChatComposer({
   placeholder,
   buttonLabel = "➤",
   community = false,
+  thread = false,
   confirmedMessageIds,
 }: Props) {
   const router = useRouter();
@@ -88,7 +90,7 @@ export default function OptimisticChatComposer({
       {error ? <p className="admin-alert admin-alert-error" role="alert">{error}</p> : null}
       <form className={formClassName} onSubmit={submit}>
         {hiddenFields.map((field) => <input key={field.name} type="hidden" name={field.name} value={field.value} />)}
-        <label className="sr-only" htmlFor={community ? "community-message-body" : "optimistic-message-body"}>Write a message</label>
+        {thread ? <label htmlFor="optimistic-message-body">YOUR MESSAGE <span>· MAX 4,000 CHARACTERS</span></label> : <label className="sr-only" htmlFor={community ? "community-message-body" : "optimistic-message-body"}>Write a message</label>}
         <textarea
           ref={inputRef}
           id={community ? "community-message-body" : "optimistic-message-body"}
@@ -99,7 +101,7 @@ export default function OptimisticChatComposer({
           placeholder={placeholder}
           onChange={() => { if (error) setError(""); }}
         />
-        <button type="submit" aria-label="Send message" disabled={isPending}>{isPending ? "…" : buttonLabel}</button>
+        {thread ? (\n          <div className="chat-compose-footer">\n            <p>Only the two approved participants can read this conversation.</p>\n            <button type="submit" aria-label="Send message" disabled={isPending}>{isPending ? "SENDING…" : buttonLabel}</button>\n          </div>\n        ) : <button type="submit" aria-label="Send message" disabled={isPending}>{isPending ? "…" : buttonLabel}</button>}
       </form>
     </>
   );
