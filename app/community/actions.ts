@@ -70,7 +70,7 @@ export async function sendCommunityMessageAction(formData: FormData) {
   const body = String(formData.get("body") ?? "").trim();
 
   if (!SLUG_PATTERN.test(slug) || !UUID_PATTERN.test(communityId) || body.length < 1 || body.length > 4000) {
-    redirect(`/community/${SLUG_PATTERN.test(slug) ? slug : "community-one"}?notice=invalid-message`);
+    return { ok: false as const, error: "Messages must contain 1–4,000 characters." };
   }
 
   const { supabase, userId } = await requireApprovedMember();
@@ -82,35 +82,27 @@ export async function sendCommunityMessageAction(formData: FormData) {
     .eq("is_active", true)
     .maybeSingle();
 
-  if (!community) redirect(`/community/${slug}?notice=community-unavailable`);
+  if (!community) return { ok: false as const, error: "This community is no longer available." };
 
-  const { data: membership } = await supabase
-    .from("memberships")
-    .select("community_id")
-    .eq("community_id", communityId)
-    .eq("profile_id", userId)
-    .maybeSingle();
-
-  const { data: viewer } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", userId)
-    .maybeSingle();
+  const [{ data: membership }, { data: viewer }] = await Promise.all([
+    supabase.from("memberships").select("community_id").eq("community_id", communityId).eq("profile_id", userId).maybeSingle(),
+    supabase.from("profiles").select("role").eq("id", userId).maybeSingle(),
+  ]);
 
   const adminPrivateAccess = viewer?.role === "admin" &&
     (slug === "community-two" || slug === "community-three");
   if (!membership && !adminPrivateAccess) {
-    redirect(`/community/${slug}?notice=not-a-member`);
+    return { ok: false as const, error: "Enter this community before sending a message." };
   }
 
-  const { error } = await supabase.from("community_messages").insert({
-    community_id: communityId,
-    sender_id: userId,
-    body,
-  });
+  const { data: message, error } = await supabase
+    .from("community_messages")
+    .insert({ community_id: communityId, sender_id: userId, body })
+    .select("id, community_id, sender_id, body, created_at")
+    .single();
 
-  if (error) redirect(`/community/${slug}?notice=send-failed`);
+  if (error || !message) return { ok: false as const, error: "Message could not be sent. Please try again." };
 
   revalidatePath(`/community/${slug}`);
-  redirect(`/community/${slug}`);
+  return { ok: true as const, message };
 }
