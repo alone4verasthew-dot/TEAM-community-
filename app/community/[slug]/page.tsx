@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOutAction } from "@/app/auth/actions";
 import { enterCommunityAction, sendCommunityMessageAction } from "../actions";
+import RoleBadges from "@/app/components/role-badges";
 
 // These pages render user-specific data and must never be prerendered or shared-cached.
 export const dynamic = "force-dynamic";
@@ -69,7 +70,7 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
   const notice = query.notice ? noticeText[query.notice] : undefined;
 
   let messages: { id: string; sender_id: string; body: string; created_at: string }[] = [];
-  let senderNames = new Map<string, string>();
+  let senderNames = new Map<string, { name: string; role: string; isBanner: boolean }>();
   const canUseChat = Boolean(membership) || viewer.role === "admin";
   if (canUseChat) {
     const { data } = await supabase
@@ -82,13 +83,28 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
 
     const senderIds = [...new Set(messages.map((message) => message.sender_id))];
     if (senderIds.length) {
-      const { data: profiles } = await supabase
-        .from("profiles")
-        .select("id, username, display_name")
-        .in("id", senderIds);
+      const [{ data: profiles }, { data: bannerCommunity }] = await Promise.all([
+        supabase
+          .from("profiles")
+          .select("id, username, display_name, role")
+          .in("id", senderIds),
+        supabase.from("communities").select("id").eq("slug", "community-three").maybeSingle(),
+      ]);
+      const { data: bannerRows } = bannerCommunity
+        ? await supabase
+            .from("memberships")
+            .select("profile_id")
+            .eq("community_id", bannerCommunity.id)
+            .in("profile_id", senderIds)
+        : { data: [] as { profile_id: string }[] };
+      const bannerIds = new Set((bannerRows ?? []).map((row) => row.profile_id));
       senderNames = new Map((profiles ?? []).map((profile) => [
         profile.id,
-        profile.display_name || profile.username || "TFY member",
+        {
+          name: profile.display_name || profile.username || "TFY member",
+          role: profile.role,
+          isBanner: bannerIds.has(profile.id),
+        },
       ]));
     }
   }
@@ -154,12 +170,17 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
                 ) : (
                   messages.map((message) => {
                     const own = message.sender_id === userId;
-                    const sender = senderNames.get(message.sender_id) ?? "TFY member";
+                    const sender = senderNames.get(message.sender_id) ?? { name: "TFY member", role: "member", isBanner: false };
                     return (
                       <article className={own ? "community-message-row community-message-row-own" : "community-message-row"} key={message.id}>
-                        {!own ? <span className="community-message-avatar">{sender.trim().slice(0, 1).toUpperCase()}</span> : null}
+                        {!own ? <span className="community-message-avatar">{sender.name.trim().slice(0, 1).toUpperCase()}</span> : null}
                         <div className={own ? "community-message-bubble community-message-bubble-own" : "community-message-bubble"}>
-                          {!own ? <strong>{sender}</strong> : null}
+                          {!own ? (
+                            <div className="community-message-sender">
+                              <strong>{sender.name}</strong>
+                              <RoleBadges isBanner={sender.isBanner} isAdmin={sender.role === "admin"} compact />
+                            </div>
+                          ) : null}
                           <p>{message.body}</p>
                           <time dateTime={message.created_at}>{formatTime(message.created_at)}</time>
                         </div>
