@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOutAction } from "@/app/auth/actions";
 import { sendDirectMessageAction } from "../actions";
+import OptimisticChatComposer from "@/app/components/optimistic-chat-composer";
 
 // These pages render user-specific data and must never be prerendered or shared-cached.
 export const dynamic = "force-dynamic";
@@ -152,22 +153,14 @@ export default async function ConversationPage({ params, searchParams }: Convers
             )}
           </div>
 
-          <form action={sendDirectMessageAction} className="chat-compose-form">
-            <input type="hidden" name="conversation_id" value={conversationId} />
-            <label htmlFor="message-body">YOUR MESSAGE <span>· MAX 4,000 CHARACTERS</span></label>
-            <textarea
-              id="message-body"
-              name="body"
-              rows={3}
-              maxLength={4000}
-              required
-              placeholder={`Write something to ${otherName}…`}
-            />
-            <div className="chat-compose-footer">
-              <p>Only the two approved participants can read this conversation.</p>
-              <button type="submit">SEND MESSAGE <span>↗</span></button>
-            </div>
-          </form>
+          <OptimisticChatComposer
+            action={sendDirectMessageAction}
+            hiddenFields={[{ name: "conversation_id", value: conversationId }]}
+            formClassName="chat-compose-form"
+            placeholder={`Write something to ${otherName}…`}
+            buttonLabel="SEND ↗"
+          />
+          <p className="chat-inbox-privacy">Only the two approved participants can read this conversation.</p>
         </section>
         <footer className="chat-footer">TFY COMMUNITY <span>·</span> PRIVATE BY DESIGN</footer>
       </div>
