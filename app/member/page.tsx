@@ -55,7 +55,6 @@ export default async function MemberPage() {
             <p className="member-detail">Username: @{profile.username || "not set"}</p>
             <p className="member-detail">Access role: {profile.role}</p>
             <Link className="member-messages-link" href="/messages">OPEN PRIVATE MESSAGES ↗</Link>
-            <Link className="member-messages-link" href="/recovery-codes">MANAGE ACCOUNT RECOVERY CODES ↗</Link>
             {profile.role === "admin" ? <Link className="admin-dashboard-link" href="/admin">OPEN ADMIN DASHBOARD ↗</Link> : null}
           </>
         ) : isRejected ? (
@@ -70,6 +69,7 @@ export default async function MemberPage() {
             <p className="member-detail">We’ll keep your space private while your request is reviewed.</p>
           </>
         )}
+        <Link className="member-messages-link" href="/recovery-codes">MANAGE ACCOUNT RECOVERY CODES ↗</Link>
         <form action={signOutAction}><button className="auth-submit" type="submit">SIGN OUT</button></form>
       </section>
     </main>
