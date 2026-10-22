@@ -194,6 +194,7 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
                 action={sendCommunityMessageAction}
                 hiddenFields={[{ name: "slug", value: community.slug }, { name: "community_id", value: community.id }]}
                 formClassName="community-compose-form"
+                confirmedMessageIds={messages.map((message) => message.id)}
                 placeholder={`Message ${chatTitle}…`}
                 community
               />
