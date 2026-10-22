@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -53,19 +54,20 @@ export async function sendDirectMessageAction(formData: FormData) {
   const body = String(formData.get("body") ?? "").trim();
 
   if (!UUID_PATTERN.test(conversationId) || body.length < 1 || body.length > 4000) {
-    redirect("/messages?notice=invalid-message");
+    return { ok: false as const, error: "Messages must contain 1–4,000 characters." };
   }
 
-  const { error } = await supabase.from("direct_messages").insert({
-    conversation_id: conversationId,
-    sender_id: userId,
-    body,
-  });
+  const { data: message, error } = await supabase
+    .from("direct_messages")
+    .insert({ conversation_id: conversationId, sender_id: userId, body })
+    .select("id, conversation_id, sender_id, body, created_at")
+    .single();
 
-  if (error) {
-    redirect("/messages?notice=send-failed");
+  if (error || !message) {
+    return { ok: false as const, error: "Message could not be sent. Please try again." };
   }
 
-  const returnToInbox = String(formData.get("return_to") ?? "") === "inbox";
-  redirect(returnToInbox ? `/messages?conversation=${conversationId}` : `/messages/${conversationId}`);
+  revalidatePath("/messages");
+  revalidatePath(`/messages/${conversationId}`);
+  return { ok: true as const, message };
 }
