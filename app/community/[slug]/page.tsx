@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { signOutAction } from "@/app/auth/actions";
 import { enterCommunityAction, sendCommunityMessageAction } from "../actions";
 import RoleBadges from "@/app/components/role-badges";
+import OptimisticChatComposer from "@/app/components/optimistic-chat-composer";
 
 // These pages render user-specific data and must never be prerendered or shared-cached.
 export const dynamic = "force-dynamic";
@@ -189,13 +190,13 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
                   })
                 )}
               </div>
-              <form action={sendCommunityMessageAction} className="community-compose-form">
-                <input type="hidden" name="slug" value={community.slug} />
-                <input type="hidden" name="community_id" value={community.id} />
-                <label className="sr-only" htmlFor="community-message-body">Message your community</label>
-                <textarea id="community-message-body" name="body" rows={2} maxLength={4000} required placeholder={`Message ${chatTitle}…`} />
-                <button type="submit" aria-label="Send message">➤</button>
-              </form>
+              <OptimisticChatComposer
+                action={sendCommunityMessageAction}
+                hiddenFields={[{ name: "slug", value: community.slug }, { name: "community_id", value: community.id }]}
+                formClassName="community-compose-form"
+                placeholder={`Message ${chatTitle}…`}
+                community
+              />
               <p className="community-privacy-note">Only approved members who entered this community can read or send group messages.</p>
             </>
           )}
