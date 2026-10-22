@@ -41,6 +41,14 @@ export async function POST(request: NextRequest) {
     const ipHash = sha256(ip);
     const usernameHash = sha256(username);
     const cutoff = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    const retentionCutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+
+    // Keep the rate-limit table bounded during active use.
+    const { error: cleanupError } = await admin
+      .from("account_recovery_attempts")
+      .delete()
+      .lt("created_at", retentionCutoff);
+    if (cleanupError) throw cleanupError;
 
     const { error: logError } = await admin.from("account_recovery_attempts").insert({ ip_hash: ipHash, username_hash: usernameHash });
     if (logError) throw logError;
@@ -64,13 +72,18 @@ export async function POST(request: NextRequest) {
     if (codeError) throw codeError;
     if (!codeRow) return NextResponse.json({ error: "Username or recovery code is invalid." }, { status: 400 });
 
+    const usedAt = new Date().toISOString();
     const { data: consumed, error: consumeError } = await admin.from("account_recovery_codes")
-      .update({ used_at: new Date().toISOString() }).eq("id", codeRow.id).is("used_at", null).select("id").maybeSingle();
+      .update({ used_at: usedAt }).eq("id", codeRow.id).is("used_at", null).select("id").maybeSingle();
     if (consumeError) throw consumeError;
     if (!consumed) return NextResponse.json({ error: "Username or recovery code is invalid." }, { status: 400 });
 
     const { error: updateError } = await admin.auth.admin.updateUserById(profile.id, { password });
-    if (updateError) return NextResponse.json({ error: "Password update failed. Please use another recovery code or try again." }, { status: 500 });
+    if (updateError) {
+      // If Auth rejects the password update, restore this code so the user is not locked out.
+      await admin.from("account_recovery_codes").update({ used_at: null }).eq("id", codeRow.id).eq("used_at", usedAt);
+      return NextResponse.json({ error: "Password update failed. Please check the password requirements and try again." }, { status: 400 });
+    }
 
     return NextResponse.json({ message: "Password updated. Please sign in with your new password." });
   } catch {
