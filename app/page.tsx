@@ -4,6 +4,9 @@ import GateWorld from "./components/GateWorld";
 import { enterCommunityAction } from "./community/actions";
 import { createClient } from "@/lib/supabase/server";
 
+// The homepage contains role-specific community cards; never share/cache its HTML across users.
+export const dynamic = "force-dynamic";
+
 const kanji = ["仲間", "成長", "未来"];
 
 export default async function HomePage() {
