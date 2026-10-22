@@ -30,7 +30,7 @@ export default function RecoveryCodesPage() {
   async function copyCodes() {
     if (!codes) return;
     try {
-      await navigator.clipboard.writeText(codes.join("\\n"));
+      await navigator.clipboard.writeText(codes.join("\n"));
       setNotice("Recovery codes copied. Store them somewhere private and safe.");
     } catch {
       setError("Clipboard access was blocked. Select and copy the codes manually.");
