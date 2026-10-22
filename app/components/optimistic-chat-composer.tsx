@@ -101,7 +101,12 @@ export default function OptimisticChatComposer({
           placeholder={placeholder}
           onChange={() => { if (error) setError(""); }}
         />
-        {thread ? (\n          <div className="chat-compose-footer">\n            <p>Only the two approved participants can read this conversation.</p>\n            <button type="submit" aria-label="Send message" disabled={isPending}>{isPending ? "SENDING…" : buttonLabel}</button>\n          </div>\n        ) : <button type="submit" aria-label="Send message" disabled={isPending}>{isPending ? "…" : buttonLabel}</button>}
+        {thread ? (
+          <div className="chat-compose-footer">
+            <p>Only the two approved participants can read this conversation.</p>
+            <button type="submit" aria-label="Send message" disabled={isPending}>{isPending ? "SENDING…" : buttonLabel}</button>
+          </div>
+        ) : <button type="submit" aria-label="Send message" disabled={isPending}>{isPending ? "…" : buttonLabel}</button>}
       </form>
     </>
   );
