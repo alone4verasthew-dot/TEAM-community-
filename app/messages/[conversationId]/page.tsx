@@ -162,7 +162,6 @@ export default async function ConversationPage({ params, searchParams }: Convers
             buttonLabel="SEND MESSAGE ↗"
             thread
           />
-          <p className="chat-inbox-privacy">Only the two approved participants can read this conversation.</p>
         </section>
         <footer className="chat-footer">TFY COMMUNITY <span>·</span> PRIVATE BY DESIGN</footer>
       </div>
