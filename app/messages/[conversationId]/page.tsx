@@ -157,6 +157,7 @@ export default async function ConversationPage({ params, searchParams }: Convers
             action={sendDirectMessageAction}
             hiddenFields={[{ name: "conversation_id", value: conversationId }]}
             formClassName="chat-compose-form"
+            confirmedMessageIds={(messages ?? []).map((message) => message.id)}
             placeholder={`Write something to ${otherName}…`}
             buttonLabel="SEND ↗"
           />
