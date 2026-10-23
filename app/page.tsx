@@ -3,6 +3,7 @@ import CursorSwords from "./components/CursorSwords";
 import GateWorld from "./components/GateWorld";
 import { enterCommunityAction } from "./community/actions";
 import { createClient } from "@/lib/supabase/server";
+import { signOutAction } from "@/app/auth/actions";
 
 // The homepage contains role-specific community cards; never share/cache its HTML across users.
 export const dynamic = "force-dynamic";
@@ -69,7 +70,16 @@ export default async function HomePage() {
           <a href="#way">THE WAY</a>
           <a href="#community">COMMUNITY</a>
           <a href="#members">MEMBERS</a>
-          <Link href="/login" aria-label="Member login">MEMBER LOGIN</Link>
+          {role ? (
+            <>
+              <Link href="/member">MEMBER VIEW</Link>
+              <form action={signOutAction}>
+                <button className="samurai-nav-signout" type="submit">SIGN OUT</button>
+              </form>
+            </>
+          ) : (
+            <Link href="/login" aria-label="Member login">MEMBER LOGIN</Link>
+          )}
         </nav>
         <a className="join-button" href="mailto:admin@tfy.community?subject=TFY%20invite%20request">JOIN THE TEAM <span>↗</span></a>
       </header>
