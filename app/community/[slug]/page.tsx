@@ -5,6 +5,7 @@ import { signOutAction } from "@/app/auth/actions";
 import { enterCommunityAction, sendCommunityMessageAction } from "../actions";
 import RoleBadges from "@/app/components/role-badges";
 import OptimisticChatComposer from "@/app/components/optimistic-chat-composer";
+import CommunityMessageHistory from "@/app/components/community-message-history";
 
 // These pages render user-specific data and must never be prerendered or shared-cached.
 export const dynamic = "force-dynamic";
@@ -78,9 +79,9 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
       .from("community_messages")
       .select("id, sender_id, body, created_at")
       .eq("community_id", community.id)
-      .order("created_at", { ascending: true })
+      .order("created_at", { ascending: false })
       .limit(200);
-    messages = data ?? [];
+    messages = [...(data ?? [])].reverse();
 
     const senderIds = [...new Set(messages.map((message) => message.sender_id))];
     if (senderIds.length) {
@@ -162,33 +163,19 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
                 <span>{messages.length} {messages.length === 1 ? "MESSAGE" : "MESSAGES"}</span>
               </div>
               <div className="community-message-stream" aria-label="Community group messages" aria-live="polite">
-                {messages.length === 0 ? (
-                  <div className="community-thread-empty">
-                    <span>言</span>
-                    <h2>Welcome to {chatTitle}.</h2>
-                    <p>Your circle is here. Say hello and set the tone.</p>
-                  </div>
-                ) : (
-                  messages.map((message) => {
-                    const own = message.sender_id === userId;
-                    const sender = senderNames.get(message.sender_id) ?? { name: "TFY member", role: "member", isBanner: false };
-                    return (
-                      <article className={own ? "community-message-row community-message-row-own" : "community-message-row"} key={message.id}>
-                        {!own ? <span className="community-message-avatar">{sender.name.trim().slice(0, 1).toUpperCase()}</span> : null}
-                        <div className={own ? "community-message-bubble community-message-bubble-own" : "community-message-bubble"}>
-                          {!own ? (
-                            <div className="community-message-sender">
-                              <strong>{sender.name}</strong>
-                              <RoleBadges isBanner={sender.isBanner} isAdmin={sender.role === "admin"} compact />
-                            </div>
-                          ) : null}
-                          <p>{message.body}</p>
-                          <time dateTime={message.created_at}>{formatTime(message.created_at)}</time>
-                        </div>
-                      </article>
-                    );
-                  })
-                )}
+                <CommunityMessageHistory
+                  slug={community.slug}
+                  userId={userId}
+                  initialMessages={messages.map((message) => {
+                    const sender = senderNames.get(message.sender_id);
+                    return {
+                      ...message,
+                      sender_name: sender?.name || "TFY member",
+                      sender_role: sender?.role || "member",
+                      is_banner: Boolean(sender?.isBanner),
+                    };
+                  })}
+                />
               </div>
               <OptimisticChatComposer
                 action={sendCommunityMessageAction}
