@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { signOutAction } from "@/app/auth/actions";
 import { sendDirectMessageAction, startDirectConversationAction } from "./actions";
 import OptimisticChatComposer from "@/app/components/optimistic-chat-composer";
+import DirectMessageHistory from "@/app/components/direct-message-history";
 
 // These pages render user-specific data and must never be prerendered or shared-cached.
 export const dynamic = "force-dynamic";
@@ -214,26 +215,12 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
                   <span className="chat-secure-label"><span /> PRIVATE CHAT</span>
                 </div>
                 <div className="chat-inbox-message-stream" aria-label="Conversation messages">
-                  {activeMessages.length === 0 ? (
-                    <div className="chat-thread-empty">
-                      <span>言</span>
-                      <h2>Say hello.</h2>
-                      <p>Your conversation is private to you and {activeOther.display_name || activeOther.username || "this member"}.</p>
-                    </div>
-                  ) : (
-                    activeMessages.map((message) => {
-                      const own = message.sender_id === userId;
-                      return (
-                        <article className={own ? "chat-message-row chat-message-row-own" : "chat-message-row"} key={message.id}>
-                          <div className={own ? "chat-message-bubble chat-message-bubble-own" : "chat-message-bubble"}>
-                            <p>{message.body}</p>
-                            <time dateTime={message.created_at}>{formatTime(message.created_at)}</time>
-                          </div>
-                        </article>
-                      );
-                    })
-                  )}
-                </div>
+                  <DirectMessageHistory
+                    conversationId={activeConversation.id}
+                    userId={userId}
+                    initialMessages={activeMessages}
+                  />
+
                 <OptimisticChatComposer
                   action={sendDirectMessageAction}
                   hiddenFields={[{ name: "conversation_id", value: activeConversation.id }, { name: "return_to", value: "inbox" }]}
