@@ -73,15 +73,18 @@ export default async function HomePage() {
           {role ? (
             <>
               <Link href="/member">MEMBER VIEW</Link>
-              <form action={signOutAction}>
-                <button className="samurai-nav-signout" type="submit">SIGN OUT</button>
-              </form>
             </>
           ) : (
             <Link href="/login" aria-label="Member login">MEMBER LOGIN</Link>
           )}
         </nav>
-        <a className="join-button" href="mailto:admin@tfy.community?subject=TFY%20invite%20request">JOIN THE TEAM <span>↗</span></a>
+        {role ? (
+          <form action={signOutAction}>
+            <button className="join-button samurai-signout-cta" type="submit">SIGN OUT <span>↗</span></button>
+          </form>
+        ) : (
+          <a className="join-button" href="mailto:admin@tfy.community?subject=TFY%20invite%20request">JOIN THE TEAM <span>↗</span></a>
+        )}
       </header>
 
       <section className="samurai-hero" id="home">
