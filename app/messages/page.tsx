@@ -77,6 +77,7 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
           .select("conversation_id, body, sender_id, created_at")
           .in("conversation_id", conversationRows.map((conversation) => conversation.id))
           .order("created_at", { ascending: false })
+          .limit(500)
       : Promise.resolve({ data: [] as { conversation_id: string; body: string; sender_id: string; created_at: string }[] }),
   ]);
 
@@ -108,9 +109,11 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
         .from("direct_messages")
         .select("id, sender_id, body, created_at")
         .eq("conversation_id", activeConversation.id)
-        .order("created_at", { ascending: true })
+        .order("created_at", { ascending: false })
+        .limit(200)
     : { data: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
-  const activeMessages = activeMessagesResult.data ?? [];
+  // Keep the inbox responsive for long-running chats; render the newest 200 in chronological order.
+  const activeMessages = [...(activeMessagesResult.data ?? [])].reverse();
   const notice = params.notice ? notices[params.notice] : undefined;
 
   return (
