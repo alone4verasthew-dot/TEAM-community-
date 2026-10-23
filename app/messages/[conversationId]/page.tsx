@@ -81,7 +81,7 @@ export default async function ConversationPage({ params, searchParams }: Convers
   }
 
   // Render the newest 200 messages oldest-first to keep long conversations lightweight.
-  const recentMessages = [...recentMessages].reverse();
+  const recentMessages = [...(messages ?? [])].reverse();
   const otherName = other.display_name || other.username || "TFY member";
   const notice = query.notice === "invalid-message"
     ? "Messages must contain 1–4,000 characters."
