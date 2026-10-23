@@ -4,14 +4,14 @@ TFY is a mobile-first, invite-only community concept designed for a small circle
 
 ## Current stage
 
-This first commit set contains the public landing page and Next.js project foundation. Authentication, invite validation, membership approvals, database policies, messaging, and calling are **not implemented yet**.
+This first commit set contains the public landing page and Next.js project foundation. The Supabase database foundation, typed browser/server clients, login/signup screens, invite-only signup trigger, email-confirmation callback, and approval-aware member page are set up on the `feat/supabase-connection` branch. The initial confirmed account has been bootstrapped as admin. The admin dashboard supports pending membership review and single-use invite codes with cinematic samurai styling. Private one-to-one messaging is implemented for approved members, with database RLS restricting each conversation to its two participants. Real-time message subscriptions, read receipts, and calling remain pending.
 
 ## Stack
 
 - Next.js App Router
 - React + TypeScript
 - Plain CSS with responsive dark styling
-- Supabase (planned for authentication, database, and realtime features)
+- Supabase (authentication and database foundation; member-facing flows are being built)
 - Vercel (planned for hosting)
 
 ## Requirements
@@ -24,12 +24,18 @@ This first commit set contains the public landing page and Next.js project found
 
 ```bash
 npm install
+copy .env.example .env.local
+# Edit .env.local with your Supabase project URL and publishable key
 npm run dev
 ```
+
+On macOS/Linux, use `cp .env.example .env.local` instead of the `copy` command. Set `NEXT_PUBLIC_SITE_URL` to `http://localhost:3000` locally. When auth is deployed later, set it to the real site URL in hosting environment variables. Never use a Supabase secret/service-role key in `NEXT_PUBLIC_*` variables.
 
 Open http://localhost:3000.
 
 ## Validation
+
+Run the code checks locally:
 
 ```bash
 npm run typecheck
@@ -37,19 +43,47 @@ npm run lint
 npm run build
 ```
 
+### Browser smoke tests (Playwright)
+
+Install dependencies and the Chromium browser once:
+
+```bash
+npm install
+npx playwright install chromium
+```
+
+Run the browser tests:
+
+```bash
+npm run test:e2e
+```
+
+For the interactive Playwright test runner:
+
+```bash
+npm run test:e2e:ui
+```
+
+The smoke suite checks the three community cards, mobile card layout, sign-in and unauthenticated access redirects. An additional authenticated theme test runs only when `TFY_E2E_EMAIL` and `TFY_E2E_PASSWORD` are supplied in the local shell; it does not send messages or join communities. Use an approved test account and never put credentials in source files. By default, Playwright starts the Next.js dev server itself and reuses an existing local server when available.
+
 ## Important security notes
 
 - Do not add real API keys, passwords, or private member data to this repository.
-- The invite-only policy and 80-member limit must be enforced on the server/database before this site is used by real members.
-- The current invite-request links are placeholders and do not create accounts or send email.
-- No login, messaging, calling, or admin functionality is active in this stage.
+- Invitation-code use and the 80-approved-member cap are enforced by database logic. End-to-end authentication and access-control testing is still required before production use.
+- Member login, invitation-code signup, email-confirmation callback, and approval-aware member status screens are implemented on the feature branch. New users need a valid invitation code, confirm their email, and wait for admin approval.
+- Direct one-to-one messaging and the admin dashboard are implemented on the feature branch. Real-time updates, message deletion, reporting, and calling are not implemented yet.
 
 ## Planned implementation order
 
 1. Confirm the landing page and hosting pipeline.
-2. Set up Supabase project, schema, and row-level security.
-3. Implement signup, invite tokens, email verification, approval queue, and server-enforced member cap.
-4. Add profiles, member directory, communities, and admin controls.
-5. Add private messaging and abuse reporting.
+2. Set up Supabase project, schema, row-level security, and typed clients.
+3. Test signup/email verification and admin member-review/invite management locally.
+4. Add profile editing, community group chat, and admin controls.
+5. Add real-time messaging, read receipts, and abuse reporting.
 6. Evaluate voice/video provider pricing and implement calls.
 7. Test access control, mobile layout, and production deployment.
+
+
+## Supabase Auth redirect setup
+
+For local email confirmation, add `http://localhost:3000/**` to Supabase Auth's Additional Redirect URLs. Keep the Site URL set to the intended primary site (do not change it to localhost for local testing). Set `NEXT_PUBLIC_SITE_URL` to the current app origin in each environment.
