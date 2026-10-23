@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
 
 type SendResult = {
   ok: boolean;
@@ -31,7 +30,6 @@ export default function OptimisticChatComposer({
   thread = false,
   confirmedMessageIds,
 }: Props) {
-  const router = useRouter();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [optimisticMessage, setOptimisticMessage] = useState<{ id: string | null; body: string } | null>(null);
   const [error, setError] = useState("");
@@ -68,7 +66,6 @@ export default function OptimisticChatComposer({
           return;
         }
         setOptimisticMessage({ id: result.message?.id ?? null, body });
-        router.refresh();
       } catch {
         setOptimisticMessage(null);
         setError("Connection issue. Please try sending again.");
