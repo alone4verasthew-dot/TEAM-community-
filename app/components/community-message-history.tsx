@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { loadOlderCommunityMessagesAction } from "@/app/community/actions";
 import RoleBadges from "@/app/components/role-badges";
 
@@ -36,6 +36,17 @@ export default function CommunityMessageHistory({
   const [hasMore, setHasMore] = useState(initialMessages.length === 200);
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    setMessages((current) => {
+      const byId = new Map(current.map((message) => [message.id, message]));
+      for (const message of initialMessages) byId.set(message.id, message);
+      return [...byId.values()].sort((a, b) =>
+        a.created_at.localeCompare(b.created_at),
+      );
+    });
+    if (initialMessages.length === 200) setHasMore(true);
+  }, [initialMessages]);
 
   function loadOlder() {
     if (isPending || !hasMore || messages.length === 0) return;
