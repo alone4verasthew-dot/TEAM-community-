@@ -64,6 +64,56 @@ export async function enterCommunityAction(formData: FormData) {
   redirect(`/community/${slug}`);
 }
 
+
+export async function loadOlderCommunityMessagesAction(slug: string, before: string) {
+  if (!SLUG_PATTERN.test(slug) || !before || Number.isNaN(Date.parse(before))) {
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+  }
+
+  const { supabase, userId, role } = await requireApprovedMember();
+  const { data: community } = await supabase
+    .from("communities")
+    .select("id, slug, is_active")
+    .eq("slug", slug)
+    .maybeSingle();
+
+  if (!community || (!community.is_active && role !== "admin")) {
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+  }
+  if (slug === "community-two" && role !== "admin") {
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+  }
+
+  const { data: membership } = await supabase
+    .from("memberships")
+    .select("community_id")
+    .eq("community_id", community.id)
+    .eq("profile_id", userId)
+    .maybeSingle();
+  const adminPrivateAccess = role === "admin" && (slug === "community-two" || slug === "community-three");
+  if (!membership && !adminPrivateAccess) {
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+  }
+
+  const { data, error } = await supabase
+    .from("community_messages")
+    .select("id, sender_id, body, created_at")
+    .eq("community_id", community.id)
+    .lt("created_at", before)
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  if (error) {
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+  }
+
+  return {
+    ok: true as const,
+    messages: [...(data ?? [])].reverse(),
+    hasMore: (data ?? []).length === 50,
+  };
+}
+
 export async function sendCommunityMessageAction(formData: FormData) {
   const slug = String(formData.get("slug") ?? "");
   const communityId = String(formData.get("community_id") ?? "");
