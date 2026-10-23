@@ -220,7 +220,7 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
                     userId={userId}
                     initialMessages={activeMessages}
                   />
-
+                </div>
                 <OptimisticChatComposer
                   action={sendDirectMessageAction}
                   hiddenFields={[{ name: "conversation_id", value: activeConversation.id }, { name: "return_to", value: "inbox" }]}
