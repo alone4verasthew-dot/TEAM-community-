@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { signOutAction } from "@/app/auth/actions";
 import { sendDirectMessageAction } from "../actions";
 import OptimisticChatComposer from "@/app/components/optimistic-chat-composer";
+import DirectMessageHistory from "@/app/components/direct-message-history";
 
 // These pages render user-specific data and must never be prerendered or shared-cached.
 export const dynamic = "force-dynamic";
@@ -135,26 +136,12 @@ export default async function ConversationPage({ params, searchParams }: Convers
           {notice ? <p className="admin-alert admin-alert-error" role="status">{notice}</p> : null}
 
           <div className="chat-message-stream" aria-label="Conversation messages">
-            {recentMessages.length === 0 ? (
-              <div className="chat-thread-empty">
-                <span>言</span>
-                <h2>Begin with a word.</h2>
-                <p>This is a private conversation between you and {otherName}.</p>
-              </div>
-            ) : (
-              recentMessages.map((message) => {
-                const own = message.sender_id === userId;
-                return (
-                  <article className={own ? "chat-message-row chat-message-row-own" : "chat-message-row"} key={message.id}>
-                    <div className={own ? "chat-message-bubble chat-message-bubble-own" : "chat-message-bubble"}>
-                      <p>{message.body}</p>
-                      <time dateTime={message.created_at}>{formatTime(message.created_at)}</time>
-                    </div>
-                  </article>
-                );
-              })
-            )}
-          </div>
+            <DirectMessageHistory
+              conversationId={conversationId}
+              userId={userId}
+              initialMessages={recentMessages}
+            />
+
 
           <OptimisticChatComposer
             action={sendDirectMessageAction}
