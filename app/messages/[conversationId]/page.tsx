@@ -72,13 +72,16 @@ export default async function ConversationPage({ params, searchParams }: Convers
       .from("direct_messages")
       .select("id, sender_id, body, created_at")
       .eq("conversation_id", conversationId)
-      .order("created_at", { ascending: true }),
+      .order("created_at", { ascending: false })
+      .limit(200),
   ]);
 
   if (!other) {
     redirect("/messages");
   }
 
+  // Render the newest 200 messages oldest-first to keep long conversations lightweight.
+  const recentMessages = [...recentMessages].reverse();
   const otherName = other.display_name || other.username || "TFY member";
   const notice = query.notice === "invalid-message"
     ? "Messages must contain 1–4,000 characters."
@@ -132,14 +135,14 @@ export default async function ConversationPage({ params, searchParams }: Convers
           {notice ? <p className="admin-alert admin-alert-error" role="status">{notice}</p> : null}
 
           <div className="chat-message-stream" aria-label="Conversation messages">
-            {(messages ?? []).length === 0 ? (
+            {recentMessages.length === 0 ? (
               <div className="chat-thread-empty">
                 <span>言</span>
                 <h2>Begin with a word.</h2>
                 <p>This is a private conversation between you and {otherName}.</p>
               </div>
             ) : (
-              (messages ?? []).map((message) => {
+              recentMessages.map((message) => {
                 const own = message.sender_id === userId;
                 return (
                   <article className={own ? "chat-message-row chat-message-row-own" : "chat-message-row"} key={message.id}>
@@ -157,7 +160,7 @@ export default async function ConversationPage({ params, searchParams }: Convers
             action={sendDirectMessageAction}
             hiddenFields={[{ name: "conversation_id", value: conversationId }]}
             formClassName="chat-compose-form"
-            confirmedMessageIds={(messages ?? []).map((message) => message.id)}
+            confirmedMessageIds={recentMessages.map((message) => message.id)}
             placeholder={`Write something to ${otherName}…`}
             buttonLabel="SEND MESSAGE ↗"
             thread
