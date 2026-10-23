@@ -73,17 +73,9 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
       .neq("id", userId)
       .order("created_at", { ascending: false }),
     conversationRows.length
-      ? Promise.all(conversationRows.map(async (conversation) => {
-          const { data } = await supabase
-            .from("direct_messages")
-            .select("conversation_id, body, sender_id, created_at")
-            .eq("conversation_id", conversation.id)
-            .order("created_at", { ascending: false })
-            .limit(1);
-          return data?.[0] ?? null;
-        })).then((rows) => ({
-          data: rows.filter((message): message is { conversation_id: string; body: string; sender_id: string; created_at: string } => message !== null),
-        }))
+      ? supabase.rpc("get_latest_direct_message_previews", {
+          p_conversation_ids: conversationRows.map((conversation) => conversation.id),
+        }).then(({ data }) => ({ data: data ?? [] }))
       : Promise.resolve({ data: [] as { conversation_id: string; body: string; sender_id: string; created_at: string }[] }),
   ]);
 
