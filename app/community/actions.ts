@@ -107,9 +107,31 @@ export async function loadOlderCommunityMessagesAction(slug: string, before: str
     return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
   }
 
+  const olderMessages = [...(data ?? [])].reverse();
+  const senderIds = [...new Set(olderMessages.map((message) => message.sender_id))];
+  const [{ data: profiles }, { data: bannerCommunity }] = senderIds.length
+    ? await Promise.all([
+        supabase.from("profiles").select("id, username, display_name, role").in("id", senderIds),
+        supabase.from("communities").select("id").eq("slug", "community-three").maybeSingle(),
+      ])
+    : [{ data: [] as { id: string; username: string | null; display_name: string | null; role: string }[] }, { data: null as { id: string } | null }];
+  const { data: bannerRows } = bannerCommunity && senderIds.length
+    ? await supabase.from("memberships").select("profile_id").eq("community_id", bannerCommunity.id).in("profile_id", senderIds)
+    : { data: [] as { profile_id: string }[] };
+  const profileById = new Map((profiles ?? []).map((profile) => [profile.id, profile]));
+  const bannerIds = new Set((bannerRows ?? []).map((row) => row.profile_id));
+
   return {
     ok: true as const,
-    messages: [...(data ?? [])].reverse(),
+    messages: olderMessages.map((message) => {
+      const profile = profileById.get(message.sender_id);
+      return {
+        ...message,
+        sender_name: profile?.display_name || profile?.username || "TFY member",
+        sender_role: profile?.role || "member",
+        is_banner: bannerIds.has(message.sender_id),
+      };
+    }),
     hasMore: (data ?? []).length === 50,
   };
 }
