@@ -1780,3 +1780,110 @@
 }
 .chat-history-pagination button:hover:not(:disabled) { border-color:#e15b5b; background:rgba(100,25,30,.3); }
 .chat-history-pagination button:disabled { opacity:.6; cursor:wait; }
+
+
+/* Responsive full-screen chat + lighter interaction effects */
+.chat-page {
+  min-height: 100svh;
+  min-height: 100dvh;
+  padding-left: clamp(8px, 2.4vw, 36px);
+  padding-right: clamp(8px, 2.4vw, 36px);
+}
+.chat-shell { width: 100%; max-width: 1480px; }
+.chat-thread-shell { max-width: 1320px; }
+.community-chat-shell { max-width: 1240px; }
+.chat-header { margin-bottom: clamp(12px, 1.8vh, 24px); }
+.chat-list-panel, .chat-thread-panel, .community-chat-panel {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.chat-inbox-layout {
+  grid-template-columns: minmax(260px, .72fr) minmax(0, 1.8fr);
+  gap: clamp(10px, 1.2vw, 18px);
+  min-height: calc(100dvh - 190px);
+}
+.chat-inbox-sidebar, .chat-inbox-main {
+  min-height: calc(100dvh - 190px);
+}
+.chat-inbox-message-stream {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  height: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: auto;
+}
+.chat-message-stream, .community-message-stream {
+  min-height: 0;
+  max-height: none;
+  height: clamp(420px, calc(100dvh - 390px), 900px);
+  overscroll-behavior: contain;
+  scroll-behavior: auto;
+}
+.community-chat-panel { min-height: calc(100dvh - 145px); }
+.community-message-stream { height: clamp(420px, calc(100dvh - 360px), 900px); }
+.chat-inbox-compose textarea, .community-compose-form textarea {
+  touch-action: manipulation;
+}
+.chat-nav a, .chat-nav button, .chat-open-button, .chat-compose-new,
+.chat-compose-footer button, .chat-inbox-compose button, .community-compose-form button,
+.community-enter-button, .community-enter-primary, .chat-history-pagination button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+button:active, .chat-open-button:active, .community-enter-button:active,
+.community-enter-primary:active, .chat-nav a:active {
+  transform: scale(.98);
+}
+button:disabled {
+  cursor: wait;
+  opacity: .68;
+}
+.chat-inbox-compose button:disabled, .community-compose-form button:disabled,
+.chat-compose-footer button:disabled {
+  transform: none;
+  filter: saturate(.7);
+}
+@media (max-width: 820px) {
+  .chat-shell, .chat-thread-shell, .community-chat-shell { max-width: 100%; }
+  .chat-inbox-layout { min-height: calc(100dvh - 150px); }
+  .chat-inbox-sidebar, .chat-inbox-main { min-height: calc(100dvh - 150px); }
+}
+@media (max-width: 620px) {
+  .chat-page { padding: 0 7px 10px; }
+  .chat-header { min-height: 58px; margin-bottom: 12px; }
+  .chat-inbox-layout { display: flex; flex-direction: column; gap: 10px; }
+  .chat-inbox-sidebar { order: 2; min-height: auto; }
+  .chat-inbox-main { order: 1; min-height: calc(100dvh - 86px); }
+  .chat-inbox-message-stream {
+    min-height: 0;
+    height: calc(100dvh - 260px);
+    max-height: none;
+    padding: 12px 9px;
+  }
+  .chat-inbox-thread-header { flex-shrink: 0; }
+  .chat-inbox-compose { flex-shrink: 0; margin: 0 8px; padding: 8px 10px; }
+  .chat-inbox-privacy { margin-bottom: 8px; }
+  .chat-thread-shell { display: flex; flex-direction: column; min-height: calc(100dvh - 10px); }
+  .chat-thread-panel { display: flex; flex: 1; flex-direction: column; padding: 12px; }
+  .chat-message-stream {
+    flex: 1 1 auto;
+    height: calc(100dvh - 330px);
+    min-height: 280px;
+    padding: 12px 1px;
+  }
+  .chat-compose-form { margin-top: auto; }
+  .chat-compose-form textarea { min-height: 68px; }
+  .community-chat-panel { min-height: calc(100dvh - 80px); padding: 13px 11px; }
+  .community-message-stream {
+    height: calc(100dvh - 300px);
+    min-height: 280px;
+    padding: 12px 1px;
+  }
+  .community-compose-form { position: sticky; bottom: 0; padding: 10px 0 max(8px, env(safe-area-inset-bottom)); background: #0e0c0f; }
+  .community-compose-form textarea { min-height: 46px; }
+  .community-compose-form button { width: 44px; height: 44px; flex-basis: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chat-moon, .chat-mist, .chat-kanji, .chat-ember { animation: none !important; }
+}
