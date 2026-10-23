@@ -73,12 +73,17 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
       .neq("id", userId)
       .order("created_at", { ascending: false }),
     conversationRows.length
-      ? supabase
-          .from("direct_messages")
-          .select("conversation_id, body, sender_id, created_at")
-          .in("conversation_id", conversationRows.map((conversation) => conversation.id))
-          .order("created_at", { ascending: false })
-          .limit(500)
+      ? Promise.all(conversationRows.map(async (conversation) => {
+          const { data } = await supabase
+            .from("direct_messages")
+            .select("conversation_id, body, sender_id, created_at")
+            .eq("conversation_id", conversation.id)
+            .order("created_at", { ascending: false })
+            .limit(1);
+          return data?.[0] ?? null;
+        })).then((rows) => ({
+          data: rows.filter((message): message is { conversation_id: string; body: string; sender_id: string; created_at: string } => message !== null),
+        }))
       : Promise.resolve({ data: [] as { conversation_id: string; body: string; sender_id: string; created_at: string }[] }),
   ]);
 
