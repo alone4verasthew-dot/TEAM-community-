@@ -141,7 +141,7 @@ export default async function ConversationPage({ params, searchParams }: Convers
               userId={userId}
               initialMessages={recentMessages}
             />
-
+          </div>
 
           <OptimisticChatComposer
             action={sendDirectMessageAction}
