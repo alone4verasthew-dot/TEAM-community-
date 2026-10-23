@@ -36,7 +36,6 @@ export default function DirectMessageHistory({
         a.created_at.localeCompare(b.created_at),
       );
     });
-    if (initialMessages.length === 200) setHasMore(true);
   }, [initialMessages]);
 
   function loadOlder() {
