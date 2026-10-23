@@ -48,6 +48,41 @@ export async function startDirectConversationAction(formData: FormData) {
   redirect(`/messages?conversation=${conversationId}`);
 }
 
+export async function loadOlderDirectMessagesAction(conversationId: string, before: string) {
+  if (!UUID_PATTERN.test(conversationId) || !before || Number.isNaN(Date.parse(before))) {
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+  }
+
+  const { supabase } = await requireApprovedMember();
+  const { data: conversation } = await supabase
+    .from("direct_conversations")
+    .select("id")
+    .eq("id", conversationId)
+    .maybeSingle();
+
+  if (!conversation) {
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+  }
+
+  const { data, error } = await supabase
+    .from("direct_messages")
+    .select("id, sender_id, body, created_at")
+    .eq("conversation_id", conversationId)
+    .lt("created_at", before)
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  if (error) {
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+  }
+
+  return {
+    ok: true as const,
+    messages: [...(data ?? [])].reverse(),
+    hasMore: (data ?? []).length === 50,
+  };
+}
+
 export async function sendDirectMessageAction(formData: FormData) {
   const { supabase, userId } = await requireApprovedMember();
   const conversationId = String(formData.get("conversation_id") ?? "");
