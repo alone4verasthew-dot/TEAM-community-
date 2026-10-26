@@ -14,14 +14,6 @@ type ConversationPageProps = {
   searchParams: Promise<{ notice?: string }>;
 };
 
-function formatTime(value: string) {
-  return new Date(value).toLocaleString("en-IN", {
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-}
 
 export default async function ConversationPage({ params, searchParams }: ConversationPageProps) {
   const [{ conversationId }, query] = await Promise.all([params, searchParams]);
