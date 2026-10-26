@@ -3,7 +3,6 @@ import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOutAction } from "@/app/auth/actions";
 import { enterCommunityAction, sendCommunityMessageAction } from "../actions";
-import RoleBadges from "@/app/components/role-badges";
 import OptimisticChatComposer from "@/app/components/optimistic-chat-composer";
 import CommunityMessageHistory from "@/app/components/community-message-history";
 
