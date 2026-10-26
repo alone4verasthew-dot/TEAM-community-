@@ -1,10 +1,36 @@
 import Link from "next/link";
 import CursorSwords from "./components/CursorSwords";
 import GateWorld from "./components/GateWorld";
+import { enterCommunityAction } from "./community/actions";
+import { createClient } from "@/lib/supabase/server";
+import { signOutAction } from "@/app/auth/actions";
+
+// The homepage contains role-specific community cards; never share/cache its HTML across users.
+export const dynamic = "force-dynamic";
 
 const kanji = ["仲間", "成長", "未来"];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = await createClient();
+  const { data: claimData } = await supabase.auth.getClaims();
+  const userId = claimData?.claims?.sub;
+  let role: string | null = null;
+  let isBannerMember = false;
+
+  if (typeof userId === "string") {
+    const { data: profile } = await supabase.from("profiles").select("role, status").eq("id", userId).maybeSingle();
+    if (profile?.status === "approved") {
+      role = profile.role;
+      if (role !== "admin") {
+        const { data: bannerCommunity } = await supabase.from("communities").select("id").eq("slug", "community-three").maybeSingle();
+        if (bannerCommunity) {
+          const { data: bannerMembership } = await supabase.from("memberships").select("community_id").eq("community_id", bannerCommunity.id).eq("profile_id", userId).maybeSingle();
+          isBannerMember = Boolean(bannerMembership);
+        }
+      }
+    }
+  }
+
   return (
     <main className="samurai-world">
       <svg width="0" height="0" aria-hidden="true" style={{ position: "absolute" }}>
@@ -44,8 +70,21 @@ export default function HomePage() {
           <a href="#way">THE WAY</a>
           <a href="#community">COMMUNITY</a>
           <a href="#members">MEMBERS</a>
+          {role ? (
+            <>
+              <Link href="/member">MEMBER VIEW</Link>
+            </>
+          ) : (
+            <Link href="/login" aria-label="Member login">MEMBER LOGIN</Link>
+          )}
         </nav>
-        <a className="join-button" href="mailto:admin@tfy.community?subject=TFY%20invite%20request">JOIN THE TEAM <span>↗</span></a>
+        {role ? (
+          <form action={signOutAction}>
+            <button className="join-button samurai-signout-cta" type="submit">SIGN OUT <span>↗</span></button>
+          </form>
+        ) : (
+          <a className="join-button" href="mailto:admin@tfy.community?subject=TFY%20invite%20request">JOIN THE TEAM <span>↗</span></a>
+        )}
       </header>
 
       <section className="samurai-hero" id="home">
@@ -66,6 +105,7 @@ export default function HomePage() {
             <a className="join-button join-main" href="mailto:admin@tfy.community?subject=TFY%20invite%20request">REQUEST AN INVITE <span>↗</span></a>
             <a className="ghost-button" href="#way">ENTER THE WORLD <span>↓</span></a>
           </div>
+          <p className="member-login-hint">Already a member? <Link href="/login">MEMBER LOGIN ↗</Link></p>
           <div className="hero-footnote"><span className="red-dot" /> INVITE ONLY <i /> 80 MEMBERS MAX</div>
         </div>
         <div className="scroll-cue"><span className="mouse"><i /></span><span>SCROLL TO EXPLORE</span><b>⌄</b></div>
@@ -82,17 +122,37 @@ export default function HomePage() {
         </div>
         <div className="lower-rule" />
       </section>
+      {role ? (
       <section className="samurai-lower gate-panel" id="community">
         <p className="lower-eyebrow">ONE TEAM <span>•</span> ONE JOURNEY</p>
         <h2>THE <span>COMMUNITY</span></h2>
         <p>A private place for your circle — built around trust, real conversations, and belonging.</p>
-        <div className="gate-steps">
-          <article><h3>COMMUNITY ONE</h3><p>A place to connect and share the journey.</p></article>
-          <article><h3>COMMUNITY TWO</h3><p>Build consistency with people who get it.</p></article>
-          <article><h3>COMMUNITY THREE</h3><p>Keep growing together, one step at a time.</p></article>
+        <div className="gate-steps community-cards">
+          <article className="community-card-eagle">
+            <span className="community-card-symbol" aria-hidden="true">🦅</span>
+            <p className="community-card-kicker">THE MAIN CIRCLE · 01</p>
+            <h3>🦅:𝘛𝘌𝘈𝘔 (;™🕷️∆)𝘛 𝘍 𝘠🍁</h3>
+            <p>One circle. One path. One TFY family.</p>
+            <form action={enterCommunityAction}><input type="hidden" name="slug" value="community-one" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form>
+          </article>
+          {role === "admin" ? <article className="community-card-admins">
+            <span className="community-card-symbol" aria-hidden="true">🛡</span>
+            <p className="community-card-kicker">THE COMMAND ROOM · 02</p>
+            <h3>ᥲᦔꪑ꠸ꪀડ ᥆ᠻ 𝘛𝘍𝘠</h3>
+            <p>Coordinate, plan and keep the TFY community moving forward.</p>
+            <form action={enterCommunityAction}><input type="hidden" name="slug" value="community-two" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form>
+          </article> : null}
+          {role === "admin" || isBannerMember ? <article className="community-card-banners">
+            <span className="community-card-symbol" aria-hidden="true">旗</span>
+            <p className="community-card-kicker">THE CREATIVE CORNER · 03</p>
+            <h3>᥇ꪖ​ꪀꪀꫀ𝘳𝘴</h3>
+            <p>Share banners, visuals and creative designs for the TFY circle.</p>
+            <form action={enterCommunityAction}><input type="hidden" name="slug" value="community-three" /><button className="community-enter-button" type="submit">ENTER COMMUNITY <span>↗</span></button></form>
+          </article> : null}
         </div>
         <div className="lower-rule" />
       </section>
+      ) : null}
       <section className="samurai-lower gate-panel" id="members">
         <p className="lower-eyebrow">INVITE ONLY <span>•</span> LIMITED CIRCLE</p>
         <div className="member-limit">80</div>
