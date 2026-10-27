@@ -100,7 +100,7 @@ export default function CommunityMessageHistory({
                   <RoleBadges isBanner={Boolean(message.is_banner)} isAdmin={message.sender_role === "admin"} compact />
                 </div>
               ) : null}
-              {message.body.trim() ? <p>{message.body}</p> : null}
+              {message.body.trim() && !(message.body.trim() === "📎" && message.attachments?.length) ? <p>{message.body}</p> : null}
               <ChatAttachmentList attachments={message.attachments} />
               <time dateTime={message.created_at}>{formatTime(message.created_at)}</time>
             </div>
