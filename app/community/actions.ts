@@ -104,10 +104,10 @@ export async function loadOlderCommunityMessagesAction(slug: string, before: str
     .maybeSingle();
 
   if (!community || (!community.is_active && role !== "admin")) {
-    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; attachments: { path: string; name: string; type: string; size: number }[]; created_at: string }[] };
   }
   if (slug === "community-two" && role !== "admin") {
-    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; attachments: { path: string; name: string; type: string; size: number }[]; created_at: string }[] };
   }
 
   const { data: membership } = await supabase
@@ -118,7 +118,7 @@ export async function loadOlderCommunityMessagesAction(slug: string, before: str
     .maybeSingle();
   const adminPrivateAccess = role === "admin" && (slug === "community-two" || slug === "community-three");
   if (!membership && !adminPrivateAccess) {
-    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; attachments: { path: string; name: string; type: string; size: number }[]; created_at: string }[] };
   }
 
   const { data, error } = await supabase
@@ -130,7 +130,7 @@ export async function loadOlderCommunityMessagesAction(slug: string, before: str
     .limit(50);
 
   if (error) {
-    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; attachments: { path: string; name: string; type: string; size: number }[]; created_at: string }[] };
   }
 
   const olderMessages = [...(data ?? [])].reverse();
