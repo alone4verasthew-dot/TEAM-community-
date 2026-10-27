@@ -5,6 +5,7 @@ import { signOutAction } from "@/app/auth/actions";
 import { sendDirectMessageAction } from "../actions";
 import OptimisticChatComposer from "@/app/components/optimistic-chat-composer";
 import DirectMessageHistory from "@/app/components/direct-message-history";
+import type { ChatAttachment } from "@/app/components/chat-attachment-list";
 
 // These pages render user-specific data and must never be prerendered or shared-cached.
 export const dynamic = "force-dynamic";
@@ -63,7 +64,7 @@ export default async function ConversationPage({ params, searchParams }: Convers
       .maybeSingle(),
     supabase
       .from("direct_messages")
-      .select("id, sender_id, body, created_at")
+      .select("id, sender_id, body, attachments, created_at")
       .eq("conversation_id", conversationId)
       .order("created_at", { ascending: false })
       .limit(200),
@@ -74,7 +75,7 @@ export default async function ConversationPage({ params, searchParams }: Convers
   }
 
   // Render the newest 200 messages oldest-first to keep long conversations lightweight.
-  const recentMessages = [...(messages ?? [])].reverse();
+  const recentMessages = [...(messages ?? [])].map((message) => ({ ...message, attachments: Array.isArray(message.attachments) ? message.attachments as unknown as ChatAttachment[] : [] })).reverse();
   const otherName = other.display_name || other.username || "TFY member";
   const notice = query.notice === "invalid-message"
     ? "Messages must contain 1–4,000 characters."
