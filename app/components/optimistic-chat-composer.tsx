@@ -124,14 +124,19 @@ export default function OptimisticChatComposer({
                 const { data: auth } = await client.auth.getUser();
                 if (!auth.user) throw new Error("Please sign in again before uploading.");
                 const uploaded: ChatAttachment[] = [];
-                for (const file of selected) {
-                  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(-100) || "attachment";
-                  const path = `${community ? "community" : "direct"}/${targetId}/${auth.user.id}/${crypto.randomUUID()}-${safeName}`;
-                  const { error: uploadError } = await client.storage.from("tfy-chat-media").upload(path, file, { contentType: file.type, upsert: false });
-                  if (uploadError) throw uploadError;
-                  uploaded.push({ path, name: file.name.slice(0, 160), type: file.type, size: file.size });
+                try {
+                  for (const file of selected) {
+                    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(-100) || "attachment";
+                    const path = `${community ? "community" : "direct"}/${targetId}/${auth.user.id}/${crypto.randomUUID()}-${safeName}`;
+                    const { error: uploadError } = await client.storage.from("tfy-chat-media").upload(path, file, { contentType: file.type, upsert: false });
+                    if (uploadError) throw uploadError;
+                    uploaded.push({ path, name: file.name.slice(0, 160), type: file.type, size: file.size });
+                  }
+                  setAttachments((current) => [...current, ...uploaded]);
+                } catch (uploadError) {
+                  if (uploaded.length) await client.storage.from("tfy-chat-media").remove(uploaded.map((item) => item.path));
+                  throw uploadError;
                 }
-                setAttachments((current) => [...current, ...uploaded]);
               } catch (uploadError) {
                 setError(uploadError instanceof Error ? uploadError.message : "Upload failed. Please try again.");
               } finally { setUploading(false); }
