@@ -229,6 +229,7 @@ export async function loadCommunityMediaAction(slug: string) {
       .from("community_messages")
       .select("id, sender_id, attachments, created_at")
       .eq("community_id", community.id)
+      .neq("attachments", "[]")
       .order("created_at", { ascending: false })
       .range(offset, offset + batchSize - 1);
     if (error) return { ok: false as const, error: "Media could not be loaded. Please try again.", media: [] as { id: string; sender_id: string; sender_name: string; created_at: string; attachment: ChatAttachment }[] };
