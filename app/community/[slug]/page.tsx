@@ -5,6 +5,7 @@ import { signOutAction } from "@/app/auth/actions";
 import { enterCommunityAction, sendCommunityMessageAction } from "../actions";
 import OptimisticChatComposer from "@/app/components/optimistic-chat-composer";
 import CommunityMessageHistory from "@/app/components/community-message-history";
+import CommunityMediaGallery from "@/app/components/community-media-gallery";
 import type { ChatAttachment } from "@/app/components/chat-attachment-list";
 
 // These pages render user-specific data and must never be prerendered or shared-cached.
@@ -162,6 +163,7 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
                 <span>{chatTitle} · GROUP CHAT</span>
                 <span>{messages.length} {messages.length === 1 ? "MESSAGE" : "MESSAGES"}</span>
               </div>
+              <CommunityMediaGallery slug={community.slug} />
               <div className="community-message-stream" aria-label="Community group messages" aria-live="polite">
                 <CommunityMessageHistory
                   slug={community.slug}
