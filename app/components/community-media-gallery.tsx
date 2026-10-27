@@ -69,13 +69,13 @@ export default function CommunityMediaGallery({ slug }: { slug: string }) {
         for (const entry of entries) {
           if (entry) created[entry[0]] = entry[1];
         }
-        if (!cancelled && Object.keys(created).length) {
-          setUrls((current) => ({ ...current, ...created }));
-        }
+      }
+      if (!cancelled && Object.keys(created).length) {
+        setUrls((current) => ({ ...current, ...created }));
       }
     })();
     return () => { cancelled = true; };
-  }, [open, media, urls]);
+  }, [open, media]);
 
   const visible = useMemo(() => {
     const query = search.trim().toLocaleLowerCase();
