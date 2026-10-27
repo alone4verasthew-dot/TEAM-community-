@@ -93,7 +93,7 @@ export async function enterCommunityAction(formData: FormData) {
 
 export async function loadOlderCommunityMessagesAction(slug: string, before: string) {
   if (!SLUG_PATTERN.test(slug) || !before || Number.isNaN(Date.parse(before))) {
-    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; attachments: unknown; created_at: string }[] };
   }
 
   const { supabase, userId, role } = await requireApprovedMember();
@@ -153,6 +153,7 @@ export async function loadOlderCommunityMessagesAction(slug: string, before: str
       const profile = profileById.get(message.sender_id);
       return {
         ...message,
+        attachments: Array.isArray(message.attachments) ? message.attachments : [],
         sender_name: profile?.display_name || profile?.username || "TFY member",
         sender_role: profile?.role || "member",
         is_banner: bannerIds.has(message.sender_id),
