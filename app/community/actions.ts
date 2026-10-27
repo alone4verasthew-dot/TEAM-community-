@@ -209,7 +209,7 @@ export async function sendCommunityMessageAction(formData: FormData) {
 }
 
 
-export async function loadCommunityMediaAction(slug: string) {
+export async function loadCommunityMediaAction(slug: string, offset = 0) {
   if (!SLUG_PATTERN.test(slug)) return { ok: false as const, error: "Community not found.", media: [] as { id: string; sender_id: string; sender_name: string; created_at: string; attachment: ChatAttachment }[] };
   const { supabase, userId, role } = await requireApprovedMember();
   const { data: community } = await supabase
@@ -222,20 +222,16 @@ export async function loadCommunityMediaAction(slug: string) {
   const { data: membership } = await supabase.from("memberships").select("community_id").eq("community_id", community.id).eq("profile_id", userId).maybeSingle();
   if (!membership && !(role === "admin" && (slug === "community-two" || slug === "community-three"))) return { ok: false as const, error: "Join this community to view its media.", media: [] as { id: string; sender_id: string; sender_name: string; created_at: string; attachment: ChatAttachment }[] };
 
-  const rows: { id: string; sender_id: string; attachments: unknown; created_at: string }[] = [];
-  const batchSize = 500;
-  for (let offset = 0; ; offset += batchSize) {
-    const { data, error } = await supabase
-      .from("community_messages")
-      .select("id, sender_id, attachments, created_at")
-      .eq("community_id", community.id)
-      .neq("attachments", "[]")
-      .order("created_at", { ascending: false })
-      .range(offset, offset + batchSize - 1);
-    if (error) return { ok: false as const, error: "Media could not be loaded. Please try again.", media: [] as { id: string; sender_id: string; sender_name: string; created_at: string; attachment: ChatAttachment }[] };
-    rows.push(...(data ?? []));
-    if (!data || data.length < batchSize) break;
-  }
+  const pageSize = 100;
+  const safeOffset = Number.isInteger(offset) && offset >= 0 ? Math.min(offset, 1_000_000) : 0;
+  const { data: rows, error } = await supabase
+    .from("community_messages")
+    .select("id, sender_id, attachments, created_at")
+    .eq("community_id", community.id)
+    .neq("attachments", "[]")
+    .order("created_at", { ascending: false })
+    .range(safeOffset, safeOffset + pageSize - 1);
+  if (error) return { ok: false as const, error: "Media could not be loaded. Please try again.", media: [] as { id: string; sender_id: string; sender_name: string; created_at: string; attachment: ChatAttachment }[] };
   const senderIds = [...new Set(rows.filter((row) => Array.isArray(row.attachments) && row.attachments.length).map((row) => row.sender_id))];
   const { data: profiles } = senderIds.length
     ? await supabase.from("profiles").select("id, username, display_name").in("id", senderIds)
@@ -250,5 +246,5 @@ export async function loadCommunityMediaAction(slug: string) {
       typeof attachment.name === "string" && typeof attachment.type === "string"
     ).map((attachment) => ({ id: `${row.id}:${attachment.path}`, sender_id: row.sender_id, sender_name, created_at: row.created_at, attachment }));
   }).sort((a, b) => b.created_at.localeCompare(a.created_at));
-  return { ok: true as const, media };
+  return { ok: true as const, media, hasMore: (rows ?? []).length === pageSize, nextOffset: safeOffset + (rows ?? []).length };
 }

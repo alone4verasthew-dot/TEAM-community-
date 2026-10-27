@@ -31,6 +31,8 @@ export default function CommunityMediaGallery({ slug }: { slug: string }) {
   const [search, setSearch] = useState("");
   const [error, setError] = useState("");
   const [loaded, setLoaded] = useState(false);
+  const [nextOffset, setNextOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
@@ -38,12 +40,14 @@ export default function CommunityMediaGallery({ slug }: { slug: string }) {
     setError("");
     startTransition(async () => {
       try {
-        const result = await loadCommunityMediaAction(slug);
+        const result = await loadCommunityMediaAction(slug, 0);
         if (!result.ok) {
           setError(result.error);
           return;
         }
         setMedia(result.media);
+        setNextOffset(result.nextOffset);
+        setHasMore(result.hasMore);
         setLoaded(true);
       } catch {
         setError("Media could not be loaded. Please try again.");
@@ -76,6 +80,28 @@ export default function CommunityMediaGallery({ slug }: { slug: string }) {
     })();
     return () => { cancelled = true; };
   }, [open, media]);
+
+  const loadMore = () => {
+    if (isPending || !hasMore) return;
+    setError("");
+    startTransition(async () => {
+      try {
+        const result = await loadCommunityMediaAction(slug, nextOffset);
+        if (!result.ok) {
+          setError(result.error);
+          return;
+        }
+        setMedia((current) => {
+          const seen = new Set(current.map((item) => item.id));
+          return [...current, ...result.media.filter((item) => !seen.has(item.id))];
+        });
+        setNextOffset(result.nextOffset);
+        setHasMore(result.hasMore);
+      } catch {
+        setError("More media could not be loaded. Please try again.");
+      }
+    });
+  };
 
   const visible = useMemo(() => {
     const query = search.trim().toLocaleLowerCase();
@@ -136,6 +162,7 @@ export default function CommunityMediaGallery({ slug }: { slug: string }) {
                 );
               })}
             </div>
+            {loaded && hasMore ? <div className="community-media-load-more"><button type="button" onClick={loadMore} disabled={isPending}>{isPending ? "LOADING…" : "LOAD MORE MEDIA"}</button></div> : null}
             <footer className="community-media-footer"><span>PRIVATE GROUP ARCHIVE</span><button type="button" onClick={() => { setOpen(false); setSearch(""); setKind("all"); }}>DONE</button></footer>
           </section>
         </div>
