@@ -87,7 +87,7 @@ export async function loadOlderDirectMessagesAction(conversationId: string, befo
     .maybeSingle();
 
   if (!conversation) {
-    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; attachments: { path: string; name: string; type: string; size: number }[]; created_at: string }[] };
   }
 
   const { data, error } = await supabase
@@ -99,7 +99,7 @@ export async function loadOlderDirectMessagesAction(conversationId: string, befo
     .limit(50);
 
   if (error) {
-    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; attachments: { path: string; name: string; type: string; size: number }[]; created_at: string }[] };
   }
 
   return {
