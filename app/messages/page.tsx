@@ -105,13 +105,16 @@ export default async function MessagesPage({ searchParams }: MessagesPageProps) 
   const activeMessagesResult = activeConversation
     ? await supabase
         .from("direct_messages")
-        .select("id, sender_id, body, created_at")
+        .select("id, sender_id, body, attachments, created_at")
         .eq("conversation_id", activeConversation.id)
         .order("created_at", { ascending: false })
         .limit(200)
-    : { data: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+    : { data: [] as { id: string; sender_id: string; body: string; attachments: unknown; created_at: string }[] };
   // Keep the inbox responsive for long-running chats; render the newest 200 in chronological order.
-  const activeMessages = [...(activeMessagesResult.data ?? [])].reverse();
+  const activeMessages = [...(activeMessagesResult.data ?? [])].reverse().map((message) => ({
+    ...message,
+    attachments: Array.isArray(message.attachments) ? message.attachments as { path: string; name: string; type: string; size: number }[] : [],
+  }));
   const notice = params.notice ? notices[params.notice] : undefined;
 
   return (

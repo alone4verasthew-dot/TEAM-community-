@@ -2,8 +2,9 @@
 
 import { useEffect, useState, useTransition } from "react";
 import { loadOlderDirectMessagesAction } from "@/app/messages/actions";
+import ChatAttachmentList, { type ChatAttachment } from "@/app/components/chat-attachment-list";
 
-type Message = { id: string; sender_id: string; body: string; created_at: string };
+type Message = { id: string; sender_id: string; body: string; attachments?: ChatAttachment[]; created_at: string };
 
 function formatTime(value: string) {
   return new Date(value).toLocaleString("en-IN", {
@@ -77,7 +78,8 @@ export default function DirectMessageHistory({
         return (
           <article className={own ? "chat-message-row chat-message-row-own" : "chat-message-row"} key={message.id}>
             <div className={own ? "chat-message-bubble chat-message-bubble-own" : "chat-message-bubble"}>
-              <p>{message.body}</p>
+              {message.body.trim() ? <p>{message.body}</p> : null}
+              <ChatAttachmentList attachments={message.attachments} />
               <time dateTime={message.created_at}>{formatTime(message.created_at)}</time>
             </div>
           </article>

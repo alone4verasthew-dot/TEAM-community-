@@ -7,6 +7,32 @@ import { createClient } from "@/lib/supabase/server";
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
+type ChatAttachment = { path: string; name: string; type: string; size: number };
+const ALLOWED_ATTACHMENT_TYPES = new Set([
+  "image/jpeg", "image/png", "image/gif", "image/webp", "video/mp4", "video/webm",
+  "application/pdf", "text/plain", "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+]);
+function parseAttachments(formData: FormData, kind: "community" | "direct", targetId: string, userId: string): ChatAttachment[] | null {
+  const raw = String(formData.get("attachments") ?? "[]");
+  let parsed: unknown;
+  try { parsed = JSON.parse(raw); } catch { return null; }
+  if (!Array.isArray(parsed) || parsed.length > 5) return null;
+  const prefix = `${kind}/${targetId}/${userId}/`;
+  const attachments: ChatAttachment[] = [];
+  for (const item of parsed) {
+    if (!item || typeof item !== "object") return null;
+    const value = item as Partial<ChatAttachment>;
+    if (typeof value.path !== "string" || !value.path.startsWith(prefix) ||
+      typeof value.name !== "string" || value.name.length < 1 || value.name.length > 160 ||
+      typeof value.type !== "string" || !ALLOWED_ATTACHMENT_TYPES.has(value.type) ||
+      typeof value.size !== "number" || value.size <= 0 || value.size > 20 * 1024 * 1024) return null;
+    attachments.push({ path: value.path, name: value.name, type: value.type, size: value.size });
+  }
+  return attachments;
+}
+
+
 async function requireApprovedMember() {
   const supabase = await createClient();
   const { data: claimData } = await supabase.auth.getClaims();
@@ -67,7 +93,7 @@ export async function enterCommunityAction(formData: FormData) {
 
 export async function loadOlderCommunityMessagesAction(slug: string, before: string) {
   if (!SLUG_PATTERN.test(slug) || !before || Number.isNaN(Date.parse(before))) {
-    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; attachments: unknown; created_at: string }[] };
   }
 
   const { supabase, userId, role } = await requireApprovedMember();
@@ -78,10 +104,10 @@ export async function loadOlderCommunityMessagesAction(slug: string, before: str
     .maybeSingle();
 
   if (!community || (!community.is_active && role !== "admin")) {
-    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; attachments: { path: string; name: string; type: string; size: number }[]; created_at: string }[] };
   }
   if (slug === "community-two" && role !== "admin") {
-    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; attachments: { path: string; name: string; type: string; size: number }[]; created_at: string }[] };
   }
 
   const { data: membership } = await supabase
@@ -92,19 +118,19 @@ export async function loadOlderCommunityMessagesAction(slug: string, before: str
     .maybeSingle();
   const adminPrivateAccess = role === "admin" && (slug === "community-two" || slug === "community-three");
   if (!membership && !adminPrivateAccess) {
-    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; attachments: { path: string; name: string; type: string; size: number }[]; created_at: string }[] };
   }
 
   const { data, error } = await supabase
     .from("community_messages")
-    .select("id, sender_id, body, created_at")
+    .select("id, sender_id, body, attachments, created_at")
     .eq("community_id", community.id)
     .lt("created_at", before)
     .order("created_at", { ascending: false })
     .limit(50);
 
   if (error) {
-    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; attachments: { path: string; name: string; type: string; size: number }[]; created_at: string }[] };
   }
 
   const olderMessages = [...(data ?? [])].reverse();
@@ -127,6 +153,7 @@ export async function loadOlderCommunityMessagesAction(slug: string, before: str
       const profile = profileById.get(message.sender_id);
       return {
         ...message,
+        attachments: Array.isArray(message.attachments) ? message.attachments as unknown as { path: string; name: string; type: string; size: number }[] : [],
         sender_name: profile?.display_name || profile?.username || "TFY member",
         sender_role: profile?.role || "member",
         is_banner: bannerIds.has(message.sender_id),
@@ -141,11 +168,13 @@ export async function sendCommunityMessageAction(formData: FormData) {
   const communityId = String(formData.get("community_id") ?? "");
   const body = String(formData.get("body") ?? "").trim();
 
-  if (!SLUG_PATTERN.test(slug) || !UUID_PATTERN.test(communityId) || body.length < 1 || body.length > 4000) {
+  if (!SLUG_PATTERN.test(slug) || !UUID_PATTERN.test(communityId) || body.length > 4000) {
     return { ok: false as const, error: "Messages must contain 1–4,000 characters." };
   }
 
   const { supabase, userId } = await requireApprovedMember();
+  const attachments = parseAttachments(formData, "community", communityId, userId);
+  if (!attachments || (!body && attachments.length === 0)) return { ok: false as const, error: "Add a message or up to 5 valid attachments." };
   const { data: community } = await supabase
     .from("communities")
     .select("id")
@@ -169,12 +198,53 @@ export async function sendCommunityMessageAction(formData: FormData) {
 
   const { data: message, error } = await supabase
     .from("community_messages")
-    .insert({ community_id: communityId, sender_id: userId, body })
-    .select("id, community_id, sender_id, body, created_at")
+    .insert({ community_id: communityId, sender_id: userId, body: body || "📎", attachments })
+    .select("id, community_id, sender_id, body, attachments, created_at")
     .single();
 
   if (error || !message) return { ok: false as const, error: "Message could not be sent. Please try again." };
 
   revalidatePath(`/community/${slug}`);
   return { ok: true as const, message };
+}
+
+
+export async function loadCommunityMediaAction(slug: string, offset = 0) {
+  if (!SLUG_PATTERN.test(slug)) return { ok: false as const, error: "Community not found.", media: [] as { id: string; sender_id: string; sender_name: string; created_at: string; attachment: ChatAttachment }[] };
+  const { supabase, userId, role } = await requireApprovedMember();
+  const { data: community } = await supabase
+    .from("communities")
+    .select("id, slug, is_active")
+    .eq("slug", slug)
+    .maybeSingle();
+  if (!community || (!community.is_active && role !== "admin")) return { ok: false as const, error: "Community not available.", media: [] as { id: string; sender_id: string; sender_name: string; created_at: string; attachment: ChatAttachment }[] };
+  if (slug === "community-two" && role !== "admin") return { ok: false as const, error: "You cannot access this community.", media: [] as { id: string; sender_id: string; sender_name: string; created_at: string; attachment: ChatAttachment }[] };
+  const { data: membership } = await supabase.from("memberships").select("community_id").eq("community_id", community.id).eq("profile_id", userId).maybeSingle();
+  if (!membership && !(role === "admin" && (slug === "community-two" || slug === "community-three"))) return { ok: false as const, error: "Join this community to view its media.", media: [] as { id: string; sender_id: string; sender_name: string; created_at: string; attachment: ChatAttachment }[] };
+
+  const pageSize = 100;
+  const safeOffset = Number.isInteger(offset) && offset >= 0 ? Math.min(offset, 1_000_000) : 0;
+  const { data: rows, error } = await supabase
+    .from("community_messages")
+    .select("id, sender_id, attachments, created_at")
+    .eq("community_id", community.id)
+    .neq("attachments", "[]")
+    .order("created_at", { ascending: false })
+    .range(safeOffset, safeOffset + pageSize - 1);
+  if (error) return { ok: false as const, error: "Media could not be loaded. Please try again.", media: [] as { id: string; sender_id: string; sender_name: string; created_at: string; attachment: ChatAttachment }[] };
+  const senderIds = [...new Set(rows.filter((row) => Array.isArray(row.attachments) && row.attachments.length).map((row) => row.sender_id))];
+  const { data: profiles } = senderIds.length
+    ? await supabase.from("profiles").select("id, username, display_name").in("id", senderIds)
+    : { data: [] as { id: string; username: string | null; display_name: string | null }[] };
+  const profileById = new Map((profiles ?? []).map((profile) => [profile.id, profile]));
+  const media = rows.flatMap((row) => {
+    if (!Array.isArray(row.attachments)) return [];
+    const profile = profileById.get(row.sender_id);
+    const sender_name = profile?.display_name || profile?.username || "TFY member";
+    return (row.attachments as ChatAttachment[]).filter((attachment) =>
+      attachment && typeof attachment.path === "string" && attachment.path.startsWith(`community/${community.id}/${row.sender_id}/`) &&
+      typeof attachment.name === "string" && typeof attachment.type === "string"
+    ).map((attachment) => ({ id: `${row.id}:${attachment.path}`, sender_id: row.sender_id, sender_name, created_at: row.created_at, attachment }));
+  }).sort((a, b) => b.created_at.localeCompare(a.created_at));
+  return { ok: true as const, media, hasMore: (rows ?? []).length === pageSize, nextOffset: safeOffset + (rows ?? []).length };
 }

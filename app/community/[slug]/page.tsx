@@ -3,9 +3,10 @@ import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOutAction } from "@/app/auth/actions";
 import { enterCommunityAction, sendCommunityMessageAction } from "../actions";
-import RoleBadges from "@/app/components/role-badges";
 import OptimisticChatComposer from "@/app/components/optimistic-chat-composer";
 import CommunityMessageHistory from "@/app/components/community-message-history";
+import CommunityMediaGallery from "@/app/components/community-media-gallery";
+import type { ChatAttachment } from "@/app/components/chat-attachment-list";
 
 // These pages render user-specific data and must never be prerendered or shared-cached.
 export const dynamic = "force-dynamic";
@@ -71,17 +72,17 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
   };
   const notice = query.notice ? noticeText[query.notice] : undefined;
 
-  let messages: { id: string; sender_id: string; body: string; created_at: string }[] = [];
+  let messages: { id: string; sender_id: string; body: string; attachments: ChatAttachment[]; created_at: string }[] = [];
   let senderNames = new Map<string, { name: string; role: string; isBanner: boolean }>();
   const canUseChat = Boolean(membership) || viewer.role === "admin";
   if (canUseChat) {
     const { data } = await supabase
       .from("community_messages")
-      .select("id, sender_id, body, created_at")
+      .select("id, sender_id, body, attachments, created_at")
       .eq("community_id", community.id)
       .order("created_at", { ascending: false })
       .limit(200);
-    messages = [...(data ?? [])].reverse();
+    messages = [...(data ?? [])].map((message) => ({ ...message, attachments: Array.isArray(message.attachments) ? message.attachments as unknown as ChatAttachment[] : [] })).reverse();
 
     const senderIds = [...new Set(messages.map((message) => message.sender_id))];
     if (senderIds.length) {
@@ -162,6 +163,7 @@ export default async function CommunityPage({ params, searchParams }: CommunityP
                 <span>{chatTitle} · GROUP CHAT</span>
                 <span>{messages.length} {messages.length === 1 ? "MESSAGE" : "MESSAGES"}</span>
               </div>
+              <CommunityMediaGallery slug={community.slug} />
               <div className="community-message-stream" aria-label="Community group messages" aria-live="polite">
                 <CommunityMessageHistory
                   slug={community.slug}
