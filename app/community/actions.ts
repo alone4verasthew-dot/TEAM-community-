@@ -198,7 +198,7 @@ export async function sendCommunityMessageAction(formData: FormData) {
 
   const { data: message, error } = await supabase
     .from("community_messages")
-    .insert({ community_id: communityId, sender_id: userId, body: body || " ", attachments })
+    .insert({ community_id: communityId, sender_id: userId, body: body || "📎", attachments })
     .select("id, community_id, sender_id, body, attachments, created_at")
     .single();
 
