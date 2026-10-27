@@ -55,14 +55,27 @@ export default function CommunityMediaGallery({ slug }: { slug: string }) {
     if (!open || !media.length) return;
     let cancelled = false;
     const client = createClient();
-    void Promise.all(media.map(async (item) => {
-      const { data, error: signedUrlError } = await client.storage.from("tfy-chat-media").createSignedUrl(item.attachment.path, 60 * 10);
-      return !signedUrlError && data?.signedUrl ? [item.id, data.signedUrl] as const : null;
-    })).then((entries) => {
-      if (!cancelled) setUrls((current) => ({ ...current, ...Object.fromEntries(entries.filter((entry): entry is readonly [string, string] => Boolean(entry))) }));
-    });
+    const missing = media.filter((item) => !urls[item.id]);
+    void (async () => {
+      const created: Record<string, string> = {};
+      // Avoid flooding Storage with a single request per item for large archives.
+      for (let offset = 0; offset < missing.length; offset += 10) {
+        if (cancelled) return;
+        const batch = missing.slice(offset, offset + 10);
+        const entries = await Promise.all(batch.map(async (item) => {
+          const { data, error: signedUrlError } = await client.storage.from("tfy-chat-media").createSignedUrl(item.attachment.path, 60 * 10);
+          return !signedUrlError && data?.signedUrl ? [item.id, data.signedUrl] as const : null;
+        }));
+        for (const entry of entries) {
+          if (entry) created[entry[0]] = entry[1];
+        }
+        if (!cancelled && Object.keys(created).length) {
+          setUrls((current) => ({ ...current, ...created }));
+        }
+      }
+    })();
     return () => { cancelled = true; };
-  }, [open, media]);
+  }, [open, media, urls]);
 
   const visible = useMemo(() => {
     const query = search.trim().toLocaleLowerCase();
