@@ -78,6 +78,7 @@ export type Database = {
       }
       community_messages: {
         Row: {
+          attachments: Json
           body: string
           community_id: string
           created_at: string
@@ -85,6 +86,7 @@ export type Database = {
           sender_id: string
         }
         Insert: {
+          attachments?: Json
           body: string
           community_id: string
           created_at?: string
@@ -92,6 +94,7 @@ export type Database = {
           sender_id: string
         }
         Update: {
+          attachments?: Json
           body?: string
           community_id?: string
           created_at?: string
@@ -163,6 +166,7 @@ export type Database = {
       }
       direct_messages: {
         Row: {
+          attachments: Json
           body: string
           conversation_id: string
           created_at: string
@@ -170,6 +174,7 @@ export type Database = {
           sender_id: string
         }
         Insert: {
+          attachments?: Json
           body: string
           conversation_id: string
           created_at?: string
@@ -177,6 +182,7 @@ export type Database = {
           sender_id: string
         }
         Update: {
+          attachments?: Json
           body?: string
           conversation_id?: string
           created_at?: string
