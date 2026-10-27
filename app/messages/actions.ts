@@ -76,7 +76,7 @@ export async function startDirectConversationAction(formData: FormData) {
 
 export async function loadOlderDirectMessagesAction(conversationId: string, before: string) {
   if (!UUID_PATTERN.test(conversationId) || !before || Number.isNaN(Date.parse(before))) {
-    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; created_at: string }[] };
+    return { ok: false as const, messages: [] as { id: string; sender_id: string; body: string; attachments: unknown; created_at: string }[] };
   }
 
   const { supabase } = await requireApprovedMember();
