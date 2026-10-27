@@ -153,7 +153,7 @@ export async function loadOlderCommunityMessagesAction(slug: string, before: str
       const profile = profileById.get(message.sender_id);
       return {
         ...message,
-        attachments: Array.isArray(message.attachments) ? message.attachments : [],
+        attachments: Array.isArray(message.attachments) ? message.attachments as unknown as { path: string; name: string; type: string; size: number }[] : [],
         sender_name: profile?.display_name || profile?.username || "TFY member",
         sender_role: profile?.role || "member",
         is_banner: bannerIds.has(message.sender_id),
