@@ -104,7 +104,7 @@ export async function loadOlderDirectMessagesAction(conversationId: string, befo
 
   return {
     ok: true as const,
-    messages: [...(data ?? [])].reverse(),
+    messages: [...(data ?? [])].map((message) => ({ ...message, attachments: Array.isArray(message.attachments) ? message.attachments as unknown as { path: string; name: string; type: string; size: number }[] : [] })).reverse(),
     hasMore: (data ?? []).length === 50,
   };
 }
