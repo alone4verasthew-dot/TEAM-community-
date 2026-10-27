@@ -21,7 +21,7 @@ alter table public.direct_messages
   drop constraint if exists direct_messages_attachments_valid;
 alter table public.direct_messages
   add constraint direct_messages_attachments_valid
-  check (jsonb_typeof(attachments) = 'array' and jsonb_array_length(attachments) <= 5);
+  check (case when jsonb_typeof(attachments) = 'array' then jsonb_array_length(attachments) <= 5 else false end);
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values (
