@@ -5,11 +5,18 @@ alter table public.community_messages
 alter table public.direct_messages
   add column if not exists attachments jsonb not null default '[]'::jsonb;
 
+alter table public.community_messages drop constraint if exists community_messages_body_check;
+alter table public.community_messages add constraint community_messages_body_check
+  check ((length(trim(body)) between 1 and 4000) or jsonb_array_length(attachments) > 0);
+alter table public.direct_messages drop constraint if exists direct_messages_body_check;
+alter table public.direct_messages add constraint direct_messages_body_check
+  check ((length(trim(body)) between 1 and 4000) or jsonb_array_length(attachments) > 0);
+
 alter table public.community_messages
   drop constraint if exists community_messages_attachments_valid;
 alter table public.community_messages
   add constraint community_messages_attachments_valid
-  check (jsonb_typeof(attachments) = 'array' and jsonb_array_length(attachments) <= 5);
+  check (case when jsonb_typeof(attachments) = 'array' then jsonb_array_length(attachments) <= 5 else false end);
 alter table public.direct_messages
   drop constraint if exists direct_messages_attachments_valid;
 alter table public.direct_messages
