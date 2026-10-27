@@ -3,11 +3,13 @@
 import { useEffect, useState, useTransition } from "react";
 import { loadOlderCommunityMessagesAction } from "@/app/community/actions";
 import RoleBadges from "@/app/components/role-badges";
+import ChatAttachmentList, { type ChatAttachment } from "@/app/components/chat-attachment-list";
 
 type Message = {
   id: string;
   sender_id: string;
   body: string;
+  attachments?: ChatAttachment[];
   created_at: string;
   sender_name?: string;
   sender_role?: string;
@@ -98,7 +100,8 @@ export default function CommunityMessageHistory({
                   <RoleBadges isBanner={Boolean(message.is_banner)} isAdmin={message.sender_role === "admin"} compact />
                 </div>
               ) : null}
-              <p>{message.body}</p>
+              {message.body.trim() ? <p>{message.body}</p> : null}
+              <ChatAttachmentList attachments={message.attachments} />
               <time dateTime={message.created_at}>{formatTime(message.created_at)}</time>
             </div>
           </article>
