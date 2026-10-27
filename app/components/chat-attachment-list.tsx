@@ -19,12 +19,20 @@ export default function ChatAttachmentList({ attachments }: { attachments?: Chat
     );
     if (!valid.length) { setUrls({}); return; }
     const client = createClient();
-    void Promise.all(valid.map(async (item) => {
-      const { data, error } = await client.storage.from("tfy-chat-media").createSignedUrl(item.path, 60 * 10);
-      return !error && data?.signedUrl ? [item.path, data.signedUrl] as const : null;
-    })).then((entries) => {
+    void (async () => {
+      const entries: (readonly [string, string] | null)[] = [];
+      // Limit concurrent Storage requests so chats with several attachments stay responsive.
+      for (let offset = 0; offset < valid.length; offset += 10) {
+        if (cancelled) return;
+        const batch = valid.slice(offset, offset + 10);
+        const results = await Promise.all(batch.map(async (item) => {
+          const { data, error } = await client.storage.from("tfy-chat-media").createSignedUrl(item.path, 60 * 10);
+          return !error && data?.signedUrl ? [item.path, data.signedUrl] as const : null;
+        }));
+        entries.push(...results);
+      }
       if (!cancelled) setUrls(Object.fromEntries(entries.filter((entry): entry is readonly [string, string] => Boolean(entry))));
-    });
+    })();
     return () => { cancelled = true; };
   }, [attachments]);
 
