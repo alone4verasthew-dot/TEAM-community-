@@ -207,3 +207,47 @@ export async function sendCommunityMessageAction(formData: FormData) {
   revalidatePath(`/community/${slug}`);
   return { ok: true as const, message };
 }
+
+
+export async function loadCommunityMediaAction(slug: string) {
+  if (!SLUG_PATTERN.test(slug)) return { ok: false as const, error: "Community not found.", media: [] as { id: string; sender_id: string; sender_name: string; created_at: string; attachment: ChatAttachment }[] };
+  const { supabase, userId, role } = await requireApprovedMember();
+  const { data: community } = await supabase
+    .from("communities")
+    .select("id, slug, is_active")
+    .eq("slug", slug)
+    .maybeSingle();
+  if (!community || (!community.is_active && role !== "admin")) return { ok: false as const, error: "Community not available.", media: [] as { id: string; sender_id: string; sender_name: string; created_at: string; attachment: ChatAttachment }[] };
+  if (slug === "community-two" && role !== "admin") return { ok: false as const, error: "You cannot access this community.", media: [] as { id: string; sender_id: string; sender_name: string; created_at: string; attachment: ChatAttachment }[] };
+  const { data: membership } = await supabase.from("memberships").select("community_id").eq("community_id", community.id).eq("profile_id", userId).maybeSingle();
+  if (!membership && !(role === "admin" && (slug === "community-two" || slug === "community-three"))) return { ok: false as const, error: "Join this community to view its media.", media: [] as { id: string; sender_id: string; sender_name: string; created_at: string; attachment: ChatAttachment }[] };
+
+  const rows: { id: string; sender_id: string; attachments: unknown; created_at: string }[] = [];
+  const batchSize = 500;
+  for (let offset = 0; ; offset += batchSize) {
+    const { data, error } = await supabase
+      .from("community_messages")
+      .select("id, sender_id, attachments, created_at")
+      .eq("community_id", community.id)
+      .order("created_at", { ascending: false })
+      .range(offset, offset + batchSize - 1);
+    if (error) return { ok: false as const, error: "Media could not be loaded. Please try again.", media: [] as { id: string; sender_id: string; sender_name: string; created_at: string; attachment: ChatAttachment }[] };
+    rows.push(...(data ?? []));
+    if (!data || data.length < batchSize) break;
+  }
+  const senderIds = [...new Set(rows.filter((row) => Array.isArray(row.attachments) && row.attachments.length).map((row) => row.sender_id))];
+  const { data: profiles } = senderIds.length
+    ? await supabase.from("profiles").select("id, username, display_name").in("id", senderIds)
+    : { data: [] as { id: string; username: string | null; display_name: string | null }[] };
+  const profileById = new Map((profiles ?? []).map((profile) => [profile.id, profile]));
+  const media = rows.flatMap((row) => {
+    if (!Array.isArray(row.attachments)) return [];
+    const profile = profileById.get(row.sender_id);
+    const sender_name = profile?.display_name || profile?.username || "TFY member";
+    return (row.attachments as ChatAttachment[]).filter((attachment) =>
+      attachment && typeof attachment.path === "string" && attachment.path.startsWith(`community/${community.id}/${row.sender_id}/`) &&
+      typeof attachment.name === "string" && typeof attachment.type === "string"
+    ).map((attachment) => ({ id: `${row.id}:${attachment.path}`, sender_id: row.sender_id, sender_name, created_at: row.created_at, attachment }));
+  }).sort((a, b) => b.created_at.localeCompare(a.created_at));
+  return { ok: true as const, media };
+}
