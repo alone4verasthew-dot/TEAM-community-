@@ -52,7 +52,7 @@ export default function OptimisticChatComposer({
     const formData = new FormData(event.currentTarget);
     const body = String(formData.get("body") ?? "").trim();
     if ((!body && attachments.length === 0) || body.length > 4000) {
-      setError("Messages must contain 1–4,000 characters.");
+      setError(attachments.length ? "Messages can contain up to 4,000 characters." : "Enter a message or attach a file.");
       return;
     }
 
@@ -66,6 +66,8 @@ export default function OptimisticChatComposer({
         const result = await action(formData);
         if (!result.ok) {
           setOptimisticMessage(null);
+          if (attachments.length) { const client = createClient(); await client.storage.from("tfy-chat-media").remove(attachments.map((item) => item.path)); }
+          setAttachments([]);
           setError(result.error || "Message could not be sent. Please try again.");
           if (inputRef.current) inputRef.current.value = body;
           return;
@@ -101,7 +103,7 @@ export default function OptimisticChatComposer({
           name="body"
           rows={2}
           maxLength={4000}
-          required
+          required={attachments.length === 0}
           placeholder={placeholder}
           onChange={() => { if (error) setError(""); }}
         />
@@ -141,9 +143,9 @@ export default function OptimisticChatComposer({
         {thread ? (
           <div className="chat-compose-footer">
             <p>Only the two approved participants can read this conversation.</p>
-            <button type="submit" aria-label="Send message" disabled={isPending}>{isPending ? "SENDING…" : buttonLabel}</button>
+            <button type="submit" aria-label="Send message" disabled={isPending || uploading}>{uploading ? "UPLOADING…" : isPending ? "SENDING…" : buttonLabel}</button>
           </div>
-        ) : <button type="submit" aria-label="Send message" disabled={isPending}>{isPending ? "…" : buttonLabel}</button>}
+        ) : <button type="submit" aria-label="Send message" disabled={isPending || uploading}>{uploading ? "…" : isPending ? "…" : buttonLabel}</button>}
       </form>
     </>
   );
